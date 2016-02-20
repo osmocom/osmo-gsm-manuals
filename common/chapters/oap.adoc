@@ -107,7 +107,7 @@ response), it shall send a REGISTER_ERR message.
 
 Every message is based on the following message format
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -120,7 +120,7 @@ ignored.
 
 Direction: Client -> Server
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -131,7 +131,7 @@ Direction: Client -> Server
 
 Direction: Server -> Client
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -142,7 +142,7 @@ Direction: Server -> Client
 
 Direction: Server -> Client
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -152,7 +152,7 @@ Direction: Server -> Client
 
 Direction: Server -> Client
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -164,7 +164,7 @@ Direction: Server -> Client
 
 Direction: Client -> Server
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -175,7 +175,7 @@ Direction: Client -> Server
 
 Direction: Client -> Server
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -186,7 +186,7 @@ Direction: Client -> Server
 
 Direction: Client -> Server
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
@@ -197,7 +197,7 @@ Direction: Client -> Server
 
 Direction: Server -> Client
 
-[options="header",cols="5%,20%,60%,5%,5%,5%"]
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
