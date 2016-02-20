@@ -1,0 +1,77 @@
+%%
+%% This style is derived from the docbook one.
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{asciidoc}[2008/06/05 AsciiDoc DocBook Style]
+%% Just use the original package and pass the options.
+\RequirePackageWithOptions{docbook}
+
+% Sidebar is a boxed minipage that can contain verbatim.
+% Changed shadow box to double box.
+\renewenvironment{sidebar}[1][0.95\textwidth]{
+  \hspace{0mm}\newline%
+  \noindent\begin{Sbox}\begin{minipage}{#1}%
+  \setlength\parskip{\medskipamount}%
+}{
+  \end{minipage}\end{Sbox}\doublebox{\TheSbox}%
+}
+
+\usepackage{alltt}
+\usepackage{upquote}
+
+\def\Company{sysmocom - s.f.m.c. GmbH}
+
+\def\DBKcover{
+\ifthenelse{\equal{\DBKedition}{}}{\def\edhead{}}{\def\edhead{Ed. \DBKedition}}
+
+% interligne double
+\setlength{\oldbaselineskip}{\baselineskip}
+\setlength{\baselineskip}{2\oldbaselineskip}
+\textsf{
+\vfill
+\begin{center}
+  \includegraphics{../common/images/sysmocom.pdf}
+  \ \\ %
+  \huge{\Company}
+\end{center}
+\vspace{2.5cm}
+\begin{center}
+  \includegraphics{../common/images/osmocom.pdf}
+  \ \\ %
+  \vspace{0.5cm}
+  \huge{\textbf{\DBKtitle}}\\ %
+  \ifx\DBKsubtitle\relax\else%
+    \underline{\ \ \ \ \ \ \ \ \ \ \ }\\ %
+    \ \\ %
+    \huge{\textbf{\DBKsubtitle}}\\ %
+  \fi
+  \vspace*{2.5cm}
+  \large{by \DBKauthor}
+\end{center}
+\vfill
+\setlength{\baselineskip}{\oldbaselineskip}
+\hspace{1cm}
+\vspace{1cm}
+\begin{center}
+\begin{tabular}{p{7cm} p{7cm}}
+\Large{\DBKreference{} \edhead} & \\
+\end{tabular}
+\end{center}
+}
+
+% Format for the other pages
+%\newpage
+\setlength{\baselineskip}{\oldbaselineskip}
+}
+
+% left footer
+\def\DBKpublisher{}
+
+\def\maketitle{
+	\DBKcover
+	\DBKcopyright
+	\DBKlegalblock
+	\newpage
+	\lfoot[]{\DBKcopyright}
+	\DBKdomitete
+}

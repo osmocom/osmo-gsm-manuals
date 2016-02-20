@@ -1,0 +1,75 @@
+
+[[bibliography]]
+== Appendix A. Bibliography / References
+
+[bibliography]
+- [[[osmobts-abis-spec]]] Neels Hofmeyer & Harald Welte. OsmoBTS Abis
+  Protocol Specification.  sysmocom.
+- [[[userman-osmobts]]] Osmocom Project: OsmoBTS User Manual.
+- [[[vty-ref-osmobts]]] Osmocom Project: OsmoBTS VTY Reference Manual.
+- [[[userman-osmobsc]]] Osmocom Project: OsmoBSC User Manual.
+- [[[vty-ref-osmobsc]]] Osmocom Project: OsmoBSC VTY Reference Manual.
+- [[[userman-osmopcu]]] Osmocom Project: OsmoPCU User Manual.
+- [[[vty-ref-osmopcu]]] Osmocom Project: OsmoPCU VTY Reference Manual.
+- [[[userman-osmonitb]]] Osmocom Project: OsmoNITB User Manual.
+- [[[vty-ref-osmonitb]]] Osmocom Project: OsmoNITB VTY Reference Manual.
+- [[[userman-osmosgsn]]] Osmocom Project: OsmoSGSN User Manual.
+- [[[vty-ref-osmosgsn]]] Osmocom Project: OsmoSGSN VTY Reference Manual.
+//- [[[userman-openggsn]]] Osmocom Project: OpenGGSN User Manual.
+
+- [[[3gpp-ts-24-007]]] 3GPP TS 24.007: Mobile radio interface signalling
+  layer 3; General Aspects
+  http://www.3gpp.org/DynaReport/24007.htm
+- [[[3gpp-ts-24-008]]] 3GPP TS 24.008: Mobile radio interface Layer 3
+  specification; Core network protocols; Stage 3.
+  http://www.3gpp.org/dynareport/24008.htm
+- [[[3gpp-ts-44-006]]] 3GPP TS 44.006: Mobile Station - Base Station
+  System (MS - BSS) interface; Data Link (DL) layer specification
+  http://www.3gpp.org/DynaReport/44006.htm
+- [[[3gpp-ts-44-064]]] 3GPP TS 44.064: Mobile Station - Serving GPRS
+  Support Node (MS-SGSN); Logical Link Control (LLC) Layer Specification
+  http://www.3gpp.org/DynaReport/44064.htm
+- [[[3gpp-ts-48-008]]] 3GPP TS 48.008: Mobile Switching Centre - Base
+  Station system (MSC-BSS) interface; Layer 3 specification
+  http://www.3gpp.org/DynaReport/48008.htm
+- [[[3gpp-ts-48-016]]] 3GPP TS 48.016: General Packet Radio Service
+  (GPRS); Base Station System (BSS) - Serving GPRS Support Node (SGSN)
+  interface; Network service
+  http://www.3gpp.org/DynaReport/48016.htm
+- [[[3gpp-ts-48-018]]] 3GPP TS 48.018: General Packet Radio Service
+  (GPRS); Base Station System (BSS) - Serving GPRS Support Node (SGSN);
+  BSS GPRS protocol (BSSGP)
+  http://www.3gpp.org/DynaReport/48018.htm
+- [[[3gpp-ts-48-056]]] 3GPP TS 48.056: Base Station Controller - Base
+  Transceiver Station (BSC - BTS) interface; Layer 2 specification
+  http://www.3gpp.org/DynaReport/48056.htm
+- [[[3gpp-ts-48-058]]] 3GPP TS 48.058: Base Station Controller - Base
+  Transceiver Station (BSC - BTS) Interface; Layer 3 specification
+  http://www.3gpp.org/DynaReport/48058.htm
+- [[[3gpp-ts-52-021]]] 3GPP TS 52.021: Network Management (NM)
+  procedures and messages on the A-bis interface
+  http://www.3gpp.org/DynaReport/52021.htm
+
+- [[[ietf-rfc791]]] IETF RFC 768: Internet Protocol
+  https://tools.ietf.org/html/rfc791
+- [[[ietf-rfc793]]] IETF RFC 793: Transmission Control Protocol
+  https://tools.ietf.org/html/rfc793
+- [[[ietf-rfc1350]]] IETF RFC 1350: Trivial File Transfer Protool
+  https://tools.ietf.org/html/rfc1350
+- [[[ietf-rfc2131]]] IETF RFC 2131: Dynamic Host Configuration Protocol
+  https://tools.ietf.org/html/rfc2131
+- [[[ietf-rfc3550]]] IETF RFC 3550: RTP: A Transport protocol for Real-Time Applications
+  https://tools.ietf.org/html/rfc3550
+- [[[ietf-rfc4250]]] IETF RFC 4251: The Secure Shell (SSH) Protocol Architecture
+  https://tools.ietf.org/html/rfc4251
+
+- [[[itu-t-q921]]] ITU-T Q.921: ISDN user-network interface -
+  Data link layer specification
+  https://www.itu.int/rec/T-REC-Q.921/en
+
+- [[[smpp-34]]] SMPP Develoepers Forum. Short Message Peer-to-Peer
+  Protocol Specification v3.4
+  http://docs.nimta.com/SMPP_v3_4_Issue1_2.pdf
+
+- [[[gnu-agplv3]]] Free Software Foundation.  GNU Affero General Public
+  License.  http://www.gnu.org/licenses/agpl-3.0.en.html

@@ -1,0 +1,8 @@
+*.pdf
+*.sw?
+*.bak
+*~
+*.html
+*__*.png
+*__*.svg
+generated/

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter>
+  <title>VTY reference</title>
+
+  <para>The Virtual Tele Type (VTY) has the concept of nodes and commands. This
+  chapter lists all nodes and the commands that are available within the node.
+  Each command can consist out of several words followed by a variable number of
+  parameters. There are common patterns for the parameters, these include IPv4
+  addresses, number ranges, a word, a line of text and choice. The following will
+  explain the commonly used patterns.
+  </para>
+
+  <table frame='all' id="table.vty_patterns"><title>VTY Parameter Patterns</title>
+    <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+    <colspec column="1" colname="pattern" colwidth="0.5*" />
+    <colspec column="2" colname="example" colwidth="0.5*" />
+    <thead>
+      <row>
+          <entry>Pattern</entry>
+          <entry>Example</entry>
+          <entry>Explanation</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+          <entry>A.B.C.D</entry>
+          <entry>127.0.0.1</entry>
+          <entry>A IPv4 address</entry>
+      </row>
+      <row>
+          <entry>TEXT</entry>
+          <entry>example01</entry>
+          <entry>A single string without any spaces, tabs</entry>
+      </row>
+      <row>
+          <entry>.TEXT</entry>
+          <entry>Some information</entry>
+          <entry>A line of text</entry>
+      </row>
+      <row>
+          <entry>(OptionA|OptionB|OptionC)</entry>
+          <entry>OptionA</entry>
+          <entry>A choice between a list of available options</entry>
+      </row>
+      <row>
+          <entry>&lt;0-10&gt;</entry>
+          <entry>5</entry>
+          <entry>A number from a range</entry>
+      </row>
+    </tbody>
+    </tgroup>
+  </table>
+
+  <para>
+   The application is configured through the VTY. For configuring a system
+   one needs to enter the <command>enable</command> node and then enter the
+   <command>configure terminal</command> command. Then the configuration can be
+   made according to the available commands. After the system has been configured
+   one can use the <command>write</command> command to write the new configuration
+   to the configuration file. The new file will be used after the application
+   has been restarted.
+  </para>
+
+
+  <para>
+    The following table lists the TCP port numbers of the VTY for the
+    various Osmocom GSM related programs as used on sysmocom products:
+  </para>
+
+  <table frame="all" id="table.vty_port"><title>VTY port numbers</title>
+  <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    <colspec column="1" colname="port_number" colwidth="0.5*" />
+    <colspec column="2" colname="software" colwidth="0.5*" />
+    <thead>
+      <row>
+	<entry>Port Number</entry>
+	<entry>Software</entry>
+      </row>
+    </thead>
+
+    <tbody>
+      <row>
+	<entry>4240</entry>
+	<entry>osmo-pcu</entry>
+      </row>
+      <row>
+	<entry>4241</entry>
+	<entry>osmo-bts</entry>
+      </row>
+      <row>
+	<entry>4242</entry>
+	<entry>osmo-nitb, osmo-bsc</entry>
+      </row>
+      <row>
+	<entry>4243</entry>
+	<entry>osmo-bsc_mgcp</entry>
+      </row>
+      <row>
+	<entry>4244</entry>
+	<entry>osmo-bsc_nat</entry>
+      </row>
+      <row>
+	<entry>4245</entry>
+	<entry>osmo-sgsn</entry>
+      </row>
+      <row>
+	<entry>4246</entry>
+	<entry>osmo-gbproxy</entry>
+      </row>
+    </tbody>
+  </tgroup>
+  </table>
+
+  &sections-vty;
+</chapter>

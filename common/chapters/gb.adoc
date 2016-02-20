@@ -1,0 +1,109 @@
+== Gb interface using libosmogb
+
+'libosmogb' is part of the libosmocore.git repository and implements the
+Gb interface protocol stack consisting of the NS and BSSGP layers.  It
+is used in a variety of Osmocom project, including OsmoSGSN,
+OsmoGbProxy and OsmoPCU.
+
+This section describes the configuration that libosmogb exposes via the
+VTY.
+
+=== Gb interface configuration
+
+==== NS-over-UDP configuration
+
+The GPRS-NS protocol can be encapsulated in UDP/IP.  This is the default
+encapsulation for IP based GPRS systems.
+
+.Example: GPRS NS-over-UDP configuration
+----
+OsmoSGSN(config-ns)# encapsulation udp local-ip 127.0.0.1 <1>
+OsmoSGSN(config-ns)# encapsulation udp local-port 23000 <2>
+----
+<1> Set the local side IP address for NS-over-UDP
+<2> Set the local side UDP port number for NS-over-UDP. 23000 is the default
+
+==== NS-over-FR-GRE configuration
+
+The GPRS-NS protocol can alternatively be encapsulated over Frame Relay
+(FR).  Traditionally this is communicated over SDH/PDH media, which we
+don't support.  However, we can encapsulate the FR in GRE, and then that
+in IP.
+
+The resulting NS-FR-GRE-IP stack can be converted by an off-the-shelf
+router with FR and IP support.
+
+.Example: GPRS NS-over-FR-GRE configuration
+----
+OsmoSGSN(config-ns)# encapsulation framerelay-gre enabled 1 <1>
+OsmoSGSN(config-ns)# encapsulation framerelay-gre local-ip 127.0.0.1 <2>
+----
+<1> Enable FR-GRE encapsulation
+<2> Set the local side IP address for NS-over-FR-GRE
+
+==== NS Timer configuration
+
+The NS protocol features a number of configurable timers.
+
+.List of configurable NS timers
+|===
+|tns-block|(un)blocking timer timeout (secs)
+|tns-block-retries|(un)blocking timer; number of retries
+|tns-reset|reset timer timeout (secs)
+|tns-reset-retries|reset timer; number of retries
+|tns-test|test timer timeout (secs)
+|tns-alive|alive timer timeout(secs)
+|tns-alive-retries|alive timer; number of retries
+|===
+
+=== Examining Gb interface status
+
+There are several commans that can help to inspect and analyze the
+currently running system status with respect to the Gb interfaces.
+
+.Example: Inspecting NS state
+----
+OsmoSGSN> show ns
+Encapsulation NS-UDP-IP     Local IP: 127.0.0.1, UDP Port: 23000
+Encapsulation NS-FR-GRE-IP  Local IP: 0.0.0.0
+----
+FIXME
+
+FIXME: show ns stats
+
+.Example: Inspecting BSSGP state
+----
+----
+FIXME
+
+FIXME: show nse
+
+=== FIXME
+
+==== Blocking / Unblocking / Resetting NS Virtual Connections
+
+The user can manually perform operations on individual NSVCs:
+
+* blocking a NSVC
+* unblocking a NSVC
+* resetting a NSVC
+
+The VTY command used for this is the `nsvc (nsei|nsvci) <0-65535>
+(block|unblock|reset)` command available from the ENABLE node.
+
+
+=== Gb interface logging filters
+
+There are some Gb-interface specific filters for the libosmocore
+logging subsystem, which can help to reduce the logged output to
+messages pertaining to a certain NS or BSSGP connection only.
+
+.Example: enabling a log filter for a given NSEI
+----
+OsmoSGSN> logging filter nsvc nsei 23
+----
+
+.Example: enabling a log filter for a given NSVCI
+----
+OsmoSGSN> logging filter nsvc nsvci 23
+----

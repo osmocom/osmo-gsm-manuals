@@ -1,0 +1,27 @@
+[[abis]]
+== Abis/IP Interface
+
+=== A-bis Operation & Maintenance Link
+
+The GSM Operation &amp; Maintenance Link (OML) is specified in 3GPP TS
+12.21 and is used between a GSM Base-Transceiver-Station (BTS) and a GSM
+Base-Station-Controller (BSC). The default TCP port for OML is __3002__.
+The connection will be opened from the BTS to the BSC.
+
+Abis OML is only specified over E1 interfaces.  The Abis/IP
+implementation of OsmoBTS and OsmoBSC extend and/or deviate from the TS
+12.21 specification in several ways.  Please see the _OsmoBTS Abis
+Protocol Specification_ <<osmobts-abis-spec>> for more information.
+
+=== A-bis Radio Signalling Link
+
+The GSM Radio Signalling Link (RSL) is specified in 3GPP TS 08.58 and is
+used between a GSM Base-Transceiver-Station and a GSM
+Base-Station-Controller (BSC). The default TCP port for RSL is __3003__.
+The connection will be opened from the BTS to BSC after it has been
+instructed by the BSC.
+
+Abis RSL is only specified over E1 interfaces.  The Abis/IP
+implementation of OsmoBTS and OsmoBSC extend and/or deviate from the TS
+08.58 specification in several ways.  Please see the _OsmoBTS Abis
+Protocol Specification_ <<osmobts-abis-spec>> for more information.

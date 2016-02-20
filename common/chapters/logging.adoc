@@ -1,0 +1,184 @@
+[[logging]]
+== libosmocore Logging System
+
+
+In any reasonably complex software it is important to understand how to
+enable and configure logging in order to get a better insight into what
+is happening, and to be able to follow the course of action.  We
+therefore ask the reader to bear with us while we explain how the
+logging subsystem works and how it is configured.
+
+Most Osmocom Software (like `osmo-bts`, `osmo-bsc`, `osmo-nitb`,
+`osmo-sgsn` and many others) uses the same common logging system.
+
+This chapter describes the architecture and configuration of this common
+logging system.
+
+The logging system is composed of
+
+* log targets (where to log),
+* log categories (who is creating the log line),
+* log levels (controlling the verbosity of logging), and
+* log filters (filtering or suppressing certain messages).
+
+All logging is done in human-readable ASCII-text.  The logging system is
+configured by means of VTY commands that can either be entered
+interactively, or read from a configuration file at process start time.
+
+=== Logging to the VTY
+
+Logging messages to the interactive command-line interface (VTY) is most
+useful for occasional investigation by the system administrator.
+
+Logging to the VTY is disabled by default, and needs to be enabled
+explicitly for each such session.  This means that multiple concurrent
+VTY sessions each have their own logging configuration.  Once you close
+a VTY session, the log target will be destroyed and your log settings be
+lost.  If you re-connect to the VTY, you have to again activate and
+configure logging, if you wish.
+
+To create a logging target bound to a VTY, you have to use the following
+command: `logging enable` This doesn't really activate the
+generation of any output messages yet, it merely creates and attaches a
+log target to the VTY session.  The newly-created target still doesn't
+have any filter installed, i.e.  __all log messages will be suppressed
+by default__
+
+Next, you can configure the log levels for your VTY session.  Each
+sub-system of the program in question typically logs its messages as a
+different category, allowing fine-grained control over which log
+messages you will or will not see.  For example, in OpenBSC, there are
+categories for the protocol layers `rsl`, `rr`, `mm`,
+`cc` and many others.  To get a a list of categories interactively
+on the vty, type: `logging level ?`
+
+For each of those categories, you can set an independent log level,
+controlling the level of verbosity.  Log levels include:
+
+fatal::
+	Fatal messages, causing abort and/or re-start of a process.
+	This __shouldn't happen__.
+
+error::
+	An actual error has occurred, its cause  should be further
+	investigated by the administrator.
+
+
+notice::
+	A noticeable event has occurred, which is not
+	considered to be an error.
+
+info::
+	Some information about normal/regular system
+	activity is provided.
+
+debug::
+	Verbose information about internal processing of the system,
+	used for debugging purpose. This will log the most.
+
+The log levels are inclusive, e.g. if you select __info__, then this
+really means that all events with a level of at least __info__ will be
+logged, i.e. including events of __notice__, __error__ and __fatal__.
+
+So for example, in OpenBSC, to set the log level of the Mobility
+Management category to info, you can use the following command:
+	`log level mm info`.
+
+Equally, to set the log level of the Call Control category to debug, you
+can use:
+  	`log level cc debug`
+
+Finally, after having configured the levels, you still need to set the
+filter.  The default behavior is to filter out everything, i.e. not to
+log anything.  The reason is quite simple: On a busy production setup,
+logging all events for a given subsystem may very quickly be flooding
+your console before you have a chance to set a more restrictive filter.
+
+To request no filtering, i.e. see all messages, you may use:
+  	`log filter all 1`
+
+As another example, to only see messages relating to a particular
+subscriber identified by his IMSI, you may use:
+	`log filter imsi 262020123456789`
+
+TIP: If many messages are being logged to a VTY session, it may be hard
+to impossible to still use the same session for any commands.  We
+therefore recommend to open a second VTY session in parallel, and use
+one only for logging, while the other is used for interacting with the
+system.
+
+=== Logging to a file
+
+As opposed to Logging to the VTY, logging to files is persistent and
+stored in the configuration file.  As such, it is configured in
+sub-nodes below the configuration node.  There can be any number of log
+files active, each of them having different settings regarding levels /
+subsystems.
+
+To configure a new log file, enter the following sequence of commands:
+----
+OpenBSC> enable
+OpenBSC# configure terminal
+OpenBSC(config)# log file /path/to/my/file
+OpenBSC(config-log)#
+----
+
+This leaves you at the config-log prompt, from where you can set the
+detailed configuration for this log file.  The available commands at
+this point are identical to configuring logging on the VTY, they include
+`logging filter`, `logging level` as well as `logging color`
+and `logging timestamp`.
+
+TIP: Don't forget to use the `copy running-config startup-config` (or
+its short-hand `write file`) command to make your logging configuration
+persistent across application re-start.
+
+NOTE: libosmocore currently does not provide file close-and-reopen
+support by SIGHUP, as used by popular log file rotating solutions.
+Please contact the Osmocom developers if you require this feature to be
+implemented.
+
+
+=== Logging to syslog
+
+syslog is a standard for computer data logging maintained by the IETF.
+Unix-like operating systems like GNU/Linux provide several syslog
+compatible log daemons that receive log messages generated by
+application programs.
+
+libosmocore based applications can log messages to syslog by using the
+syslog log target.  You can configure syslog logging by issuing the
+following commands on the VTY:
+
+----
+OpenBSC> enable
+OpenBSC# configure terminal
+OpenBSC(config)# log syslog daemon
+OpenBSC(config-log)#
+----
+
+This leaves you at the config-log prompt, from where you can set the
+detailed configuration for this log file.  The available commands at
+this point are identical to configuring logging on the VTY, they include
+`logging filter`, `logging level` as well as `logging color`
+and `logging timestamp`.
+
+NOTE: Syslog daemons will normally automatically prefix every message
+with a time-stamp, so you should disable the libosmocore time-stamping
+by issuing the `logging timestamp 0` command.
+
+
+=== Logging to stderr
+
+If you're not running the respective application as a daemon in the
+background, you can also use the stderr log target in order to log to
+the standard error file descriptor of the process.
+
+In order to configure logging to stderr, you can use the following
+commands:
+----
+OpenBSC> enable
+OpenBSC# configure terminal
+OpenBSC(config)# log stderr
+OpenBSC(config-log)#
+----

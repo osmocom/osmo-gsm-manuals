@@ -1,0 +1,16 @@
+<vtydoc xmlns='urn:osmocom:xml:libosmocore:vty:doc:1.0'>
+    <node id='11'>
+    <child_of nodeid='4' />
+    <name>GPRS NS Configuration</name>
+    <description>Configure the GPRS NS attributes including the
+    type of encapsulation and used NSEs.</description>
+    </node>
+    <node id='12'>
+    <child_of nodeid='4' />
+    <name>BSSGP Configuration</name>
+    <description>BSSGP related configuration options. This is an
+    unused legacy node. Only the default commands are available.
+    </description>
+    </node>
+</vtydoc>
+

@@ -1,0 +1,699 @@
+== Introduction into RF Electronics
+
+Setup and Operation of a GSM network is not only about the configuration
+and system administration on the network elements and protocol stack,
+but also includes the physical radio transmission part.
+
+Basic understanding about RF (Radio Frequency) Electronics is key to
+achieving good performance of the GSM network.
+
+[[rf-coaxial-cabling]]
+=== Coaxial Cabling
+
+Coaxial cables come in many different shapes, diameters, physical
+construction, dielectric materials, and last but not least brands and
+types.
+
+There are many parameters that might be relevant to your particular
+installation, starting from mechanical/environmental properties such as
+temperature range, UV resilience, water/weatherproofness, flammability,
+etc.
+
+For the subject of this manual, we will not look at those mechanical
+properties, but look at the electrical properties instead.
+
+The prime electrical parameters of a coaxial cable are:
+
+* its attenuation over frequency and length
+* its maximum current/power handling capability
+* its propagation velocity (ignored here)
+* its screening efficiency (ignored here)
+
+==== Coaxial Cable Attenuation
+
+The attenuation of a coaxial cable is given in dB per length, commonly
+in 'dB per 100m'.  This value changes significantly depending on the
+frequency of the signal transmitted via the cable.  Cable manufacturers
+typically either provide tables with discrete frequency values, or
+graphs plotting the attenuation per 100m (x axis) over the frequency (y
+axis).
+
+FIXME: Example.
+
+So in order to estimate the loss of a coaxial cable, you need to
+
+. determine the frequency at which you will use the cable, as determined
+  by the GSM frequency band of your BTS.  Make sure you use the highest
+  frequency that might occur, which is typically the upper end of the
+  transmit band, see <<gsm-bands>>
+. determine the attenuation of your cable per 100m at the given
+  frequency (check the cable data sheet)
+. scale that value by the actual length of the cable
+
+A real cable always has connectors attached to it, please add some
+additional losses for the connectors that are attached.  0.05 dB per
+connector is a general rule of thumb for the frequencies used in GSM.
+
+FIXME: Example computation
+
+As you can see very easily, the losses incurred in coaxial cables
+between your antenna and the BTS can very quickly become significant
+factors in your overall link budget (and thus cell coverage).  This is
+particularly relevant for the uplink power budget.  Every dB you loose
+in the antenna cable between antenna and the BTS receiver translates
+into reduced uplink coverage.
+
+Using the shortest possible coaxial cabling (e.g. by mounting the BTS
+high up on the antenna tower) and using the highest-quality cabling are
+the best strategies to optimize
+
+WARNING: If you plan to assemble the coaxial connectors yourself, please
+make sure you ensure to have the right skills for this.  Properly
+assembling coaxial connectors (whether solder-type or crimp-type)
+requires precision tools and strict process as described by the
+manufacturer.  Any mechanical imprecision of connector assembly will
+cause significant extra signal attenuation.
+
+==== Checking coaxial cables
+
+If you would like to check the proper operation of a coaxial cable,
+there are several possible methods available:
+
+* The more expensive method would be to use a 'RF Network Analyzer' to
+  measure the S11/S12 parameters or the VSWR of the cable.
+* Another option is to use a TDR (time domain reflectometer) to
+  determine the VSWR.  The TDR method has the added advantage that you
+  can localize any damage to the cable, as such damage would cause
+  reflections that can be converted into meters cable length from the
+  port at which you are testing the cable.  Mobile, battery-powered TDR
+  for field-use in GSM Site installation are available from various
+  vendors.  One commonly used series is the 'Anritsu Site Master'.
+
+
+[[rf-coaxial-connectors]]
+=== Coaxial Connectors
+
+A coaxial connector is a connector specifically designed for mounting to
+coaxial cable.  It facilitates the removable / detachable connection of
+a coaxial cable to a RF device.
+
+There are many different types of coaxial connectors on the market.
+
+The most important types of coaxial connectors in the context of GSM
+BTSs are:
+
+* The 'N type' connector
+* The 'SMA type' connector.
+* The '7/16' type connector
+
+FIXME: Images
+
+The above connectors are tightened by a screw-on shell.  Each connector
+type has a specific designated nominal torque by which the connector
+shall be tightened.  In case of uncertainty, please ask your connector
+supplier for the nominal torque.
+
+NOTE: Always ensure the proper mechanical condition of your RF
+connectors.  Don't use RF connectors that are contaminated by dust or
+dirt, or which show significant oxidization, bent contacts or the like.
+Using such connectors poses significant danger of unwanted signal loss,
+and can in some cases even lead to equipment damage (e.g. in case of RF
+power at PA output being reflected back into the PA).
+
+
+[[rf-duplexers]]
+=== Duplexers
+
+A GSM BTS (or GSM TRX inside a BTS) typically exposes separate ports for
+Rx (Receive) and Tx (Transmit).  This is intentionally the case, as
+this allows the users to add e.g. additional power amplifiers, filters
+or other external components into the signal path.  Those components
+typically operate on either the receive or the transmit path.
+
+You could now connect two separate antennas to the two ports (one for
+Rx, one for Tx).  This is commonly done in indoor installations with
+small rubber-type antennas directly attached to the BTS connectors.
+
+In outdoor installations, you typically (want to) use a single Antenna
+for Rx and Tx.  This single antenna needs to be connected to the BTS
+via a device that is called 'Duplexer'.
+
+The 'Duplexer' is actually a frequency splitter/combiner, which is
+specifically tuned to the uplink and downlink frequencies of the GSM
+band in which you operate the BTS.  As such, it has one port that passes
+only uplink frequencies between the antenna and that port, as well as
+another port that passes only downlink frequencies between antenna and
+that port.
+
+.Illustration of the Duplexer functionality
+[graphviz]
+----
+digraph G {
+	rankdir = LR;
+
+	BTS -> Duplexer [label="Tx band"];
+	Duplexer [shape=box];
+	Duplexer -> BTS [label="Rx band"];
+	Duplexer -> Antenna [label ="All frequencies",dir=both];
+	Antenna [shape=cds];
+}
+----
+
+WARNING: *The ports of a duplexer are not interchangeable*.  Always make
+sure that you use the Rx port of the duplexer with the Rx port of the
+BTS, and vice-versa for Tx.
+
+
+[[rf-pa]]
+=== RF Power Amplifiers
+
+A RF Power Amplifier (PA) is a device that boosts the transmit power of
+your RF signal, the BTS in your case.
+
+RF power amplifiers come in many different characteristics.  Some of the
+key characteristics are:
+
+Frequency range::
+  A PA is typically designed for a specific frequency range.  Only
+  signals inside that range will be properly amplified
+Gain in dB::
+  This tells you how many dB the power amplifier will increase your
+  signal.  `Pout = Pin + Gain`
+Maximum Output Power::
+  This indicates the maximum absolute output power.  For example, if the
+  maximum output power is 40 dBm, and the gain is 10dBm, then an input
+  signal of 30dBm will render the maximum output power.  An input signal
+  of 20dBm would subsequently generate only 30dBm of output power.
+Efficiency::
+  The efficiency determines how much electrical power is consumed for
+  the given output power.  Often expressed as Power Added Efficiency
+  (PAE).
+
+WARNING: If you add external power amplifiers to a GSM BTS or any other
+transmitter, this will invalidate the regulatory approval of the BTS.
+It is your responsibility to ensure that the combination of BTS and PA
+still fulfills all regulatory requirements, for example in terms of
+out-of-band emissions, spectrum envelope, phase error, linearity, etc!
+
+[graphviz]
+.Addition of a RF Power Amplifier to a GSM BTS Setup
+----
+digraph G {
+	rankdir = LR;
+	BTS;
+	PA [label="PA 14dB gain"];
+	Duplexer [shape=box];
+
+	BTS -> PA [label="Tx 23 dBm"];
+	PA -> Duplexer [label="Tx 37dBm"];
+	Duplexer -> BTS [label="Rx band"];
+	Duplexer -> Antenna [dir=both];
+	Antenna [shape=cds];
+}
+----
+
+
+=== Antennas
+
+The Antenna is responsible for converting the electromagnetic waves
+between the coaxial cable and the so-called 'air interface' and
+vice-versa.  The properties of an antenna are always symmetric for both
+transmission and reception.
+
+Antennas come in many different types and shapes. Key characteristics
+distinguishing antennas are:
+
+Antenna Gain::
+  Expresses how much more efficient the antenna converts between cable
+  and air interface.  Can be expressed in dB compared to a theoretical
+  isotropic radiator (dBi) or compared to a dipole antenna (dBd).  Gain
+  usually implies directivity.
+
+Frequency Band(s)::
+  Antennas typically have only a relatively narrow band (or multiple
+  narrow bands at which they radiate efficiently.  In general, the
+  higher the antenna gain, the lower the usable frequency band of the
+  antenna.
+
+Directivity::
+  Antennas radiate the energy in all three dimensions.
+
+Mechanical Size::
+  Mechanical Size is an important factor depending on how and where the
+  antenna is mounted.  Size also relates to weight and wind-load.
+
+Wind Load::
+  Expresses how much mechanical load the antenna will put on its
+  support structure (antenna mast).
+
+Connector Type::
+  Your cabling will have to use a compatible connector for the antenna.
+  Outdoor antennas typically use the 7/16 type connector or an N type
+  connector.  Indoor antennas either N type or SMA type.
+
+Environmental Rating::
+  Indoor antennas cannot be used outdoor, as they do not offer the level
+  of protection against dust and particularly water / humidity /
+  corrosion.
+
+Down-tilt Capability::
+  Particularly sector antennas are typically installed with a fixed or
+  (mechanically / electrically) variable down-tilt in order to limit the
+  radius/horizon of the antenna footprint and avoid excess interference
+  with surrounding cells.
+
+VSWR::
+  The Voltage Standing Wave Ratio indicates how well the antenna is
+  matched to the coaxial cable, and how much of the to-be-transmitted
+  radio signal is actually converted to radio waves versus reflected
+  back on the RF cable towards the transmitter.  An ideal antenna has a
+  VSWR of 1 (sometimes written 1:1).  Real antennas are typically in the
+  range of 1.2 to 2.
+
+Side Lobes::
+  A directional antenna never radiates only in one direction but always
+  has certain side lobes pointing outside of the main direction of the
+  antenna.   The number and strength of side lobes differ from antenna
+  to antenna model.
+
+NOTE: Whenever installing antennas it is important to understand that
+any metallic or otherwise conductive object in their vicinity will
+inevitably alter the antenna performance.  This can affect the radiation
+pattern, but also de-tune the antenna and shift its frequency band
+outside the nominal usable frequency band.   It is thus best to mount
+antennas as far as practically possible from conductive elements within
+their radiation pattern
+
+
+==== Omni-directional Antennas
+
+Omni-directional antennas are typically thin long dipole antennas covered
+with fiberglass. They radiate with equal strength in all directions and
+thus result in a more or less circular cell footprint (assuming flat
+terrain).  The shape of the radiation pattern is a torus (donut) with
+the antenna located in the center of that torus.
+
+Omni-directional antennas come with a variety of gains, typically from 0
+dBd to 3 dBd, 6 dBd and sometimes 9 dBd.  This gain is achieved by
+compressing the radiation torus in the vertical plane.
+
+Sometimes, Omni-directional antennas can be obtained with a fixed
+down-tilt to limit the cell radius.
+
+
+==== Sector Antennas
+
+Sector antennas are used in sectorized cell setups.  Sector antennas can
+have significantly higher gain than omni-directional antennas.
+
+Instead of mounting a single BTS with an omni-directional antenna to a
+given antenna pole, multiple BTSs with each one sector antenna are
+mounted to the same pole.  This results in an overall larger radius due
+to the higher gain of the sector antennas, and also in an overall
+capacity increase, as each sector has the same capacity as a single
+omni-directional cell.  And all that benefit still requires only a
+single physical site with antenna pole, power supply, back-haul cabling,
+etc.
+
+Experimentation and simulation has shown that typically the use of three
+sectors with antennas of an opening angle of 65 degrees results in the
+most optimal combination for GSM networks.  If more sectors are being
+deployed, there is a lot of overlap between the sectors, and the amount
+of hand-overs between the BTSs is increased.
+
+
+
+[[rf-lna]]
+=== RF Low Noise Amplifier (LNA)
+
+A RF Low Noise Amplifier (LNA) is a device that amplifies the weak
+received signal.  In general, LNAs are combined with band filters, to
+ensure that only those frequencies within the receive band are
+amplified, and out-of-band interferers are filtered out.  A duplexer
+can already be a sufficient band-filter, depending on its
+characteristics.
+
+The use of a LNA typically only makes sense if you
+. have very long and/or lossy coaxial cables from your antenna to the
+  BTS, and
+. can mount the duplexer + LNA close to the antenna, so that the
+  amplification happens before the long/lossy coaxial line to the BTS
+
+Key characteristics of a LNA are:
+
+Frequency range::
+  A LNA is typically designed for a specific frequency range.  Only
+  signals inside that range will be properly amplified
+Gain in dB::
+  This tells you how many dB the low noise amplifier will increase your
+  signal.  `Pout = Pin + Gain`
+Maximum Input Power::
+  This indicates the maximum RF power at the PA input before saturation.
+Noise Figure::
+  This indicates how much noise this LNA will add to the signal.  This
+  noise will add to the interference as seen by the receiver.
+
+[graphviz]
+.Addition of a RF Low Noise Amplifier to the GSM BTS Setup
+----
+digraph G {
+	rankdir = LR;
+
+	BTS -> LNA [label="Rx",dir=back];
+	LNA -> Duplexer [label="Rx",dir=back];
+	BTS -> Duplexer [label="Tx"];
+	Duplexer -> Antenna [dir=both];
+
+	Duplexer [shape=box];
+	Antenna [shape=cds];
+}
+----
+
+[graphviz]
+.Addition of a RF LNA + RF PA to the GSM BTS Setup
+----
+digraph G {
+	rankdir = LR;
+
+	subgraph {
+		rank = same;
+		PA;
+		LNA;
+	}
+
+	BTS -> LNA [label="Rx",dir=back];
+	BTS -> PA [label="Tx 23 dBm"];
+	LNA -> Duplexer [label="Rx",dir=back];
+	PA -> Duplexer [label="Tx 37 dBm"];
+	Duplexer -> Antenna [dir=both];
+
+	PA [label="PA 14dB gain"];
+	Duplexer [shape=box];
+	Antenna [shape=cds];
+}
+----
+
+As any LNA will add noise to the signal, it is generally discouraged to
+add them to the system.  Instead, we recommend you to mount the entire
+BTS closer to the antenna, thereby removing the losses created by
+lengthy coaxial wire.  The power supply lines and Ethernet connection to
+the BTS are far less critical when it comes to cable length.
+
+
+== Introduction into GSM Radio Planning
+
+The main focus of the manual you are reading is to document the
+specifics of the Osmocom GSM implementation in terms of configuration,
+system administration and monitoring.  That's basically all on the
+software part.
+
+However, successful deployment and operation of GSM networks depends to
+a large extent on the proper design on the radio frequency (RF) side,
+including the right cabling, duplexers, antennas, etc.
+
+Planning and implementing GSM deployment is a science (or art) in
+itself, and in most cases it is best to consult with somebody who has
+existing experience in the field.
+
+There are three parts to this:
+
+GSM Radio Network Planning::
+  This includes an analysis of the coverage area, its terrain/geography,
+  the selection of the right sites for your BTSs, the antenna height, a
+  path loss estimate.  As a result of that process, it will be clear
+  what amount of transmit power, antenna gain, cable length/type, etc.
+  you should use to obtain the intended coverage.
+GSM Site Installation::
+  This is the execution of what has been determined in the previous
+  step.  The required skills are quite different, as this is about
+  properly assembling RF cables and connections, duplexers, power
+  amplifiers, antennas, etc.
+Coverage testing::
+  This is typically done by driving or walking in the newly-deployed GSM
+  site, and checking of the coverage is as it was expected.
+
+NOTE: This chapter can only give you the briefest overview about the
+process used, and cannot replace the experience and skill of somebody
+with GSM RF planning and site deployment.
+
+[[rf-radio-net-plan]]
+=== GSM Radio Network Planning
+
+In GSM Radio Network Planning, the number and location of sites as well
+as type of required equipment is determined based on the coverage
+requirements.
+
+For the coverage of a single BTS, this is a process that takes into
+consideration:
+
+* the terrain that needs to be covered
+* the type of mobile stations to be supported, and particularly the
+  speed of their movement (residential, pedestrians, trains, highways)
+* the possible locations for cell sites, where BTSs and Antennas can be
+  placed, as well as the possible antenna mounting height
+* the equipment choices available, including
+** type and capabilities of BTS.  The key criteria here is
+   the downlink transmit power in dBm, and the uplink receive
+   sensitivity.
+** antenna models, including gain, radiation pattern, etc.
+** RF cabling, including the key aspect of attenuation per length
+** RF duplexers, splitting the transmit and receive path
+** power amplifiers (PAs), increasing the transmit power
+** low noise amplifiers (LNAs), amplifying the received signal
+
+For coverage of an actual cellular network consisting of neighboring
+cells, this process also must take into consideration aspects of
+'frequency planning', which is the allocation of frequencies (ARFCNs) to
+the individual cells within the network.  As part of that, interference
+generated by frequency re-use of other (distant) cells must be taken
+into consideration.  The details of this would go beyond this very
+introductory text.  There is plenty of literature on this subject
+available.
+
+[[rf-db]]
+=== The Decibel (dB) and Decibel-Milliwatt (dBm)
+
+RF engineering heavily depends on the Decibel (dB) as a unit to express
+attenuation (losses) or amplification (gain) impacted on radio signals.
+
+The dB is a logarithmic unit, it is used to express the ratio of two
+values of physical quantity.  You can thus not express an absolute value
+in dB, only relative.
+
+NOTE: *Relative loss* (cable, connector, duplexer, splitter) *or gain*
+(amplifiers) are power *is expressed in dB*.
+
+In order to express an absolute value, you need to use a unit like
+'dBm', which is referencing a power of 1 mW (milli-Watt).
+
+NOTE: *Absolute power* like transmitter output power or receiver input
+power *is expressed in dBm*.
+
+[options="header",cols="15%,15%,70%"]
+.Example table of dBm values and their corresponding RF Power
+|===
+|dBm|RF Power|Comment
+|0|1 mW|
+|1|1.26 mW|transmit power of sysmoBTS 1002 when used with `max_power_red 22`
+|3|2 mW|
+|6|4 mW|
+|12|16 mW|
+|12|16 mW|
+|20|100 mW|
+|23|199 mW|Maximum transmit power of indoor sysmoBTS 1002
+|26|398 mW|
+|30|1 W|Maximum transmit power of a MS in 1800/1900 MHz band
+|33|2 W|Maximum transmit power of a MS in 850/900 MHz band
+|37|5 W|Maximum transmit power of 1 TRX in sysmoBTS 2050
+|40|10 W|Maximum transmit power of sysmoBTS 1100
+|===
+
+[[rf-gsm-bands]]
+=== GSM Frequency Bands
+
+GSM can operate in a variety of frequency bands.  However,
+internationally only the following four bands have been deployed in
+actual networks:
+
+[options="header"]
+.Table of GSM Frequency Bands
+|===
+|Name|Uplink Band|Downlink Band|ARFCN Range
+|GSM 850|824 MHz .. 849 MHz|869 MHz .. 894 MHz|128 .. 251
+|E-GSM 900|880 MHz .. 915 MHz|925 MHz .. 960 MHz|0 .. 124, 975 .. 1023
+|DCS 1800|1710 MHz .. 1785 MHz|1805 MHz .. 1880 MHz|512 .. 885
+|PCS 1900|1850 MHz .. 1910 MHz|1930 MHz .. 1990 MHz|512 .. 810
+|===
+
+[[rf-path-loss]]
+=== Path Loss
+
+A fundamental concept in planning any type of radio communications link
+is the concept of 'Path Loss'.  Path Loss describes the amount of
+signal loss (attenuation) between a receive and a transmitter.
+
+As GSM operates in frequency duplex on uplink and downlink, there is
+correspondingly an 'Uplink Path Loss' from MS to BTS, and a 'Downlink
+Path Loss' from BTS to MS.  Both need to be considered.
+
+It is possible to compute the path loss in a theoretical ideal
+situation, where transmitter and receiver are in empty space, with no
+surfaces anywhere nearby causing reflections, and with no objects or
+materials in between them.  This is generally called the 'Free Space
+Path Loss'.
+
+Estimating the path loss within a given real-world terrain/geography is
+a hard problem, and there are no easy solutions.   It is impacted, among
+other things, by
+
+ * the height of the transmitter and receiver antennas
+ * whether there is line-of-sight (LOS) or non-line-of-sight (NLOS)
+ * the geography/terrain in terms of hills, mountains, etc.
+ * the vegetation in terms of attenuation by foliage
+ * any type of construction, and if so, the type of materials used in
+   that construction, the height of the buildings, their distance, etc.
+ * the frequency (band) used.  Lower frequencies generally expose better
+   NLOS characteristics than higher frequencies.
+
+The above factors determine on the one hand side the actual attenuation
+of the radio wave between transmitter and receiver.  On the other
+hand, they also determine how many reflections there are on this path,
+causing so-called 'Multipath Fading' of the signal.
+
+Over decades, many different radio propagation models have been designed
+by scientists and engineers.  They might be based on empirical studies
+condensed down into relatively simple models, or they might be based on
+ray-tracing in a 3D model of the terrain.
+
+Several companies have developed (expensive, proprietary) simulation
+software that can help with this process in detail.  However, the
+results of such simulation also depend significantly on the availability
+of precise 3D models of the geography/terrain as well as the building
+structure in the coverage area.
+
+In absence of such simulation software and/or precise models, there are
+several models that can help, depending on the general terrain:
+
+[[path-loss-models]]
+.List of common path loss models
+[options="header",cols="20%,20%,60%"]
+|===
+|Type|Sub-Type|Bands|Name
+|Terrain|-|850, 900, 1800, 1900|ITU terrain model
+|Rural|Foliage|850, 900, 1800, 1900|One woodland terminal model
+|City|Urban|850, 900|Okumura-Hata Model for Urban Areas
+|City|Suburban|850, 900|Okumura-Hata Model for Suburban Areas
+|City|Open|850, 900|Okumura-Hata Model for Open Areas
+|City|Urban|1800, 1900|COST-231 Hata Model
+|Indoor|-|900, 1800, 1900|ITU model for indoor attenuation
+|===
+
+In <<path-loss-models>> you can see a list of commonly-used path loss
+models.  They are typically quite simple equations which only require
+certain parameters like the distance of transmitter and receiver as well
+as the antenna height, etc.  No detailed 3D models of the terrain are
+required.
+
+FIXME: Example calculations
+
+[[rf-link-budget]]
+=== Link Budget
+
+The link budget consists of the total budget of all elements in the
+telecommunication system between BTS and MS (and vice-versa).
+
+This includes
+
+* antenna gains on both sides
+* coaxial cabling between antenna and receiver/transmitter
+* losses in duplexers, splitters, connectors, etc
+* gain of any amplifiers (PA, LNA)
+* path loss of the radio link between the two antennas
+
+The simplified link budget equations looks like this:
+
+ Rx Power (dBm) = Tx Power (dBm) + Gains (dB) − Losses (dB)
+
+Gains is the sum of all gains, including
+
+* Gain of the transmitter antenna
+* Gain of the receiver antenna
+* Gain of any PA (transmitter) or LNA (receiver)
+
+Losses is the sum of all losses, including
+
+* Loss of any cabling and/or connectors on either side
+* Loss of any passive components like duplexers/splitters on either side
+* Path Loss of the radio link
+
+Using the Link Budget equation and resolving it for the path loss will
+give you an idea of how much path loss on the radio link you can afford
+while still having a reliable radio link.  Resolving the path loss into
+a physical distance based on your path loss model will then give you an
+idea about the coverage area that you can expect.
+
+The Rx Power substituted in the Link budget equation is determined by
+the receiver sensitivity.  It is customary to add some some safety
+margin to cover for fading.
+
+==== Uplink Link Budget
+
+[graphviz]
+----
+digraph G {
+	rankdir = LR;
+	MS -> MSAnt -> Path -> BTSAnt -> Cabling -> Duplexer -> Cable -> BTS;
+	MSAnt [label="MS Antenna"];
+	BTSAnt [label="BTS Antenna"];
+}
+----
+
+The transmit power of a MS depends on various factors, such as the MS
+Power Class, the frequency band and the modulation scheme used.
+
+[options="header"]
+.Typical MS transmit power levels
+|===
+|Power Class|Band|Modulation|Power
+|4|850 / 900|GMSK|33 dBm (2 W)
+|1|1800 / 1900|GMSK|30 dBm (1 W)
+|E2|850 / 900|8PSK|27 dBm (0.5 W)
+|E2|1800 / 1900|8PSK|26 dBm (0.4 W)
+|===
+
+The minimum reference sensitivity level of a normal GSM BTS is specified
+in 3GPP TS 05.05 and required to be at least -104 dBm.  Most modern BTSs
+outperform this significantly.
+
+FIXME: Example calculation (spreadsheet screenshot?)
+
+==== Downlink Link Budget
+
+[graphviz]
+----
+digraph G {
+	rankdir = LR;
+	BTS -> Cable -> Duplexer -> Cabling -> BTSAnt -> Path -> MSAnt -> MS;
+	MSAnt [label="MS Antenna"];
+	BTSAnt [label="BTS Antenna"];
+}
+----
+
+The transmit power of the BTS depends on your BTS model and any possible
+external power amplifiers used.
+
+The minimum reference sensitivity level of a GSM MS is specified in 3GPP
+TS 05.05 and can typically be assumed to be about -102 dB.
+
+FIXME: Example calculation (spreadsheet screenshot?)
+
+
+==== Optimization of the Link Budget
+
+If the coverage area determined by the above procedure is insufficient,
+you can try to change some of the parameters, such as
+
+* increasing transmit power by adding a bigger PA
+* increasing antenna gain by using a higher gain antenna
+* reducing cable losses by using better / shorter coaxial cables
+* increasing the height of your antenna

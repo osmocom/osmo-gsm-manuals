@@ -1,0 +1,175 @@
+[[common-control-if]]
+== Osmocom Control Interface
+
+The VTY interface as described in <<vty>> is aimed at human interaction
+with the respective Osmocom program.
+
+Other programs *should not* use the VTY interface to interact with the
+Osmocom software, as parsing the textual representation is cumbersome,
+inefficient, and will break every time the formatting is changed by the
+Osmocom developers.
+
+Instead, the 'Control Interface' was introduced as a programmatic
+interface that can be used to interact with the respective program.
+
+=== Control Interface Protocol
+
+The control interface protocol is a mixture of binary framing with text
+based payload.
+
+The protocol for the control interface is wrapped inside the IPA
+multiplex header with the stream identifier set to IPAC_PROTO_OSMO (0xEE).
+
+.IPA header for control protocol
+[packetdiag]
+----
+{
+	colwidth = 24
+	node_height = 24
+
+	0-15: 	Length (network byte order)
+	16-23:	Stream ID (0xEE)
+}
+----
+
+Inside the IPA header is a single byte of extension header with protocol
+ID 0x00 which indicates the control interface.
+
+.IPA extension header for control protocol
+[packetdiag]
+----
+{
+	colwidth = 8
+	node_height = 24
+
+	0-7: 	Protocol (0x00)
+}
+----
+
+After the concatenation of the two above headers, the plain-text payload
+message starts.  The format of that plain text is illustrated for each
+operation in the respective message sequence chart in the chapters
+below.
+
+The fields specified below follow the following meaning:
+
+<id>::
+	A numeric identifier, uniquely identifying this particular
+	operation.  `0` is not allowed.  It will be echoed back in any
+	response to a particular request.
+<var>::
+	The name of the variable / field affected by the GET / SET /
+	TRAP operation.  Which variables/fields are available is
+	dependent on the specific application under control.
+<val>::
+	The value of the variable / field
+<reason>::
+	A text formatted, human-readable reason why the operation
+	resulted in an error.
+
+==== GET operation
+
+The GET operation is performed by an external application to get a
+certain value from inside the Osmocom application.
+
+.Control Interface GET operation (successful outcome)
+[mscgen]
+----
+msc {
+	cli [label="Client"], ctrl [label="Control Interface"];
+
+	cli => ctrl	[label="GET <id> <var>"];
+	cli <= ctrl	[label="GET_REPLY <id> <var> <val>"];
+}
+----
+
+.Control Interface GET operation (unsuccessful outcome)
+[mscgen]
+----
+msc {
+	cli [label="Client"], ctrl [label="Control Interface"];
+
+	cli => ctrl	[label="GET <id> <var>"];
+	cli <= ctrl	[label="ERROR <id> <reason>"];
+}
+----
+
+==== SET operation
+
+The SET operation is performed by an external application to set a value
+inside the Osmocom application.
+
+.Control Interface SET operation (successful outcome)
+[mscgen]
+----
+msc {
+	cli [label="Client"], ctrl [label="Control Interface"];
+
+	cli => ctrl	[label="SET <id> <var> <val>"];
+	cli <= ctrl	[label="SET_REPLY <id> <var> <val>"];
+}
+----
+
+.Control Interface SET operation (unsuccessful outcome)
+[mscgen]
+----
+msc {
+	cli [label="Client"], ctrl [label="Control Interface"];
+
+	cli => ctrl	[label="SET <id> <var> <val>"];
+	cli <= ctrl	[label="ERROR <id> <reason>"];
+}
+----
+
+==== TRAP operation
+
+The program can at any time issue a trap.  The term is used in the
+spirit of SNMP.
+
+.Control Interface TRAP operation
+[mscgen]
+----
+msc {
+	cli [label="Client"], ctrl [label="Control Interface"];
+
+	cli <= ctrl	[label="TRAP <var> <val>"];
+}
+----
+
+=== Control Interface python example: `bsc_control.py`
+
+In the `openbsc.git` repository, there is an example python script
+called `openbsc/contrib/bsc_control.py` which implements the Osmocom
+control interface protocol.
+
+You can use this tool either stand-alone to perform control interface
+operations against an Osmocom program, or you can use it as a reference
+for developing your own python software talking to the control
+interface.
+
+==== Setting a value
+
+.Example: Use `bsc_control.py` to set the short network name of OsmoNITB
+----
+$ ./bsc_control.py -d localhost -s short-name 32C3
+Got message: SET_REPLY 1 short-name 32C3
+----
+
+==== Getting a value
+
+.Example: Use `bsc_control.py` to get the mnc of OsmoNITB
+----
+$ ./bsc_control.py -d localhost -g mnc
+Got message: GET_REPLY 1 mnc 262
+----
+
+==== Listening for traps
+
+You can use `bsc_control.py` to listen for traps the following way:
+
+.Example: Using `bsc_control.py` to listen for traps:
+----
+$ ./bsc_control.py -d localhost -m
+<1>
+----
+<1> the command will not return and wait for any TRAP messages to arrive

@@ -1,0 +1,46 @@
+[[spectrum]]
+== Regulatory Requirements
+
+=== Spectrum License Required
+
+
+GSM operates in licensed frequency spectrum. As a result you may not
+operate a BTS without having obtained a license from the regulatory
+authority in the country you want to operate the BTS in.
+
+Failure to acquire a proper spectrum license or failure to comply with
+the terms of the license can lead to interference with public
+communications networks, which not only may cause civil claims by the
+operator of the interfered network, but is punishable as a crime under
+most jurisdictions.
+
+sysmocom disclaims any responsibility for illegal / unlicensed use of
+its products.
+
+
+=== Regulatory authorities by country
+
+
+The following (by far incomplete) list gives you some indication of the
+regulatory authorities for the respective country.  sysmocom does not
+guarantee correctness of this information.
+
+[[table.reg]]
+.Regulatory authorities
+[options="header"]
+|===============
+|Country|Name
+|Austria|RTR
+|Belgium|IBPT
+|Germany|Bundesnetzagentur
+|Italy|AGCOM
+|Netherlands|Agentschap Telecom
+|Sweden|PTS
+|Switzerland|Bakom
+|United Kingdom|Ofcom
+|United States of America|FCC
+|===============
+
+
+A more complete list of regulatory authorities including links to their
+web pages can be found at https://en.wikipedia.org/wiki/List_of_telecommunications_regulatory_bodies

@@ -1,0 +1,299 @@
+[[vty]]
+== The Osmocom VTY Interface
+
+All interaction with Osmocom software is typically performed via an
+interactive command-line interface called the _VTY_.
+
+The Osmocom VTY is used to
+
+* explore the current status of the system, including its configuration
+  parameters but also run-time state and statistics
+* review the currently active (running) configuration
+* perform interactive changes to the configuration
+* store the current running configuration to the config file
+* enable or disable logging; to the VTY itself or to other targets
+
+The Virtual Tele Type (VTY) has the concept of __nodes__ and
+__commands__.  Each command has a name and arguments.  The name may
+contain a space to group several similar commands into a specific group.
+The arguments can be a single word, a string, numbers, ranges or a list
+of options. The available commands depend on the current node.  there
+are various keyboard shortcuts to ease finding commands and the possible
+argument values.
+
+This chapter explains the most common nodes nodes and the commands that
+are available within the node.
+
+There are common patterns for the parameters, these include IPv4
+addresses, number ranges, a word, a line of text and choice. The
+following will explain the commonly used syntactical patterns:
+
+.VTY Parameter Patterns
+[options="header",cols="35%,25%,40%"]
+|===============
+|Pattern|Example|Explanation
+|`A.B.C.D`|`127.0.0.1`|An IPv4 address
+|`TEXT`|`example01`|A single string without any spaces, tabs
+|`.TEXT`|`Some information`|A line of text
+|`(OptionA\|OptionB\|OptionC)`|`OptionA`|A choice between a list of available options
+|`<0-10>`|`5`|A number from a range
+|===============
+
+=== Accessing the VTY
+
+The VTY of a given Osmocom program is implemented as a telnet server,
+listening to a specific TCP port.  For `osmo-nitb`, this port is `4242`.
+
+Please see <<port-numbers>> to check for the default TCP port number of
+the VTY interface of the specific Osmocom software you would like to
+connect to.
+
+As telnet is insecure and offers neither strong authentication nor
+encryption, the VTY by default only binds to localhost (127.0.0.1) and
+will thus not be reachable by other hosts on the network.
+
+WARNING: By default, any user with access to the machine running the
+Osmocom software will be able to connect to the VTY.  We assume that
+such systems are single-user systems, and anyone with local access to
+the system also is authorized to access the VTY.  If you require
+stronger security, you may consider using the packet filter of your
+operating system to restrict access to the Osmocom VTY ports further.
+
+
+=== VTY Nodes
+
+The VTY by default has the following minimal nodes:
+
+VIEW::
+  The 'VIEW' node is the node you automatically enter when you connect to
+  a VTY.  As its name implies, it can only be used to view the system
+  status, but it does not provide commands to alter the system
+  state or configuration.  As long as you are in the non-privileged
+  'VIEW' node, your prompt will end in a `>` character.
+
+ENABLE::
+  The 'ENABLE' node is entered as soon as you enter the `enable` command
+  from the 'VIEW' node.  Changing into the 'ENABLE' node will unlock all
+  kinds of commands that allow you to alter the system state or perform
+  any other change to it.  The 'ENABLE' node and its children are
+  signified by a '#' character at the end of your prompt.
+  +
+  You can change back from the 'ENABLE' node to the 'VIEW' node by using
+  the `disable` command.
+
+CONFIG::
+  The 'CONFIG' node is entered when you enter the `configure terminal`
+  command from the 'VIEW' node.  The config node is used to change the
+  run-time configuration parameters of teh system.  The prompt will
+  indicate that you are in the config node by a `(config)#` prompt
+  suffix.
+  +
+  You can always leave the 'CONFIG' node or any of its children by using
+  the `end` command.
+  +
+  This node is also automatically entered at the time the configuration
+  file is read.  All configuration file lines are processed as if they
+  were entered from the VTY 'CONFIG' node at start-up.
+
+Other::
+  Depending on the specific Osmocom program you are running, there will
+  be few or more other nodes, typically below the 'CONFIG' node.  For
+  example, the OsmoBSC has nodes for each BTS, and within the BTS node
+  one for each TRX, and within the TRX node one for each Timeslot.
+
+
+=== Interactive help
+
+The VTY features an interactive help system, designed to help you to
+efficiently navigate is commands.
+
+NOTE: The VTY is present on most Osmcoom GSM/GPRS software, thus this
+chapter is present in all the relevant manuals.  The detailed examples
+below assume you are executing them on the OsmoNITB VTY. They will work
+in similar fashion on the other VTY, too - but of course the output will
+be different for each program.
+
+==== The question-mark (`?`) command
+
+If you type a single `?` at the prompt, the VTY will display you
+possible completions at the exact location of your currently entered
+command.
+
+If you type `?` at an otherwise empty command (without having entered
+even only a partial command), you will get a list of the first word of
+all possible commands available at this node:
+
+.Example: Typing `?` at start of OsmoNITB prompt
+----
+OpenBSC> <1>
+  show        Show running system information
+  list        Print command list
+  exit        Exit current mode and down to previous mode
+  help        Description of the interactive help system
+  enable      Turn on privileged mode command
+  terminal    Set terminal line parameters
+  who         Display who is on vty
+  logging     Configure log message to this terminal
+  sms         SMS related comamnds
+  subscriber  Operations on a Subscriber
+----
+<1> press `?` here at the prompt, the character will not be printed
+
+If you have already entered a partial comamnd, `?` will help you to
+review possible options of how to continue your command.   Let's say you
+remember that `show` is used to investigate the system status.  But you
+don't know exactly what the object was called that you'd like to show:
+You simply press `?` after typing `show` and you will see the following
+choice:
+
+.Example: Typing `?` after a partial command
+----
+OpenBSC> show <1>
+  version       Displays program version
+  online-help   Online help
+  history       Display the session command history
+  network       Display information about a GSM NETWORK
+  bts           Display information about a BTS
+  trx           Display information about a TRX
+  timeslot      Display information about a TS
+  lchan         Display information about a logical channel
+  paging        Display information about paging reuqests of a BTS
+  paging-group  Display the paging group
+  logging       Show current logging configuration
+  alarms        Show current logging configuration
+  stats         Show statistical values
+  e1_driver     Display information about available E1 drivers
+  e1_line       Display information about a E1 line
+  e1_timeslot   Display information about a E1 timeslot
+  subscriber    Operations on a Subscriber
+  statistics    Display network statistics
+  sms-queue     Display SMSqueue statistics
+  smpp          SMPP Interface
+----
+<1> press `?` after the `show` command, the character will not be printed
+
+Now you decide you want to have a look at the the `network` object, so
+you type network and press `?` again:
+
+.Example: Typing `?` after `show network`
+----
+OpenBSC> show network
+  <cr>
+----
+
+By presenting `<cr>` as the only option, the VTY tells you that your
+command is complete and does not support any additional arguments.
+
+==== TAB completion
+
+The VTY supports tab (tabulator) completion.  Simply type any partial
+command and press `<tab>`, and it will either show you a choice of
+possible continuations, or complete the command if there's only one
+alternative.
+
+.Example: Use of `<tab>` pressed after typing only `s` as command
+----
+OpenBSC> s<1>
+show       sms        subscriber
+----
+<1> press `<tab>` here.
+
+At this point you then have to decide how to continue typing your
+command.  Let's assume you choose `show`, and then press `<tab>` again:
+
+.Example: Use of `<tab>` pressed after typing `show` command
+----
+OpenBSC> show <1>
+version    online-help history    network    bts        trx
+timeslot   lchan      paging     paging-group logging    alarms
+stats      e1_driver  e1_line    e1_timeslot subscriber statistics
+sms-queue  smpp
+----
+<1> press `<tab>` here.
+
+
+==== The `list` command
+
+The `list` command will give you a full list of all commands available
+at this node:
+
+.Example: Typing `list` at start of OsmoNITB 'VIEW' node prompt
+----
+OpenBSC> list
+  show version
+  show online-help
+  list
+  exit
+  help
+  enable
+  terminal length <0-512>
+  terminal no length
+  who
+  show history
+  show network
+  show bts [<0-255>]
+  show trx [<0-255>] [<0-255>]
+  show timeslot [<0-255>] [<0-255>] [<0-7>]
+  show lchan [<0-255>] [<0-255>] [<0-7>] [lchan_nr]
+  show lchan summary [<0-255>] [<0-255>] [<0-7>] [lchan_nr]
+  show paging [<0-255>]
+  show paging-group <0-255> IMSI
+  logging enable
+  logging disable
+  logging filter all (0|1)
+  logging color (0|1)
+  logging timestamp (0|1)
+  logging print extended-timestamp (0|1)
+  logging print category (0|1)
+  logging set-log-mask MASK
+  logging level (all|rll|cc|mm|rr|rsl|nm|mncc|pag|meas|sccp|msc|mgcp|ho|db|ref|gprs|ns|bssgp|llc|sndcp|nat|ctrl|smpp|filter|lglobal|llapd|linp|lmux|lmi|lmib|lsms|lctrl|lgtp|lstats) (everything|debug|info|notice|error|fatal)
+  show logging vty
+  show alarms
+  show stats
+  show stats level (global|peer|subscriber)
+  show e1_driver
+  show e1_line [line_nr] [stats]
+  show e1_timeslot [line_nr] [ts_nr]
+  show subscriber (extension|imsi|tmsi|id) ID
+  show subscriber cache
+  sms send pending
+  subscriber create imsi ID
+  subscriber (extension|imsi|tmsi|id) ID sms sender (extension|imsi|tmsi|id) SENDER_ID send .LINE
+  subscriber (extension|imsi|tmsi|id) ID silent-sms sender (extension|imsi|tmsi|id) SENDER_ID send .LINE
+  subscriber (extension|imsi|tmsi|id) ID silent-call start (any|tch/f|tch/any|sdcch)
+  subscriber (extension|imsi|tmsi|id) ID silent-call stop
+  subscriber (extension|imsi|tmsi|id) ID ussd-notify (0|1|2) .TEXT
+  subscriber (extension|imsi|tmsi|id) ID update
+  show statistics
+  show sms-queue
+  logging filter imsi IMSI
+  show smpp esme
+----
+
+TIP: Remember, the list of available commands will change significantly
+depending on the Osmocom program you are accessing, and the current node
+you're at.  Compare the above example of the OsmoNITB 'VIEW' node with
+the result from the OsmoNITB 'TRX' config node:
+
+.Example: Typing `list` at start of OsmoNITB 'TRX' config node prompt
+----
+OpenBSC(config-net-bts-trx)# list
+  help
+  list
+  write terminal
+  write file
+  write memory
+  write
+  show running-config
+  exit
+  end
+  arfcn <0-1023>
+  description .TEXT
+  no description
+  nominal power <0-100>
+  max_power_red <0-100>
+  rsl e1 line E1_LINE timeslot <1-31> sub-slot (0|1|2|3|full)
+  rsl e1 tei <0-63>
+  rf_locked (0|1)
+  timeslot <0-7>
+----

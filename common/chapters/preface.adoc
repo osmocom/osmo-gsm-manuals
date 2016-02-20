@@ -1,0 +1,274 @@
+== Foreword
+
+Digital cellular networks based on the GSM specification were designed
+in the late 1980ies and first deployed in the early 1990ies in Europe.
+Over the last 25 years, hundreds of networks were established globally
+and billions of subscribers have joined the associated networks.
+
+The technological foundation of GSM was based on multi-vendor
+interoperable standards, first created by government bodies within CEPT,
+then handed over to ETSI, and now in the hands of 3GPP.  Nevertheless,
+for the first 17 years of GSM technology, the associated protocol stacks
+and network elements have only existed in proprietary 'black-box'
+implementations and not as Free Software.
+
+In 2008 Dieter Spaar and I started to experiment with inexpensive
+end-of-life surplus Siemens GSM BTSs.   We learned about the A-bis
+protocol specifications, reviewed protocol traces and started to
+implement the BSC-side of the A-bis protocol as something originally
+called `bs11-abis`.  All of this was 'just for fun', in order to learn
+more and to boldly go where no Free Software developer has gone before.
+The goal was to learn and to bring Free Software into a domain that
+despite its ubiquity had not yet seen and Free / Open Source software
+implementations.
+
+`bs11-abis` quickly turned into `bsc-hack`, then 'OpenBSC' and into
+what is today known as its 'OsmoNITB' variant:  A minimal implementation
+of all the required functionality of an entire GSM network, exposing
+A-bis towards the BTS.  The project attracted more interested
+developers, and surprisingly quick also commercial interest,
+contribution and adoption.   This added support for more BTS models
+
+After having implemented the network-side GSM protocol stack in 2008 and
+2009, in 2010 the same group of people set out to create a
+telephone-side implementation of the GSM protocol stack.  This
+established the creation of the Osmocom umbrella project, under which
+OpenBSC and the OsmocomBB projects were hosted.
+
+Meanwhile, more interesting telecom standards were discovered and
+implemented, including TETRA professional mobile radio, DECT cordless
+telephony, GMR satellite telephony, some SDR hardware, a SIM card
+protocol tracer and many others.
+
+It has been a most exciting ride during the last seven years.  I
+wouldn't want to miss it under any circumstances.
+
+-- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
+
+
+== Acknowledgements
+
+My deep thanks to everyone who has contributed to Osmocom.  The list of
+contributors is too long to mention here, but I'd like to call out the
+following key individuals and organizations, in no particular order:
+
+* Dieter Spaar for being the most amazing reverse engineer I've met in
+  my career
+* Holger Freyther for his many code contributions and for shouldering a
+  lot of the maintenance work, setting up Jenkins - and being crazy
+  enough to co-start sysmocom as a company with me ;)
+* Andreas Eversberg for taking care of Layer2 and Layer3 of
+  OsmocomBB, and for his work on OsmoBTS and OsmoPCU
+* Sylvain Munaut for always tackling the hardest problems, particularly
+  when it comes closer to the physical layer
+* Chaos Computer Club for providing us a chance to run real-world
+  deployments with tens of thousands of subscribers every year
+* Bernd Schneider of Netzing AG for funding early ip.access nanoBTS support
+* On-Waves ehf for being one of the early adopters of OpenBSC and
+  funding a never ending list of features, fixes and general improvement
+  of pretty much all of our GSM network element implementations
+* sysmocom, for hosting and funding a lot of Osmocom development, the
+  annual Osmocom Developer Conference and releasing this manual.
+* Jan Luebbe, Stefan Schmidt, Daniel Willmann, Pablo Neira, Nico Golde,
+  Kevin Redon, Ingo Albrecht, Alexander Huemer, Alexander Chemeris, Max
+  Suraev, Tobias Engel, Jacob Erlbeck, Ivan Kluchnikov, Alexander Huemer
+
+May the source be with you!
+
+-- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
+
+
+== Preface
+
+First of all, we appreciate your interest in Osmocom software.
+
+Osmocom is a Free and Open Source Software (FOSS) community that
+develops and maintains a variety of software (and partially also
+hardware) projects related to mobile communications.
+
+Founded by people with decades of experience in community-driven FOSS
+projects like the Linux kernel, this community is built on a strong
+belief in FOSS methodology, open standards and vendor neutrality.
+
+
+=== FOSS lives by contribution!
+
+If you are new to FOSS, please try to understand that this development
+model is not primarily about ``free of cost to the GSM network
+operator'', but it is about a collaborative, open development model.  It
+is about sharing ideas and code, but also about sharing the effort of
+software development and maintenance.
+
+If your organization is benefitting from using Osmocom software, please
+consider ways how you can contribute back to that community.  Such
+contributions can be many-fold, for example
+
+* sharing your experience about using the software on the public mailing
+  lists, helping to establish best practises in using/operating it,
+* providing qualified bug reports, work-arounds
+* sharing any modifications to the software you may have made, whether
+  bug fixes or new features, even experimental ones
+* providing review of patches
+* testing new versions of the related software, either in its current
+  ``master'' branch or even more experimental feature branches
+* sharing your part of the maintenance and/or development work, either
+  by donating developer resources or by (partially) funding those people
+  in the community who do.
+
+
+=== Osmocom and sysmocom
+
+Some of the founders of the Osmocom project have established sysmocom as
+a company to provide products and services related to Osmocom.
+
+sysmocom and its staff are the by far the largest developers and
+contributors to the Osmocom mobile network infrastructure projects.
+
+As part of this work, sysmocom has also created the manual you are
+reading.
+
+At sysmocom, we draw a clear line between what is the Osmocom FOSS
+project, and what is sysmocom as a commercial entity.  Under no
+circumstances requires participation in the FOSS projects any commercial
+relationship with sysmocom as a company.
+
+
+=== Corrections
+
+We have prepared this manual in the hope it will guide you through the
+process of installing, configuring and debugging your deployment of
+cellular network infrastructure elements using Osmocom software.  If
+you do find errors, mistakes and/or omissions, or have any suggestions
+on missing topics, please do take the extra time and let us know.
+
+
+=== Legal disclaimers
+
+==== Spectrum License
+
+As GSM operates in licensed spectrum, please always double-check that
+you have all required licenses and that you do not transmit on any ARFCN
+that is not explicitly allocated to you by the applicable regulatory
+authority in your country.
+
+WARNING: Depending on your jurisdiction, operating a radio transmitter
+without a proper license may be considered a felony under criminal law!
+
+
+==== Software License
+
+The software developed by the Osmocom project and described in this
+manual is Free / Open Source Software (FOSS) and subject to so-called
+_copyleft_ licensing.
+
+Copyleft licensing is a legal instrument to ensure that this software
+and any modifications, extensions or derivative versions will always be
+publicly available to anyone, for any purpose, under the same terms as
+the original program as developed by Osmocom.
+
+This means that you are free to use the software for whatever purpose,
+make copies and distribute them - just as long as you ensure to always
+provide/release the _complete and corresponding_ source code.
+
+Every Osmocom software includes a file called `COPYING` in its source
+code repository which explains the details of the license.  The majority
+of programs is released under GNU Affero General Public License, Version
+3 (AGPLv3).
+
+If you have any questions about licensing, don't hesitate to contact the
+Osmocom community.  We're more than happy to clarify if your intended
+use case is compliant with the software licenses.
+
+
+==== Trademarks
+
+All trademarks, service marks, trade names, trade dress, product names
+and logos appearing in this manual are the property of their respecitve
+owners.  All rights not expressly granted herein are reserved.
+
+For your convenience we have listed below some of the registrered
+trademarks referenced herein.  This is not a definitive or complete list
+of the trademarks used.
+
+'Osmocom(R)' and 'OpenBSC(R)' are registered trademarks of Holger
+Freyther and Harald Welte.
+
+'sysmocom(R)' and 'sysmoBTS(R)' is registered trasdemarks of
+'sysmocom - systems for mobile communications GmbH'.
+
+'ip.access(R)' and 'nanoBTS(R)' are registered trademarks of
+'ip.access Ltd.'
+
+
+==== Liability
+
+The software is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the License
+text included with the software for more details.
+
+
+==== Documentation License
+
+Please see <<licenses-gfdl>> for further information.
+
+
+== Introduction
+
+Please note that even while the capital expenses of running mobile
+networks has decreased significantly due to Osmocom software and
+associated hardware like sysmoBTS, GSM networks are still primarily
+operated by large GSM operators.
+
+Neither the GSM specification nor the GSM equipment was ever designed
+for networks to be installed and configured by anyone but professional
+GSM engineers, specialized in their respective area like radio planning,
+radio access network, back-haul or core network.
+
+If you do not share an existing background in GSM network architecture,
+GSM protocols, correctly installing, configuring and optimizing your GSM
+network will be tough, irrespective whether you use products with
+Osmocom software or those of traditional telecom suppliers.
+
+GSM knowledge has many different fields, from radio planning through
+site installation through to core network configuration/administration.
+
+The detailed skills required will depend on the type of installation
+and/or deployment that you are planning, as well as its associated
+network architecture.   A small laboratory deployment for research at a
+university is something else than a rural network for a given village
+with a handful of cells, which is again entirely different from an urban
+network in a dense city.
+
+Some of the useful skills we recommend are:
+
+* general understanding about RF propagation and path loss in order to
+  estimate coverage of your cells and do RF network planning.
+* general understanding about GSM network architecture, its network
+  elements and key transactions on the Layer 3 protocol
+* general understanding about voice telephony, particularly those of
+  ISDN heritage (Q.931 call control)
+* understanding of GNU/Linux system administration and working on the
+  shell
+* understanding of TCP/IP networks and network administration, including
+  tcpdump, tshark, wireshark protocol analyzers.
+* ability to work with text based configuration files and command-line
+  based interfaces such as the VTY of the Osmocom network elements
+
+
+=== Getting assistance
+
+If you do have a support package / contract with sysmocom (or want to
+get one), please contact us at support@sysmocom.de with any issues you
+may have.
+
+If you don't have a support package / contract, please be advised that
+sysmocom can only provide very basic assistance.  However, in any case,
+you can try to use the resources put together by the Osmocom community
+at http://openbsc.osmocom.org/, checking out the wiki and
+the mailing-list for community-based assistance.  Please always
+remember, though:  The community has no obligation to help you, and you
+should address your requests politely to them.  The information (and
+software) provided at osmocom.org is put together by volunteers for
+free.  Treat them like a friend whom you're asking for help, not like a
+supplier from whom you have bought a service.

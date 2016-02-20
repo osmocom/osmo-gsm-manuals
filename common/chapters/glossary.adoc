@@ -1,0 +1,278 @@
+[glossary]
+== Glossary
+
+3GPP::
+  3rd Generation Partnership Project
+A Interface::
+  Interface between BTS and BSC, traditionally over E1 (_3GPP TS 48.008_
+  <<3gpp-ts-48-008>>)
+A3/A8::
+  Algorithm 3 and 8; Authentication and key generation algorithm in GSM
+  and GPRS. COMP128v1/v2/v3 or MILENAGE are typically used
+A5::
+  Algorithm 5; Air-interface encryption of GSM; currently only A5/0
+  through A5/3 are in use
+Abis Interface::
+  Interface between BTS and BSC, traditionally over E1 (_3GPP TS 48.058_
+  <<3gpp-ts-48-058>> and _3GPP TS 52.021_ <<3gpp-ts-52-021>>)
+AGCH::
+  Access Grant Channel on Um interface; used to assign a dedicated
+  channel in response to RACH request
+AGPL::
+  GNU Affero General Public License, a copyleft-style Freee Software License
+ARFCN::
+  Absolute Radio Frequency Channel Number, specifying a tuple of uplink
+  and downlink frequency
+AUC::
+  Authentication Center; central database of authentication key material
+  for each subscriber
+BCCH::
+  Broadcast Control Channel on Um interface; used to broadcast
+  information about Cell and its neighbors
+BCC::
+  Base Station Color Code; short identifier of BTS, lower part of BSIC
+BTS::
+  Base Transceiver Station
+BSC::
+  Base Station Controller
+BSIC::
+  Base Station Identity Code; 16bit identifier of BTS within location area
+BSSGP::
+  Base Station Subsystem Gateway Protocol (_3GPP TS 48.018_ <<3gpp-ts-48-018>>)
+BVCI::
+  BSSGP Virtual Circuit Identifier
+CBCH::
+  Cell Broadcast Channel; used to transmit Cell Broadcast SMS (SMS-CB)
+CC::
+  Call Control; Part of the GSM Layer 3 Protocol
+CCCH::
+  Common Control Channel on Um interface; consists of RACH (uplink),
+  BCCH, PCH, AGCH (all downlink)
+Cell::
+  A cell in a cellular network, served by a BTS
+CEPT::
+  Conférence européenne des administrations des postes et des
+  télécommunications; European onference of Postal and Telecommunications
+  Administrations.
+CGI::
+  Cell Global Identifier comprised of MCC, MNC, LAC and BSIC
+dB::
+  deci-Bel; relative logarithmic unit
+dBm::
+  deci-Bel (milliwatt); unit of measurement for signal strength of radio
+  signals
+DHCP::
+  Dynamic Host Configuration Protocol (_IETF RFC 2131_ <<ietf-rfc2131>>
+downlink::
+  Direction of messages / signals from the network core towards the
+  mobile phone
+DSP::
+  Digital Signal Processor
+dvnixload::
+  Tool to program UBL and the Bootloader on a sysmoBTS
+EDGE::
+  Enhanced Data rates for GPRS Evolution; Higher-speed improvement of
+  GPRS; introduces 8PSK
+EGPRS::
+  Enhanced GPRS; the part of EDGE relating to GPRS services
+ESME::
+  External SMS Entity.  An external application interfacing with a SMSC
+  over SMPP
+ETSI::
+  European Telecommunications Standardization Institute
+FPGA::
+  Field Programmable Gate Array. Programmable digital logic
+Gb::
+  Interface between PCU and SGSN in GPRS/EDGE network; uses NS, BSSGP, LLC
+GERAN::
+  GPRS/EDGE Radio Access Network
+GFDL::
+  GNU Free Documentation License, a copyleft-style Documentation License
+GGSN::
+  GPRS Gateway Support Node; gateway between GPRS and external (IP) network
+GMSK::
+  Gaussian Minimum Shift Keying; modulation used for GSM and GPRS
+GPL::
+  GNU General Public License, a copyleft-style Freee Software License
+Gp::
+  Gp interface between SGSN and GGSN; usees GTP protocol
+GPS::
+  Global Positioning System.  Provides a high accuracy clock reference
+  next to position.
+GSM::
+  Global System for Mobile Communications.  ETSI/3GPP Standard of a 2G
+  digital cellular network
+GSMTAP::
+  GSM tap. Pseudo-Standard for encapsulating GSM protocol layers over
+  UDP/IP for means of analysis
+GTP::
+  GPRS Tunnel Protocol; used between SGSN and GGSN
+HLR::
+  Home Location Register; central subscriber database of a GSM network
+HPLMN::
+  Home PLMN; the network that has issued the subscriber SIM and has his record in HLR
+IE::
+  Information Element
+IMEI::
+  International Mobile Equipment Identity; unique identifier for the mobile phone
+IMSI::
+  International Mobile Subscriber Identity; 15-digit unique identifier
+  for the subscriber/SIM, starts with MCC/MNC of issuing operator
+IP::
+  Internet Protocol (_IETF RFC 791_ <<ietf-rfc791>>)
+IPA::
+  The _ip.access GSM over IP_ protocol, used to multiplex a single TCP connection
+LAC::
+  Location Area Code; 16bit identifier of Location Area within network
+LAPD::
+  Link Access Protocol, D-Channel (_ITU-T Q.921_ <<itu-t-q921>>)
+LAPDm::
+  Link Access Protocol Mobile (_3GPP TS 44.006_ <<3gpp-ts-44-006>>)
+LLC::
+  Logical Link Control; GPRS protocol between MS and SGSN (_3GPP TS
+  44.064_ <<3gpp-ts-44-064>>)
+Location Area::
+  Location Area; a geographic area containing multiple BTS
+MCC::
+  Mobile Country Code; unique identifier of a country, e.g. 262 for Germany
+MGW::
+  Media Gateway
+MM::
+  Mobility Management; Part of the GSM Layer 3 Protocol
+MNC::
+  Mobile Network Code; identifies network within a country; assigned by national regulator
+MNO::
+  Mobile Network Operator; Operator with real physical radio network under his MCC/MNC
+MS::
+  Mobile Station, the mobile phone / GSM Modem
+MSC::
+  Mobile Switching Center
+MSISDN::
+  Mobile Subscriber ISDN Number; telephone number of the subscriber
+MVNO::
+  Mobile Virtual Network Operator; Operator without physical radio network
+NCC::
+  Network Color Code; assigned by national regulator
+NITB::
+  Network In The Box; integrating BSC,MSC,VLR,HLR,SMSC functions
+NSEI::
+  NS Entity Identifier
+NVCI::
+  NS Virtual Circuit Identifier
+NWL::
+  Network Listen; ability of some BTS to receive downlink from other BTSs
+NS::
+  Network Service; protocol on Gb interface (_3GPP TS 48.016_ <<3gpp-ts-48-016>>)
+OCXO::
+  Oven Controlled Crystal Oscillator.  A very high-precision oscillator.
+OML::
+  Operation & Maintenance Link (ETSI/_3GPP TS 52.021_ <<3gpp-ts-52-021>>)
+OpenBSC::
+  Open Source implementation of GSM network elements, specifically OsmoBSC, OsmoNITB, OsmoSGSN
+OpenGGSN::
+  Open Source implementation of a GPRS Packet Control Unit
+OpenVPN::
+  Open-Source Virtual Private Network.  Used to establish encrypted private networks over untrusted public networks.
+Osmocom::
+  Open Source MObile COMmunications; Collaborative community for
+  implementing communications protocols and systems, including GSM, GPRS,
+  TETRA, DECT, GMR and others
+OsmoBSC::
+  Open Source implementation of a GSM Base Station Controller
+OsmoNITB::
+  Open Source implementation of a GSM Network In The Box, comprising
+  functionality that traditionally required BSC, MSC, VLR, HLR, AUC, SMSC
+OsmoSGSN::
+  Open Source implementation of a Serving GPRS Support Node
+OsmoPCU::
+  Open Source implementation of a GPRS Packet Control Unit
+PCH::
+  Paging Channel on downlink Um interface; used by network to page a MS
+PCU::
+  Packet Control Unit; used to manage Layer 2 of the GPRS radio interface
+PDCH::
+  Packet Data Channel on Um interface; used for GPRS/EDGE signalling + user data
+PLMN::
+  Public Land Mobile Network; specification language for a single GSM network
+RAC::
+  Routing Area Code; 16bit identifier for a Routing Area within a Location Area
+RACH::
+  Random Access Channel on uplink Um interface; used by MS to request
+  establishment of a dedicated channel
+RF::
+  Radio Frequency (synonymous to transceiver equipment, e.g. being on or off)
+Roaming::
+  Procedure in which a subscriber of one network is using the radio
+  network of another network, often in different countries, but national
+  roaming exists in some countries, too
+Routing Area::
+  Routing Area; GPRS specific sub-division of Location Area
+RR::
+  Radio Resources; Part of the GSM Layer 3 Protocol
+RSL::
+  Radio Signalling Link (_3GPP TS 48.058_ <<3gpp-ts-48-058>>)
+RTP::
+  Real-Time Transport Protocol (_IETF RFC 3550_ <<ietf-rfc3550>>). Used to
+  transport audio/video streams over UDP/IP
+SACCH::
+  Slow Associate Control Channel on Um interface; bundled to a TCH or
+  SDCCH, used for signalling in parallel to active dedicated channel
+SDCCH::
+  Slow Dedicated Control Channel on Um interface; used for signalling
+  and SMS transport in GSM
+SDK::
+  Software Development Kit
+SIM::
+  Subscriber Identity Module; small chip card storing subscriber identity
+Site::
+  A site is a location where one or multiple BTSs are installed,
+  typically three BTS for three sectors
+SMPP::
+  Short Message Peer-to-Peer; TCP based protocol how external entities
+  can interface with SMSC
+SMSC::
+  Short Message Service Center; Store-and-forward relay for short messages
+SSH::
+  Secure Shell, _IETF RFC 4250_ <<ietf-rfc4251>> to 4254
+syslog::
+  System logging service of UNIX-like operating systems
+System Information::
+  A set of downlink messages on the BCCH and SACCH of the Um interface
+  describing properties of the cell and network
+TCH::
+  Traffic Channel, used for circuit-switched user traffic (mostly voice)
+  in GSM
+TCP::
+  Transmission Control Protocol (_IETF RFC 793_ <<ietf-rfc793>>)
+TFTP::
+  Trivial File Transfer Protocol (_IETF RFC 1350_ <<ietf-rfc1350>>)
+TRX::
+  Transceiver; Element of a BTS serving a single carrier
+u-Boot::
+  The name of a boot loader used in a lot of embedded systems
+UBI::
+  A MTD wear leveling system to deal with NAND flash in Linux
+UBL::
+  The name for the initial bootloader loaded by the TI Davinci SoC
+UDP::
+  User Datagram Protocol (_IETF RFC 768_ <<ietf-rfc768>>)
+UICC::
+  Universal Integrated Chip Circuit.  A smart card according to FIXME
+Um interface::
+  U mobile; Radio interface between MS and BTS
+uplink::
+  Direction of messages / signals from the mobile phone towards the network
+USIM::
+  Universal Subscriber Identity Module; Application running on an UICC
+  to provide subscriber identity for UMTS and GSM networks.
+VCTCXO::
+  Voltage Controlled, Temperature Compensated Crystal Oscillator.  A
+  precision oscillator, better than a classic Crystal Oscillator, but
+  inferior to an OCXO.
+VPLMN::
+  Visited PLMN; the network in which the subscriber is currently
+  registered. May differ from HPLMN when on roaming.
+VTY::
+  Virtual TeletYpe. A textual command-line interface for configuration
+  and introspection.
+

@@ -1,0 +1,49 @@
+<vtydoc xmlns='urn:osmocom:xml:libosmocore:vty:doc:1.0'>
+  <!-- authentication -->
+  <node id='0'><hide /></node>
+  <node id='2'><hide /></node>
+  <node id='8'><hide /></node>
+
+
+  <node id='1'>
+    <name>Show Node for introspection</name>
+    <description>This is the default node when connecting to the
+    VTY interface. This node does not require any additional
+    permission and allows to introspect the application.</description>
+  </node>
+
+  <node id='3'>
+    <name>Enable Node for admin commands</name>
+    <description>This is a privileged node allowing to make changes
+    to the configuration and allow to access more commands. Everything
+    available on the show node should be available here.</description>
+  </node>
+
+  <node id='4'>
+    <name>Configuration Node for configuration</name>
+    <description>This is the base node for all configuration nodes. It
+    allows to enter BTS and logging node to configure them.</description>
+  </node>
+  <node id='7'>
+    <child_of nodeid='4' />
+    <name>Logging Node for logging configuration</name>
+    <description>This is the node is a child of the configuration node and
+    is responsible for configuring the logging framework including the
+    log targets and log levels.</description>
+  </node>
+  <node id='9'>
+    <child_of nodeid='4' />
+    <name>E1/J1/T1 Configuration Node</name>
+    <description>This is the configuration for E1/J1/T1/IP configuration
+    for mISDN, DAHDI or IP based connectivity.</description>
+  </node>
+
+  <common>
+    <command id='logging filter all (0|1)'>
+      <description>The logging framework has the concept of filters. This can
+      be used to only show log messages that apply to a given timeslot or
+      subscriber. The all filter allows all messages to pass unfiltered.
+      </description>
+    </command>
+  </common>
+</vtydoc>
