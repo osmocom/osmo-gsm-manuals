@@ -61,10 +61,10 @@
   procedures and messages on the A-bis interface
   http://www.3gpp.org/DynaReport/52021.htm
 
-- [[[etsi-tr-102216]]] ETSI TR 102 216: Smart cards
+- [[[etsi-tr102216]]] ETSI TR 102 216: Smart cards
   http://www.etsi.org/deliver/etsi_tr/102200_102299/102216/03.00.00_60/tr_102216v030000p.pdf
 
-- [[[ietf-rfc791]]] IETF RFC 768: Internet Protocol
+- [[[ietf-rfc768]]] IETF RFC 768: Internet Protocol
   https://tools.ietf.org/html/rfc791
 - [[[ietf-rfc793]]] IETF RFC 793: Transmission Control Protocol
   https://tools.ietf.org/html/rfc793
@@ -74,7 +74,7 @@
   https://tools.ietf.org/html/rfc2131
 - [[[ietf-rfc3550]]] IETF RFC 3550: RTP: A Transport protocol for Real-Time Applications
   https://tools.ietf.org/html/rfc3550
-- [[[ietf-rfc4250]]] IETF RFC 4251: The Secure Shell (SSH) Protocol Architecture
+- [[[ietf-rfc4251]]] IETF RFC 4251: The Secure Shell (SSH) Protocol Architecture
   https://tools.ietf.org/html/rfc4251
 
 - [[[itu-t-q921]]] ITU-T Q.921: ISDN user-network interface -
