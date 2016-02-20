@@ -24,6 +24,9 @@
 \def\DBKcover{
 \ifthenelse{\equal{\DBKedition}{}}{\def\edhead{}}{\def\edhead{Ed. \DBKedition}}
 
+% ensure the section is called just HISTORY as required by GFDL
+\def\DBKrevtitle{HISTORY}
+
 % interligne double
 \setlength{\oldbaselineskip}{\baselineskip}
 \setlength{\baselineskip}{2\oldbaselineskip}
