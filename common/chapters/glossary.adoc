@@ -257,7 +257,8 @@ UBL::
 UDP::
   User Datagram Protocol (_IETF RFC 768_ <<ietf-rfc768>>)
 UICC::
-  Universal Integrated Chip Circuit.  A smart card according to FIXME
+  Universal Integrated Chip Circuit.  A smart card according to _ETSI
+  TR 102 216_ <<etsi-tr102216>>
 Um interface::
   U mobile; Radio interface between MS and BTS
 uplink::

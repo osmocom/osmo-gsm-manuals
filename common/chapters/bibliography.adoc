@@ -50,6 +50,9 @@
   procedures and messages on the A-bis interface
   http://www.3gpp.org/DynaReport/52021.htm
 
+- [[[etsi-tr-102216]]] ETSI TR 102 216: Smart cards
+  http://www.etsi.org/deliver/etsi_tr/102200_102299/102216/03.00.00_60/tr_102216v030000p.pdf
+
 - [[[ietf-rfc791]]] IETF RFC 768: Internet Protocol
   https://tools.ietf.org/html/rfc791
 - [[[ietf-rfc793]]] IETF RFC 793: Transmission Control Protocol
