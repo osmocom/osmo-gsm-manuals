@@ -78,6 +78,16 @@ May the source be with you!
 -- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
 
 
+== Endorsements
+
+This version of the manual is endorsed by Harald Welte as the official
+version of the manual.
+
+While the GFDL license (see <<licenses-gfdl>>) permits anyone to create
+and distribute modified versions of this manual, such modified
+versions must remove the above endorsement.
+
+
 == Preface
 
 First of all, we appreciate your interest in Osmocom software.
@@ -115,6 +125,7 @@ contributions can be many-fold, for example
   by donating developer resources or by (partially) funding those people
   in the community who do.
 
+We're looking forward to receicing your contributions.
 
 === Osmocom and sysmocom
 
