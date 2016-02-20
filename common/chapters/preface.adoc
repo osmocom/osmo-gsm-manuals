@@ -46,7 +46,7 @@ wouldn't want to miss it under any circumstances.
 -- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
 
 
-== Acknowledgements
+=== Acknowledgements
 
 My deep thanks to everyone who has contributed to Osmocom.  The list of
 contributors is too long to mention here, but I'd like to call out the
@@ -78,7 +78,7 @@ May the source be with you!
 -- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
 
 
-== Endorsements
+=== Endorsements
 
 This version of the manual is endorsed by Harald Welte as the official
 version of the manual.
@@ -226,6 +226,9 @@ Please see <<licenses-gfdl>> for further information.
 
 == Introduction
 
+
+=== Required Skills
+
 Please note that even while the capital expenses of running mobile
 networks has decreased significantly due to Osmocom software and
 associated hardware like sysmoBTS, GSM networks are still primarily
@@ -270,13 +273,12 @@ Some of the useful skills we recommend are:
 === Getting assistance
 
 If you do have a support package / contract with sysmocom (or want to
-get one), please contact us at support@sysmocom.de with any issues you
+get one), please contact support@sysmocom.de with any issues you
 may have.
 
-If you don't have a support package / contract, please be advised that
-sysmocom can only provide very basic assistance.  However, in any case,
-you can try to use the resources put together by the Osmocom community
-at http://openbsc.osmocom.org/, checking out the wiki and
+If you don't have a support package / contract, you have the option of
+using the resources put together by the Osmocom community
+at http://projects.osmocom.org/, checking out the wiki and
 the mailing-list for community-based assistance.  Please always
 remember, though:  The community has no obligation to help you, and you
 should address your requests politely to them.  The information (and
