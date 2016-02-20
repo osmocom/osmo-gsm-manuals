@@ -4,17 +4,28 @@
 
 [bibliography]
 - [[[osmobts-abis-spec]]] Neels Hofmeyer & Harald Welte. OsmoBTS Abis
-  Protocol Specification.  sysmocom.
+  Protocol Specification.
+  http://ftp.osmocom.org/docs/latest/osmobts-abis.pdf
 - [[[userman-osmobts]]] Osmocom Project: OsmoBTS User Manual.
+  http://ftp.osmocom.org/docs/latest/osmobts-usermanual.pdf
 - [[[vty-ref-osmobts]]] Osmocom Project: OsmoBTS VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmobts-vty-reference.pdf
 - [[[userman-osmobsc]]] Osmocom Project: OsmoBSC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmobsc-usermanual.pdf
 - [[[vty-ref-osmobsc]]] Osmocom Project: OsmoBSC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmobsc-vty-reference.pdf
 - [[[userman-osmopcu]]] Osmocom Project: OsmoPCU User Manual.
+  http://ftp.osmocom.org/docs/latest/osmopcu-usermanual.pdf
 - [[[vty-ref-osmopcu]]] Osmocom Project: OsmoPCU VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmopcu-vty-reference.pdf
 - [[[userman-osmonitb]]] Osmocom Project: OsmoNITB User Manual.
+  http://ftp.osmocom.org/docs/latest/osmonitb-usermanual.pdf
 - [[[vty-ref-osmonitb]]] Osmocom Project: OsmoNITB VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
 - [[[userman-osmosgsn]]] Osmocom Project: OsmoSGSN User Manual.
+  http://ftp.osmocom.org/docs/latest/osmosgsn-usermanual.pdf
 - [[[vty-ref-osmosgsn]]] Osmocom Project: OsmoSGSN VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
 //- [[[userman-openggsn]]] Osmocom Project: OpenGGSN User Manual.
 
 - [[[3gpp-ts-24-007]]] 3GPP TS 24.007: Mobile radio interface signalling
