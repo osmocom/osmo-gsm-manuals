@@ -1,8 +1,14 @@
 [glossary]
 == Glossary
 
+2FF::
+  2nd Generation Form Factor; the so-called plug-in SIM form factor
+3FF::
+  3rd Generation Form Factor; the so-called microSIM form factor
 3GPP::
   3rd Generation Partnership Project
+4FF::
+  4th Generaion Form Factor; the so-called nanoSIM form factor
 A Interface::
   Interface between BTS and BSC, traditionally over E1 (_3GPP TS 48.008_
   <<3gpp-ts-48-008>>)
@@ -15,6 +21,10 @@ A5::
 Abis Interface::
   Interface between BTS and BSC, traditionally over E1 (_3GPP TS 48.058_
   <<3gpp-ts-48-058>> and _3GPP TS 52.021_ <<3gpp-ts-52-021>>)
+ACC::
+  Access Control Class; every BTS broadcasts a bit-mask of permitted
+  ACC, and only subscribers with a SIM of matching ACC are permitted
+  to use that BTS
 AGCH::
   Access Grant Channel on Um interface; used to assign a dedicated
   channel in response to RACH request
@@ -135,6 +145,9 @@ Location Area::
   Location Area; a geographic area containing multiple BTS
 MCC::
   Mobile Country Code; unique identifier of a country, e.g. 262 for Germany
+MFF::
+  Machine-to-Machine Form Factor; a SIM chip package that is soldered
+  permanently onto M2M device circuit boards.
 MGW::
   Media Gateway
 MM::
@@ -190,21 +203,36 @@ OsmoSGSN::
   Open Source implementation of a Serving GPRS Support Node
 OsmoPCU::
   Open Source implementation of a GPRS Packet Control Unit
+OTA::
+  Over-The-Air; Capability of operators to remotely
+  reconfigure/reprogram ISM/USIM cards
 PCH::
   Paging Channel on downlink Um interface; used by network to page an MS
 PCU::
   Packet Control Unit; used to manage Layer 2 of the GPRS radio interface
 PDCH::
   Packet Data Channel on Um interface; used for GPRS/EDGE signalling + user data
+PIN::
+  Personal Identification Number; a number by which the user
+  authenticates to a SIM/USIM or other smart card
 PLMN::
   Public Land Mobile Network; specification language for a single GSM network
+PUK::
+  PIN Unblocking Code; used to unblock a blocked PIN (after too many
+  wrong PIN attempts)
 RAC::
   Routing Area Code; 16bit identifier for a Routing Area within a Location Area
 RACH::
   Random Access Channel on uplink Um interface; used by MS to request
   establishment of a dedicated channel
+RAM::
+  Remote Application Management; Ability to remotely manage
+  (install, remove) Java Applications on SIM/USIM Card
 RF::
   Radio Frequency
+RFM::
+  Remote File Management; Ability to remotely manage (write, read)
+  files on a SIM/USIM card
 Roaming::
   Procedure in which a subscriber of one network is using the radio
   network of another network, often in different countries; in some
