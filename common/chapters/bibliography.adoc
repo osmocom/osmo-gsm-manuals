@@ -28,12 +28,32 @@
   http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
 //- [[[userman-openggsn]]] Osmocom Project: OpenGGSN User Manual.
 
+- [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
+  (U)SIM application toolkit; Stage 2
+  http://www.3gpp.org/DynaReport/23048.htm
 - [[[3gpp-ts-24-007]]] 3GPP TS 24.007: Mobile radio interface signalling
   layer 3; General Aspects
   http://www.3gpp.org/DynaReport/24007.htm
 - [[[3gpp-ts-24-008]]] 3GPP TS 24.008: Mobile radio interface Layer 3
   specification; Core network protocols; Stage 3.
   http://www.3gpp.org/dynareport/24008.htm
+- [[[3gpp-ts-31-101]]] 3GPP TS 31.101: UICC-terminal interface;
+  Physical and logical characteristics
+  http://www.3gpp.org/DynaReport/31101.htm
+- [[[3gpp-ts-31-102]]] 3GPP TS 31.102: Characteristics of the
+  Universal Subscriber Identity Module (USIM) application
+  http://www.3gpp.org/DynaReport/31102.htm
+- [[[3gpp-ts-31-111]]] 3GPP TS 31.111: Universal Subscriber Identity
+  Module (USIM) Application Toolkit (USAT)
+  http://www.3gpp.org/DynaReport/31111.htm
+- [[[3gpp-ts-31-115]]] 3GPP TS 31.115: Secured packet structure for
+  (Universal) Subscriber Identity Module (U)SIM Toolkit applications
+  http://www.3gpp.org/DynaReport/31115.htm
+- [[[3gpp-ts-31-116]]] 3GPP TS 31.116: Remote APDU Structure for
+  (U)SIM Toolkit applications http://www.3gpp.org/DynaReport/31116.htm
+- [[[3gpp-ts-35-206]]] 3GPP TS 35.206: 3G Security; Specification of
+  the MILENAGE algorithm set: Algorithm specification
+  http://www.3gpp.org/DynaReport/35206.htm
 - [[[3gpp-ts-44-006]]] 3GPP TS 44.006: Mobile Station - Base Station
   System (MS - BSS) interface; Data Link (DL) layer specification
   http://www.3gpp.org/DynaReport/44006.htm
@@ -57,12 +77,21 @@
 - [[[3gpp-ts-48-058]]] 3GPP TS 48.058: Base Station Controller - Base
   Transceiver Station (BSC - BTS) Interface; Layer 3 specification
   http://www.3gpp.org/DynaReport/48058.htm
+- [[[3gpp-ts-51-011]]] 3GPP TS 51.011: Specification of the Subscriber
+  Identity Module - Mobile Equipment (SIM-ME) interface
+- [[[3gpp-ts-51-014]]] 3GPP TS 51.014: Specification of the SIM
+  Application Toolkit for the Subscriber Identity Module - Mobile
+  Equipment (SIM - ME) interface http://www.3gpp.org/DynaReport/51014.htm
 - [[[3gpp-ts-52-021]]] 3GPP TS 52.021: Network Management (NM)
   procedures and messages on the A-bis interface
   http://www.3gpp.org/DynaReport/52021.htm
 
 - [[[etsi-tr102216]]] ETSI TR 102 216: Smart cards
   http://www.etsi.org/deliver/etsi_tr/102200_102299/102216/03.00.00_60/tr_102216v030000p.pdf
+
+- [[[etsi-ts102221]]] ETSI TS 102 221: Smart Cards; UICC-Terminal
+  interface; Physical and logical characteristics
+  http://www.etsi.org/deliver/etsi_ts/102200_102299/102221/13.01.00_60/ts_102221v130100p.pdf
 
 - [[[ietf-rfc768]]] IETF RFC 768: Internet Protocol
   https://tools.ietf.org/html/rfc791
