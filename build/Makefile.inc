@@ -41,7 +41,7 @@ pdf: $(pdfs) $(manuals)
 %.pdf: %.xml %.xml-lint $(EXTRA_DEPS) FORCE
 	$(call command,dblatex $(dblatex_quiet) -P draft.mode=no $<,DBLATEX,$<)
 
-upload: $(pdfs)
-	rsync -avz $(pdfs) $(UPLOAD_PATH)/
+upload: $(pdfs) $(ASCIIDOCPDFS)
+	rsync -avz $(pdfs) $(ASCIIDOCPDFS) $(UPLOAD_PATH)/
 
 FORCE:
