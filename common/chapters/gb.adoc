@@ -58,7 +58,7 @@ The NS protocol features a number of configurable timers.
 
 === Examining Gb interface status
 
-There are several commans that can help to inspect and analyze the
+There are several commands that can help to inspect and analyze the
 currently running system status with respect to the Gb interfaces.
 
 .Example: Inspecting NS state

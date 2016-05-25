@@ -134,12 +134,12 @@ OpenBSC> <1>
   terminal    Set terminal line parameters
   who         Display who is on vty
   logging     Configure log message to this terminal
-  sms         SMS related comamnds
+  sms         SMS related commands
   subscriber  Operations on a Subscriber
 ----
 <1> press `?` here at the prompt, the character will not be printed
 
-If you have already entered a partial comamnd, `?` will help you to
+If you have already entered a partial command, `?` will help you to
 review possible options of how to continue your command.   Let's say you
 remember that `show` is used to investigate the system status.  But you
 don't know exactly what the object was called that you'd like to show:
@@ -157,7 +157,7 @@ OpenBSC> show <1>
   trx           Display information about a TRX
   timeslot      Display information about a TS
   lchan         Display information about a logical channel
-  paging        Display information about paging reuqests of a BTS
+  paging        Display information about paging requests of a BTS
   paging-group  Display the paging group
   logging       Show current logging configuration
   alarms        Show current logging configuration
@@ -172,7 +172,7 @@ OpenBSC> show <1>
 ----
 <1> press `?` after the `show` command, the character will not be printed
 
-Now you decide you want to have a look at the the `network` object, so
+Now you decide you want to have a look at the `network` object, so
 you type network and press `?` again:
 
 .Example: Typing `?` after `show network`

@@ -8,7 +8,7 @@
 3GPP::
   3rd Generation Partnership Project
 4FF::
-  4th Generaion Form Factor; the so-called nanoSIM form factor
+  4th Generation Form Factor; the so-called nanoSIM form factor
 A Interface::
   Interface between BTS and BSC, traditionally over E1 (_3GPP TS 48.008_
   <<3gpp-ts-48-008>>)
@@ -103,7 +103,7 @@ GGSN::
 GMSK::
   Gaussian Minimum Shift Keying; modulation used for GSM and GPRS
 GPL::
-  GNU General Public License, a copyleft-style Freee Software License
+  GNU General Public License, a copyleft-style Free Software License
 Gp::
   Gp interface between SGSN and GGSN; uses GTP protocol
 GPS::
@@ -159,7 +159,7 @@ MNO::
 MS::
   Mobile Station; a mobile phone / GSM Modem
 MSC::
-  Mobile Switching Center; network element in the circuit-switcehd
+  Mobile Switching Center; network element in the circuit-switched
   core network
 MSISDN::
   Mobile Subscriber ISDN Number; telephone number of the subscriber
@@ -168,7 +168,7 @@ MVNO::
 NCC::
   Network Color Code; assigned by national regulator
 NITB::
-  Network In The Box; combines functionality traditionally proivided
+  Network In The Box; combines functionality traditionally provided
   by BSC, MSC, VLR, HLR, SMSC functions; see OsmoNITB
 NSEI::
   NS Entity Identifier
@@ -236,7 +236,7 @@ RFM::
 Roaming::
   Procedure in which a subscriber of one network is using the radio
   network of another network, often in different countries; in some
-  countris national roaming exists
+  countries national roaming exists
 Routing Area::
   Routing Area; GPRS specific sub-division of Location Area
 RR::
