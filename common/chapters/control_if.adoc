@@ -136,6 +136,29 @@ msc {
 }
 ----
 
+[[ctrl_common_vars]]
+=== Common variables
+
+There are several variables which are common to all the programs using control
+interface. They are described in the following table.
+
+.Variables available over control interface
+[options="header",width="100%",cols="20%,10%,50%,20%"]
+|===
+|Name|Access|Value|Comment
+|counter.*|RO||Get counter value.
+|rate_ctr.*|RO||Get rate counter value.
+|===
+
+Those read-only variables allow to get value of arbitrary counter or rate
+counter using its name e. g. "counter.net.sms.submitted" or
+"rate_ctr.per_hour.nat.bsc.sccp.conn". Of course for that to work the program
+in question have to register corresponding counter names using libosmocore
+functions. Note the difference between counter and rate_ctr access format: in
+case of rate_ctr the counter name have to be prefixed with interval
+specification which can be any of "per_sec", "per_min", "per_hour", "per_day"
+or "abs" for absolute value.
+
 === Control Interface python example: `bsc_control.py`
 
 In the `openbsc.git` repository, there is an example python script
