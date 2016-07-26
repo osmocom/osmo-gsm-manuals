@@ -3,7 +3,7 @@
 == Appendix A. Bibliography / References
 
 [bibliography]
-- [[[osmobts-abis-spec]]] Neels Hofmeyer & Harald Welte. OsmoBTS Abis
+- [[[osmobts-abis-spec]]] Neels Hofmeyr & Harald Welte. OsmoBTS Abis
   Protocol Specification.
   http://ftp.osmocom.org/docs/latest/osmobts-abis.pdf
 - [[[userman-osmobts]]] Osmocom Project: OsmoBTS User Manual.
