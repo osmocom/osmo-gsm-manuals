@@ -1,0 +1,6 @@
+* The _PDCH ACT_ type supports switching between _TCH/F_ and _PDCH_ and is
+  compatible to the dynamic PDCH protocol employed by _ip.access nanobts_
+  devices. It uses a non-standard _RSL PDCH Activate_ message.
+* The _CHAN ACT_ type supports switching between _TCH/F_, _TCH/H_ and _PDCH_.
+  It uses non-standard _Channel Number_ IE value and _Activation Type_ in RSL
+  _Channel Activate_ messages.
