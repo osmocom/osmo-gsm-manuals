@@ -10,18 +10,28 @@ which protocol / interface.
 [options="header",cols="10%,10%,40%,40%"]
 |===============
 |L4 Protocol|Port Number|Purpose|Software
+|UDP|2427|MGCP GW|osmo-bsc_mgcp
 |TCP|2775|SMPP (SMS interface for external programs)|osmo-nitb
-|TCP|3002|A/bis/IP OML|osmo-bts, osmo-bsc, osmo-nitb
+|TCP|3002|A-bis/IP OML|osmo-bts, osmo-bsc, osmo-nitb
 |TCP|3003|A-bis/IP RSL|osmo-bts, osmo-bsc, osmo-nitb
 |TCP|4240|telnet (VTY)|osmo-pcu
 |TCP|4241|telnet (VTY)|osmo-bts
-|TCP|4242|telnet (VTY)|osmo-nitb, osmo-bsc
+|TCP|4242|telnet (VTY)|osmo-nitb, osmo-bsc, cellmgr-ng
 |TCP|4243|telnet (VTY)|osmo-bsc_mgcp
 |TCP|4244|telnet (VTY)|osmo-bsc_nat
 |TCP|4245|telnet (VTY)|osmo-sgsn
 |TCP|4246|telnet (VTY)|osmo-gbproxy
+|TCP|4247|telnet (VTY)|OsmocomBB
 |TCP|4249|Control Interface|osmo-nitb, osmo-bsc
 |TCP|4250|Control Interface|osmo-bsc_nat
+|TCP|4251|Control Interface|osmo-sgsn
+|TCP|4252|telnet (VTY)|sysmobts-mgr
+|TCP|4253|telnet (VTY)|osmo-gtphub
+|TCP|4254|telnet (VTY)|osmo-cscn
+|TCP|4255|Control Interface|osmo-cscn
+|TCP|4256|telnet (VTY)|osmo-sip-connector
+|TCP|4257|Control Interface|ggsn (OpenGGSN)
+|UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
 |UDP|2427|GSMTAP|osmo-pcu, osmo-bts
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
