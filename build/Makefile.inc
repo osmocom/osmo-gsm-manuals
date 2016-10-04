@@ -1,9 +1,9 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-LIBOSMO_DIR := ~/source/gsm/libosmocore
+LIBOSMO_DIR ?= ~/source/gsm/libosmocore
 MERGE_DOC := $(LIBOSMO_DIR)/doc/vty/merge_doc.xsl
-UPLOAD_PATH := generic@sysmocom-downloads:documents
+UPLOAD_PATH ?= generic@sysmocom-downloads:documents
 
 pdfs = $(patsubst %.xml,%.pdf,$(manuals))
 lint = $(patsubst %.xml,%.xml-lint,$(manuals))
