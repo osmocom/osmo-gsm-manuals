@@ -1,7 +1,7 @@
 BUILDDIR = $(TOPDIR)/build
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
-GIT_DATE := $(shell date -d @`git log -n 1 "--pretty=%at" ../.` "+%Y-%b-%e")
+GIT_DATE := $(shell $(TOPDIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
 
 # prepend the document name with the version numbe suffix
 #DOCS_VER = $(foreach P, $(ASCIIDOCS), $(P)-v$(shell xmllint --recover --xpath "//revnumber[position()=last()]/text()" $(P)-docinfo.xml 2>/dev/null))
