@@ -16,7 +16,7 @@ docbooktotypes = pdf
 include ../build/Makefile.inc
 
 clean:
-	rm -rf $(cleanfiles)
+	-rm -rf $(cleanfiles)
 
 gen-nat-vty-docbook: FORCE
 	$(call command,xsltproc -o generated/combined1.xml \
