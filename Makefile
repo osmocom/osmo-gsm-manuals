@@ -24,3 +24,13 @@ upload:
 	cd OsmoSGSN; $(MAKE) upload
 	cd OsmoNAT; $(MAKE) upload
 	cd OsmoPCU; $(MAKE) upload
+
+check:
+	cd OsmoBTS; $(MAKE) check
+	cd OsmoNITB; $(MAKE) check
+	cd OsmoBSC; $(MAKE) check
+	cd OsmoSGSN; $(MAKE) check
+	cd OsmoPCU; $(MAKE) check
+	# These don't use asciidoc, so they have no 'make check' target:
+	#cd OsmoMGCP; $(MAKE) check
+	#cd OsmoNAT; $(MAKE) check

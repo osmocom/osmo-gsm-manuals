@@ -8,4 +8,5 @@
 *.html
 *__*.png
 *__*.svg
+*.check
 generated/

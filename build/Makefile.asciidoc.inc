@@ -9,6 +9,7 @@ GIT_DATE := $(shell $(TOPDIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=
 
 # generate list of PDFs that we're supposed to render
 ASCIIDOCPDFS = $(ASCIIDOCS:%=%.pdf)
+ASCIIDOC_CHECKS = $(ASCIIDOCS:%=%.check)
 
 ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex.sty
 
@@ -30,3 +31,13 @@ all: $(ASCIIDOCPDFS)
 
 $(ASCIIDOCPDFS): %.pdf: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc
 	a2x $(A2X_OPTS) $< || asciidoc -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf $<
+
+check: $(ASCIIDOC_CHECKS)
+
+$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc chapters/*.adoc
+	asciidoc -v $(ASCIIDOC_OPTS) $< > $@ 2>&1
+	# Make absolutely sure that the %.check target is updated.
+	touch $@
+	# Do print the WARNING output but return error if any was found
+	# (grep -v would omit the WARNING output from the log).
+	@grep WARNING $@ && exit 1 || exit 0
