@@ -30,7 +30,7 @@ A2X_OPTS := -L --asciidoc-opts="$(ASCIIDOC_OPTS)" --dblatex-opts="$(DBLATEX_OPTS
 all: $(ASCIIDOCPDFS)
 
 $(ASCIIDOCPDFS): %.pdf: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc
-	a2x $(A2X_OPTS) $< || asciidoc -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf $<
+	a2x $(A2X_OPTS) $< || asciidoc -v $(ASCIIDOC_OPTS) $<
 
 check: $(ASCIIDOC_CHECKS)
 
