@@ -67,14 +67,36 @@ OsmoSGSN> show ns
 Encapsulation NS-UDP-IP     Local IP: 127.0.0.1, UDP Port: 23000
 Encapsulation NS-FR-GRE-IP  Local IP: 0.0.0.0
 ----
-FIXME
 
-FIXME: show ns stats
+.Example: Inspecting NS statistics
+----
+OsmoSGSN> show ns stats
+Encapsulation NS-UDP-IP     Local IP: 10.9.1.198, UDP Port: 23000
+Encapsulation NS-FR-GRE-IP  Local IP: 0.0.0.0
+NSEI  101, NS-VC 101, Remote: BSS, ALIVE UNBLOCKED, UDP 10.9.1.119:23000
+ NSVC Peer Statistics:
+  Packets at NS Level  ( In):     1024 (2/s 123/m 911/h 0/d)
+  Packets at NS Level  (Out):     1034 (0/s 151/m 894/h 0/d)
+  Bytes at NS Level    ( In):   296638 (1066/s 22222/m 274244/h 0/d)
+  Bytes at NS Level    (Out):   139788 (0/s 48225/m 91710/h 0/d)
+  NS-VC Block count         :        0 (0/s 0/m 0/h 0/d)
+  NS-VC gone dead count     :        0 (0/s 0/m 0/h 0/d)
+  NS-VC replaced other count:        0 (0/s 0/m 0/h 0/d)
+  NS-VC changed NSEI count  :        0 (0/s 0/m 0/h 0/d)
+  NS-VCI was invalid count  :        0 (0/s 0/m 0/h 0/d)
+  NSEI was invalid count    :        0 (0/s 0/m 0/h 0/d)
+  ALIVE ACK missing count   :        0 (0/s 0/m 0/h 0/d)
+  RESET ACK missing count   :        0 (0/s 0/m 0/h 0/d)
+ NSVC Peer Statistics:
+  ALIVE reponse time        :        0 ms
+----
 
 .Example: Inspecting BSSGP state
 ----
+OsmoSGSN> show bssgp
+NSEI   101, BVCI     2, RA-ID: 1-2-1-0, CID: 0, STATE: UNBLOCKED
+NSEI   101, BVCI     0, RA-ID: 0-0-0-0, CID: 0, STATE: UNBLOCKED
 ----
-FIXME
 
 FIXME: show nse
 
