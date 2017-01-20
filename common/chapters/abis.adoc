@@ -25,3 +25,89 @@ Abis RSL is only specified over E1 interfaces.  The Abis/IP
 implementation of OsmoBTS and OsmoBSC extend and/or deviate from the TS
 08.58 specification in several ways.  Please see the _OsmoBTS Abis
 Protocol Specification_ <<osmobts-abis-spec>> for more information.
+
+=== Locate Abis/IP based BTS
+
+We can use a tool called abisip-find to be able to find BTS which is
+connected in the network. This tool is located under:
+'./openbsc/openbsc/src/ipaccess'
+
+==== abisip-find
+
+abisip-find is a small command line tool which is used to search and
+find BTS devices in your network (e.g. sysmoBTS, nanoBTS).
+
+It uses broadcast packets of the UDP variant of the Abis-IP protocol
+on port 3006, and thus will find any BTS that can be reached by the
+all-network broadcast address 255.255.255.255
+
+When program is started it will print one line for each BTS it can find.
+
+.Example: using abisip-find to find BTS in your network
+----
+$ ./abisip-find
+abisip-find (C) 2009 by Harald Welte
+This is FREE SOFTWARE with ABSOLUTELY NO WARRANTY
+
+you might need to specify the outgoing
+network interface, e.g. ``abisip-find eth0``
+Trying to find ip.access BTS by broadcast UDP...
+
+MAC_Address='24:62:78:01:02:03' IP_Address='192.168.0.171' Serial_Number='123'
+Unit_ID='sysmoBTS 1002'
+
+MAC_Address='24:62:78:04:05:06' IP_Address='192.168.0.182' Serial_Number='456'
+Unit_ID='sysmoBTS 1002'
+
+MAC Address='00:01:02:03:04:05' IP Address='192.168.100.123' Unit ID='65535/0/0'
+Location_1='' Location 2='BTS_NBT131G'  Equipment Version='165a029_55'
+Software Version='168a302_v142b13d0' Unit Name='nbts-00-02-95-00-4E-B3'
+Serial Number='00123456'
+
+^C
+----
+
+You may have to start the program as a root:
+----
+$ sudo ./abisip-find eth0
+----
+
+=== Deploying a new nanoBTS
+
+A tool called ipaccess-config can be used to configure a new ip.access nanoBTS.
+
+==== ipaccess-config
+
+This program is very helpful tool which is used to configure Unit ID and
+Primarly OML IP. You can find this tool under:
+'./openbsc/openbsc/src/ipaccess'
+
+
+.Example: using ipaccess-config to configure Unit ID and Primarly OML IP of
+nanoBTS
+----
+$ ./ipaccess-config -u 1801/0/0<1>  10.9.1.195<2> -o 10.9.1.154<3>
+
+ipaccess-config (C) 2009-2010 by Harald Welte and others
+This is FREE SOFTWARE with ABSOLUTELY NO WARRANTY
+
+Trying to connect to ip.access BTS ...
+abis_nm.c:316 OC=SITE-MANAGER(00) INST=(ff,ff,ff) STATE CHG:
+OP_STATE=Disabled AVAIL=Not installed(07)
+abis_nm.c:316 OC=BTS(01) INST=(00,ff,ff) STATE CHG:
+OP_STATE=Disabled AVAIL=Not installed(07) ADM=Locked
+abis_nm.c:316 OC=BASEBAND-TRANSCEIVER(04) INST=(00,00,ff) STATE CHG:
+OP_STATE=Disabled AVAIL=Not installed(07) ADM=Locked
+OML link established using TRX 0
+setting Unit ID to '1801/0/0'
+setting primary OML link IP to '10.9.1.154'
+abis_nm.c:316 OC=CHANNEL(03) INST=(00,00,00) STATE CHG:
+OP_STATE=Disabled AVAIL=Not installed(07) ADM=Locked
+...
+abis_nm.c:2433 OC=BASEBAND-TRANSCEIVER(04) INST=(00,00,ff) IPACCESS(0xf0):
+SET NVATTR ACK
+Set the NV Attributes.
+----
+<1> Unit ID
+<2> IP address of the NITB
+<3> IP address of the nanoBTS
