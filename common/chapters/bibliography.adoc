@@ -92,6 +92,9 @@
 - [[[etsi-ts102221]]] ETSI TS 102 221: Smart Cards; UICC-Terminal
   interface; Physical and logical characteristics
   http://www.etsi.org/deliver/etsi_ts/102200_102299/102221/13.01.00_60/ts_102221v130100p.pdf
+- [[[etsi-ts101220]]] ETSI TS 101 220: Smart Cards; ETSI numbering
+  system for telecommunication application providers
+  http://www.etsi.org/deliver/etsi_ts/101200_101299/101220/12.00.00_60/ts_101220v120000p.pdf
 
 - [[[ietf-rfc768]]] IETF RFC 768: Internet Protocol
   https://tools.ietf.org/html/rfc791
