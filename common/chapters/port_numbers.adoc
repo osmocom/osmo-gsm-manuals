@@ -37,3 +37,9 @@ which protocol / interface.
 |UDP|2427|GSMTAP|osmo-pcu, osmo-bts
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
 |===============
+////
+ATTENTION: Keep this list in sync with all of:
+https://osmocom.org/projects/cellular-infrastructure/wiki/PortNumbers
+https://git.osmocom.org/libosmocore/tree/include/osmocom/vty/ports.h
+https://git.osmocom.org/libosmocore/tree/include/osmocom/ctrl/ports.h
+////
