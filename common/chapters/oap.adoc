@@ -1,5 +1,6 @@
 == Osmocom Authentication Protocol (OAP)
 
+=== General
 The Osmocom Authentication Protocol employs mutual authentication to
 register a client with a server over an IPA connection. Milenage is used
 as the authentication algorithm, where client and server have a shared
@@ -195,14 +196,11 @@ Direction: Client -> Server
 
 ==== Sync Error
 
-Direction: Server -> Client
+Not used.
 
-[options="header",cols="5%,20%,45%,10%,10%,10%"]
-|===
-|IEI|IE|Type|Presence|Format|Length
-|  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
-|02|Cause|GMM Cause, TS 04.08: 10.5.5.14|M|TLV|3
-|===
+==== Sync Result
+
+Not used.
 
 === Information Elements
 
