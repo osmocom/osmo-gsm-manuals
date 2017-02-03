@@ -191,7 +191,7 @@ Direction: Client -> Server
 |===
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<common-oap-ie-msgtype>>|M|V|1
-|20|AUTS|octet string (16)|TLV|18
+|20|AUTS|octet string (14)|TLV|16
 |===
 
 ==== Sync Error
