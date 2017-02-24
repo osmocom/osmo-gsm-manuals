@@ -27,8 +27,8 @@ which protocol / interface.
 |TCP|4251|Control Interface|osmo-sgsn
 |TCP|4252|telnet (VTY)|sysmobts-mgr
 |TCP|4253|telnet (VTY)|osmo-gtphub
-|TCP|4254|telnet (VTY)|osmo-cscn
-|TCP|4255|Control Interface|osmo-cscn
+|TCP|4254|telnet (VTY)|osmo-msc
+|TCP|4255|Control Interface|osmo-msc
 |TCP|4256|telnet (VTY)|osmo-sip-connector
 |TCP|4257|Control Interface|ggsn (OpenGGSN)
 |TCP|4258|telnet (VTY)|osmo-hlr
