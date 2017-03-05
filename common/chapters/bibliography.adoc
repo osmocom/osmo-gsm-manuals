@@ -51,6 +51,8 @@
   http://www.3gpp.org/DynaReport/31115.htm
 - [[[3gpp-ts-31-116]]] 3GPP TS 31.116: Remote APDU Structure for
   (U)SIM Toolkit applications http://www.3gpp.org/DynaReport/31116.htm
+- [[[3gpp-ts-35-205]]] 3GPP TS 35.205: 3G Security; Specification of
+  the MILENAGE algorithm set: General
 - [[[3gpp-ts-35-206]]] 3GPP TS 35.206: 3G Security; Specification of
   the MILENAGE algorithm set: Algorithm specification
   http://www.3gpp.org/DynaReport/35206.htm
