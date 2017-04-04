@@ -20,6 +20,9 @@ encapsulation for IP based GPRS systems.
 OsmoSGSN(config-ns)# encapsulation udp local-ip 127.0.0.1 <1>
 OsmoSGSN(config-ns)# encapsulation udp local-port 23000 <2>
 ----
+The example above configures a libosmogb based application to listen for
+incoming connections from PCUs on the specified address and port.
+
 <1> Set the local side IP address for NS-over-UDP
 <2> Set the local side UDP port number for NS-over-UDP. 23000 is the default
 
