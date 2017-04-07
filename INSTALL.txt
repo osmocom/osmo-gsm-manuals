@@ -1,0 +1,14 @@
+Dependencies needed, by example of a debian system:
+
+apt-get install \
+  make \
+  asciidoc \
+  xsltproc \
+  dblatex \
+  mscgen \
+  graphviz
+
+Build PDFs, run:
+  make
+or for a parallel build using more CPU cores:
+  make -j 5
