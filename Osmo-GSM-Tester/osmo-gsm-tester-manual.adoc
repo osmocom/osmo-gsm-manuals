@@ -1,0 +1,18 @@
+Osmo-GSM-Tester Manual
+======================
+Neels Hofmeyr <nhofmeyr@sysmocom.de>
+
+== WARNING: Work in Progress
+
+*NOTE: The osmo-gsm-tester is still in pre-alpha stage: some parts are still
+incomplete, and details will still change and move around.*
+
+include::chapters/intro.adoc[]
+
+include::chapters/config.adoc[]
+
+include::chapters/trial.adoc[]
+
+include::chapters/test_api.adoc[]
+
+include::chapters/debugging.adoc[]

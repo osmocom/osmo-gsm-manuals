@@ -1,0 +1,269 @@
+== Introduction with Examples
+
+The osmo-gsm-tester is software to run automated tests of real GSM hardware,
+foremost to verify that ongoing Osmocom software development continues to work
+with various BTS models, while being flexibly configurable and extendable.
+
+A 'main unit' (general purpose computer) is connected via ethernet and/or USB to
+any number of BTS models and to any number of GSM modems via USB. The modems
+and BTS instances' RF transceivers are typically wired directly to each other
+via RF distribution chambers to bypass the air medium and avoid disturbing real
+production cellular networks. Furthermore, the setup may include adjustable RF
+attenuators to model various distances between modems and base stations.
+
+The osmo-gsm-tester software runs on the main unit to orchestrate the various
+GSM hardware and run predefined test scripts. It typically receives binary
+packages from a jenkins build service. It then automatically configures and
+launches an Osmocom core network on the main unit and sets up and runs BTS
+models as well as modems to form a complete ad-hoc GSM network. On this setup,
+predefined test suites, combined with various scenario definitions, are run to
+verify stability of the system.
+
+The osmo-gsm-tester is implemented in Python (version 3). It uses the ofono
+daemon to control the modems connected via USB. BTS software is either run
+directly on the main unit (e.g. for osmo-bts-trx, osmo-bts-octphy), run via SSH
+(e.g. for a sysmoBTS) or assumed to run on a connected BTS model (e.g. for
+ip.access nanoBTS).
+
+.Typical osmo-gsm-tester setup
+[graphviz]
+----
+digraph G {
+	rankdir=LR;
+	jenkins
+	subgraph cluster_gsm_hardware {
+		label = "GSM Hardware";
+		style=dotted
+
+		modem0 [shape=box label=Modem]
+		modem1 [shape=box label=Modem]
+		modem2 [shape=box label=Modem]
+		osmo_bts_sysmo [label="sysmocom sysmoBTS\nrunning osmo-bts-sysmo" shape=box]
+		B200 [label="Ettus B200" shape=box]
+		octphy [label="Octasic octphy BTS" shape=box]
+		nanoBTS [label="ip.access nanoBTS" shape=box]
+		rf_distribution [label="RF distribution"]
+
+		{modem0 modem1 modem2 osmo_bts_sysmo B200 octphy nanoBTS}->rf_distribution [dir=both arrowhead="curve" arrowtail="curve"]
+	}
+	subgraph cluster_main_unit {
+	  label = "Main Unit"
+	  osmo_gsm_tester [label="Osmo-GSM-Tester\ntest suites\n& scenarios"]
+	  ofono [label="ofono daemon"]
+	  OsmoNITB
+	  osmo_bts_trx [label="osmo-bts-trx"]
+	  osmo_bts_octphy [label="osmo-bts-octphy"]
+	}
+
+
+	jenkins->osmo_gsm_tester [label="trial\n(binaries)"]
+	osmo_gsm_tester->jenkins [label="results"]
+	ofono->modem0 [label="USB"]
+	ofono->modem1 [label="USB"]
+	ofono->modem2 [label="USB"]
+	osmo_gsm_tester-> {OsmoNITB osmo_bts_trx osmo_bts_octphy}
+	osmo_gsm_tester-> osmo_bts_sysmo [taillabel="SSH"]
+	osmo_gsm_tester-> ofono [taillabel="DBus"]
+	osmo_bts_trx->B200 [label="USB"]
+	osmo_bts_octphy->octphy [label="raw eth"]
+	{osmo_bts_sysmo B200 octphy nanoBTS}->OsmoNITB [label="eth"]
+}
+----
+
+=== Typical Test Script
+
+A typical single test script (part of a suite) may look like this:
+
+----
+#!/usr/bin/env python3
+from osmo_gsm_tester.test import *
+
+print('use resources...')
+nitb = suite.nitb()
+bts = suite.bts()
+ms_mo = suite.modem()
+ms_mt = suite.modem()
+
+print('start nitb and bts...')
+nitb.bts_add(bts)
+nitb.start()
+sleep(1)
+assert nitb.running()
+bts.start()
+
+nitb.subscriber_add(ms_mo)
+nitb.subscriber_add(ms_mt)
+
+ms_mo.connect(nitb)
+ms_mt.connect(nitb)
+wait(nitb.subscriber_attached, ms_mo, ms_mt)
+
+sms = ms_mo.sms_send(ms_mt.msisdn)
+wait(ms_mt.sms_received, sms)
+----
+
+=== Resource Resolution
+
+- A global configuration defines which hardware is connected to the
+  osmo-gsm-tester main unit.
+- Each suite contains a number of test scripts. The amount of resources a test
+  may use is defined by the test suite's 'suite.conf'.
+- Which specific modems, BTS models, NITB IP addresses etc. are made available
+  to a test run is typically determined by a combination of scenario
+  configurations -- or picked automatically if not.
+
+[[resources_conf_example]]
+=== Typical 'resources.conf'
+
+A global configuration of hardware may look like below; for details, see
+<<resources_conf>>.
+
+----
+nitb_iface:
+- addr: 10.42.42.1
+- addr: 10.42.42.2
+- addr: 10.42.42.3
+
+bts:
+- label: sysmoBTS 1002
+  type: osmo-bts-sysmo
+  addr: 10.42.42.114
+  band: GSM-1800
+
+- label: octBTS 3000
+  type: osmo-bts-octphy
+  addr: 10.42.42.115
+  band: GSM-1800
+  trx_list:
+  - hw_addr: 00:0c:90:32:b5:8a
+    net_device: eth0.2342
+
+- label: Ettus B210
+  type: osmo-bts-trx
+  addr: 10.42.42.116
+  band: GSM-1800
+
+- label: nanoBTS 1900
+  type: nanobts
+  addr: 10.42.42.190
+  band: GSM-1900
+  trx_list:
+  - hw_addr: 00:02:95:00:41:b3
+
+arfcn:
+  - arfcn: 512
+    band: GSM-1800
+  - arfcn: 514
+    band: GSM-1800
+
+  - arfcn: 540
+    band: GSM-1900
+  - arfcn: 542
+    band: GSM-1900
+
+modem:
+- label: m7801
+  path: '/wavecom_0'
+  imsi: 901700000007801
+  ki: D620F48487B1B782DA55DF6717F08FF9
+
+- label: m7802
+  path: '/wavecom_1'
+  imsi: 901700000007802
+  ki: 47FDB2D55CE6A10A85ABDAD034A5B7B3
+
+- label: m7803
+  path: '/wavecom_2'
+  imsi: 901700000007803
+  ki: ABBED4C91417DF710F60675B6EE2C8D2
+----
+
+=== Typical 'suites/*/suite.conf'
+
+The configuration that reserves a number of resources for a test suite may look
+like this:
+
+----
+resources:
+  nitb_iface:
+  - times: 1
+  bts:
+  - times: 1
+  modem:
+  - times: 2
+----
+
+It may also request e.g. specific BTS models, but this is typically left to
+scenario configurations.
+
+=== Typical 'scenarios/*.conf'
+
+For a suite as above run as-is, any available resources are picked. This may be
+combined with any number of scenario definitions to constrain which specific
+resources should be used, e.g.:
+
+----
+resources:
+  bts:
+  - type: osmo-bts-sysmo
+----
+
+Which 'nitb_iface' or 'modem' is used in particular doesn't really matter, so
+it can be left up to the osmo-gsm-tester to pick these automatically.
+
+Any number of such scenario configurations can be combined in the form
+'<suite_name>:<scenario>+<scenario>+...', e.g. 'my_suite:sysmo+tch_f+amr'.
+
+=== Typical Invocations
+
+Each invocation of osmo-gsm-tester deploys a set of pre-compiled binaries for
+the Osmocom core network as well as for the Osmocom based BTS models. To create
+such a set of binaries, see <<trials>>.
+
+Examples for launching test trials:
+
+- Run the default suites (see <<default_suites>>) on a given set of binaries:
+
+----
+osmo-gsm-tester.py path/to/my-trial
+----
+
+- Run an explicit choice of 'suite:scenario' combinations:
+
+----
+osmo-gsm-tester.py path/to/my-trial -s sms:sysmo -s sms:trx -s sms:nanobts
+----
+
+- Run one 'suite:scenario' combination, setting log level to 'debug' and
+  enabling logging of full python tracebacks, and also only run just the
+  'mo_mt_sms.py' test from the suite, e.g. to investigate a test failure:
+
+----
+osmo-gsm-tester.py path/to/my-trial -s sms:sysmo -l dbg -T -t mo_mt
+----
+
+A test script may also be run step-by-step in a python debugger, see
+<<debugging>>.
+
+=== Resource Reservation for Concurrent Trials
+
+While a test suite runs, the used resources are noted in a global state
+directory in a reserved-resources file. This way, any number of trials may be
+run consecutively without resource conflicts. Any test trial will only use
+resources that are currently not reserved by any other test suite. The
+reservation state is human readable.
+
+The global state directory is protected by a file lock to allow access by
+separate processes.
+
+Also, the binaries from a trial are never installed system-wide, but are run
+with a specific 'LD_LIBRARY_PATH' pointing at the trial's 'inst', so that
+several trials can run consecutively without conflicting binary versions.
+
+Once a test suite run is complete, all its reserved resources are torn down (if
+the test scripts have not done so already), and the reservations are released
+automatically.
+
+If required resources are unavailable, the test trial fails. For consecutive
+test trials, a test run needs to either wait for resources to become available,
+or test suites need to be scheduled to make sense. (*<- TODO*)

@@ -6,6 +6,7 @@ all:
 	cd OsmoSGSN; $(MAKE)
 	cd OsmoNAT; $(MAKE)
 	cd OsmoPCU; $(MAKE)
+	cd Osmo-GSM-Tester; $(MAKE)
 
 clean:
 	cd OsmoBTS; $(MAKE) clean
@@ -15,6 +16,7 @@ clean:
 	cd OsmoSGSN; $(MAKE) clean
 	cd OsmoNAT; $(MAKE) clean
 	cd OsmoPCU; $(MAKE) clean
+	cd Osmo-GSM-Tester; $(MAKE) clean
 
 upload:
 	cd OsmoBTS; $(MAKE) upload
@@ -24,6 +26,7 @@ upload:
 	cd OsmoSGSN; $(MAKE) upload
 	cd OsmoNAT; $(MAKE) upload
 	cd OsmoPCU; $(MAKE) upload
+	cd Osmo-GSM-Tester; $(MAKE) upload
 
 check:
 	cd OsmoBTS; $(MAKE) check
@@ -34,3 +37,4 @@ check:
 	# These don't use asciidoc, so they have no 'make check' target:
 	#cd OsmoMGCP; $(MAKE) check
 	#cd OsmoNAT; $(MAKE) check
+	cd Osmo-GSM-Tester; $(MAKE) check

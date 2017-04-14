@@ -1,0 +1,4 @@
+[[debugging]]
+== Debugging
+
+*TODO*: describe how to invoke 'ipdb3' and step into a suite's test script
