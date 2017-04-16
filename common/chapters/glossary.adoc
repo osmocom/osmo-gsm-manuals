@@ -117,6 +117,8 @@ GSM::
 GSMTAP::
   GSM tap; pseudo standard for encapsulating GSM protocol layers over
   UDP/IP for analysis
+GT::
+  Global Title; an address in SCCP
 GTP::
   GPRS Tunnel Protocol; used between SGSN and GGSN
 HLR::
@@ -145,6 +147,12 @@ LLC::
   44.064_ <<3gpp-ts-44-064>>)
 Location Area::
   Location Area; a geographic area containing multiple BTS
+M2PA::
+  MTP2 Peer-to-Peer Adaptation; a SIGTRAN Variant (_RFC 4165_ <<ietf-rfc4165>>)
+M2UA::
+  MTP2 User Adaptation; a SIGTRAN Variant (_RFC 3331_ <<ietf-rfc3331>>)
+M3UA::
+  MTP3 User Adaptation; a SIGTRAN Variant (_RFC 4666_ <<ietf-rfc4666>>)
 MCC::
   Mobile Country Code; unique identifier of a country, e.g. 262 for Germany
 MFF::
@@ -165,6 +173,8 @@ MSC::
   core network
 MSISDN::
   Mobile Subscriber ISDN Number; telephone number of the subscriber
+MTP::
+  Message Transfer Part; SS7 signaling protocol (_ITU-T Q.701_ <<itu-t-q701>>)
 MVNO::
   Mobile Virtual Network Operator; Operator without physical radio network
 NCC::
@@ -208,6 +218,8 @@ OsmoPCU::
 OTA::
   Over-The-Air; Capability of operators to remotely
   reconfigure/reprogram ISM/USIM cards
+PC::
+  Point Code; an address in MTP
 PCH::
   Paging Channel on downlink Um interface; used by network to page an MS
 PCU::
@@ -251,11 +263,15 @@ RTP::
 SACCH::
   Slow Associate Control Channel on Um interface; bundled to a TCH or
   SDCCH, used for signalling in parallel to active dedicated channel
+SCCP::
+  Signaling Connection Control Part; SS7 signaling protocol (_ITU-T Q.711_ <<itu-t-q711>>)
 SDCCH::
   Slow Dedicated Control Channel on Um interface; used for signalling
   and SMS transport in GSM
 SDK::
   Software Development Kit
+SIGTRAN::
+  Signaling Transport over IP (_IETF RFC 2719_ <<ietf-rfc2719>>)
 SIM::
   Subscriber Identity Module; small chip card storing subscriber identity
 Site::
@@ -266,8 +282,16 @@ SMPP::
   entities with an SMSC
 SMSC::
   Short Message Service Center; store-and-forward relay for short messages
+SS7::
+  Signaling System No. 7; Classic digital telephony signaling system
 SSH::
   Secure Shell; _IETF RFC 4250_ <<ietf-rfc4251>> to 4254
+SSN::
+  Sub-System Number; identifies a given SCCP Service such as MSC, HLR
+STP::
+  Signaling Transfer Point; A Router in SS7 Networks
+SUA::
+  SCCP User Adaptation; a SIGTRAN Variant (_RFC 3868_ <<ietf-rfc3868>>)
 syslog::
   System logging service of UNIX-like operating systems
 System Information::

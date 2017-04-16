@@ -1,0 +1,332 @@
+== Signaling Networks: SS7 and SIGTRAN
+
+Classic digital telephony networks (whether wired or wireless) use the
+ITU-T SS7 (Signaling System 7) to exchange signaling information
+between network elements.
+
+Most of the ETSI/3GPP interfaces in the GSM and UMTS network are also
+based on top of [parts of] SS7.  This includes, among others, the
+following interfaces:
+
+* _A_ interface between BSC and MSC
+* _IuCS_ interface between RNC (or HNB-GW) and MSC
+* _IuPS_ interface between RNC (or HNB-GW) and SGSN
+
+NOTE:: This does not include the A-bis interface between BTS and BSC.
+While Abis traditionally is spoken over the same physical TDM circuits
+as SS7, the protocol stack from L2 upwards is quite different (Abis
+uses LAPD, while SS7 uses MTP)!
+
+=== Physical Layer
+
+The traditional physical layer of SS7 is based on TDM (time division
+multiplex) links of the PDH/SDH family, as they were common in ISDN
+networks.  Some people may know their smallest incarnation as
+so-called E1/T1 links.  It can run either on individual 64kBps
+timeslots of such a link, or on entire 2Mbps/1.5MBps E1/T1 links.
+
+There are also specifications for SS7 over ATM, though it is unclear
+to the author if this is actually still used anywhere.
+
+On top of the Physical Layer is the Message Transfer Part (MTP).
+
+=== Message Transfer Part (MTP)
+
+MTP is the lower layer of the SS7 protocol stack.  It is comprised of
+two sub-layes, called MTP2 and MTP3.
+
+Nodes in a MTP network are addressed by their unique PC (Point Code).
+
+A _MTP Routing Label_ is in the MTP header and indicates the
+_Originationg Point Code_ (OPC) as well as the _Destination Point
+Code_ (DPC) and the _Service Indicator Octet_ (SIO).  The SIO is used
+to de-multiplex between different upper-layer protocol such as ISUP,
+TUP or SCCP.
+
+Routing is performed by means of routers with routing tables, similar
+to routing is performed in IP networks.  Even the concept of a _point
+code mask_ analogous to the _netmask_ exists.
+
+Routers are connected with one another over one or more _Link Sets_,
+each comprised of one or multiple _Links_.  Multiple Links in a
+Linkset exist both for load sharing as well as for fail over purposes.
+
+==== Point Codes
+
+The length of point codes depends on the particular MTP dialect that
+is used.  In the 1980ies, when international telephony signaling
+networks were established, most countries had their own national
+dialects with certain specifics.
+
+Today, mostly the ITU and ANSI variants survive.  The ITU variant uses
+14bit point codes, while the ANSI variant uses 24 bit point code
+length.
+
+Point Codes can be represented either as unsigned integers, or
+grouped.  Unfortunately there is no standard as to their
+representation.  In ITU networks, the _3.8.3_ notation is commonly
+used, i.e. one decimal for the first 3 bits, followed by one decimal
+for the center 8 bits, followed by another decimal for the final 3
+bits.
+
+Example:: The Point Code *1.5.3* (in 3.8.3 notation) is 1*2^11^ + 5*2^3^ + 3 = *2091 decimal*.
+
+=== Higher-Layer Protocols
+
+There are various higher-layer protocols used on top of MTP3, such as
+TUP, ISUP, BICC as well as SCCP.   Those protocols exist side-by-side
+on top of MTP3, similar to e.g. ICMP, TCP and UDP existing
+side-by-side on top of IP.
+
+In the context of cellular networks, SCCP is the most relevant part.
+
+=== Signaling Connection Control Part (SCCP)
+
+SCCP runs on top of MTP3 and creates something like an overlay network
+on top of it.  SCCP communication can e.g. span multiple different
+isolated MTP networks, each with their own MTP dialect and addressing.
+
+SCCP provides both connectionless (datagram) and connection-oriented
+services.  Both are used in the context of cellular networks.
+
+==== SCCP Adresses
+
+SCCP Adresses are quite complex.  This is due to the fact that it is
+not simply one address format, but in fact a choice of one or multiple
+different types of addresses.
+
+SCCP Addresses exist as _Calling Party_ and _Called Party_ addresses.
+In the context of connectionless datagram services, the sender is
+always the Calling Party, and the receiver the Called Party.  In
+connection-oriented SCCP, they resemble the initiator and recipient of
+the connection.
+
+.SCCP Address Parts
+[options="header",cols="10%,20%,70%"]
+|====
+|Acronym|Name|Description
+|SSN|Sub-System Number|Describes a given application such as e.g. a
+                       GSM MSC, BSC or HLR.  Can be compared to port
+                       numbers on the Internet
+|PC|Point Code        |The Point Code of the underlying MTP network
+|GT|Global Title      |What most people would call a "phone number".
+                       However, Global Titles come in many different
+                       numbering plans, and only one of them (E.164)
+                       resembles actual phone numbers.
+|RI|Routing Indicator |Determines if message shall be routed on PC+SSN
+                       or on GT basis
+|====
+
+==== Global Titles
+
+A Global Title is a (typically) globally unique address in the global
+telephony network.  The body of the Global Title consists of a series
+of BCD-encoded digits similar to what everyone knows as phone numbers.
+
+A GT is however not only the digits of the "phone number", but also
+some other equally important information, such as the _Numbering Plan_
+as well as the _Nature of Address Indication_.
+
+.Global Title Parts
+[options="header",cols="10%,20%,70%"]
+|====
+|Acronym|Name|Description
+|GTI|Global Title Indicator|Determines the GT Format. Ranges from no
+                            GT (0) to GT+TT+NP+ES+NAI (4)
+|NAI|Nature of Address Indicator|Exists in GTI=1 and is sort of a mixture of TON + NPI
+|TT|Translation Type      |Used as a look-up key in Global Title Translation Tables
+|NP|Numbering Plan        |Indicates ITU Numbering Plan, such as E.164, E.212, E.214
+|ES|Encoding Scheme       |Just a peculiar way to idicate the length of the digits
+|- |Signals               |The actual "phone number digits"
+|====
+
+For more information about SCCP Adresses and Global Titles, please
+refer to <<itu-t-q713>>
+
+
+==== Global Title Translation (GTT)
+
+Global Title Translation is a process of re-writing the Global Title
+on-the-fly while a signaling message passes a STP.
+
+Basically, a SCCP message is first transported by MTP3 on the MTP
+level to the Destination Point Code indicated in the MTP Routing
+Label.  This process uses MTP routing and is transparent to SCCP.
+
+Once the SCCP message arrives at the MTP End-Node identified by the
+Destination Point Code, the message is handed up to the local SCCP
+stack, which then may implement Global Title Translation.
+
+The input to the GTT process is
+
+* the destination address of the SCCP message
+* a local list/database of Global Title Translation Rules
+
+The successful output of he GTT includes
+
+* A new Routing Indicator
+* The Destination Point Code to which the message is forwarded on MTP
+  level
+* a Sub-system Number (if RI is set to "Route on SSN")
+* a new Global Title (if RI is set to "Route on GT"), e.g. with translated digits.
+
+Between sender and recipient of a signaling message, there can be many
+instances of Global Title Translation (up to 15 as per the hop
+counter).
+
+For more information on Global Title Translation, please refer to
+<<itu-t-q714>>.
+
+
+==== Peculiarities of Connection Oriented SCCP
+
+Interestingly, Connection-Oriented SCCP messages carry SCCP Addresses
+*only during connection establishment*.  All data messages during
+an ongoing connection do not contain a Called or Calling Party
+Address.  Instead, they are routed only by the MTP label, which is
+constructed from point code information saved at the time the
+connection is established.
+
+This means that connection-oriented SCCP can not be routed across MTP
+network boundaries the same way as connectionless SCCP messages.
+Instead, an STP would have to perform _connection coupling_, whic is
+basically the equivalent of an application-level proxy between two
+SCCP connections, each over one of the two MTP networks.
+
+This is probably mostly of theoretical relevance, as
+connection-oriented SCCP is primarily used between RAN and CN of
+cellular network inside one operator, i.e. not across multiple MTP
+networks.
+
+=== SIGTRAN - SS7 over IP Networks
+
+At some point, IP based networks became more dominant than classic
+ISDN networks, and 3GPP as well as IETF were working out methods in
+which telecom signaling traffic can be adapted over IP based
+networks.
+
+Initially, only the edge of the network (i.e. the applications talking
+to the network, such as HLR or MSC) were attached to the existing old
+SS7 backbone by means as SUA and M3UA.  Over time, even the links of
+the actual network backbone networks became more and more IP based.
+
+In order to replace existing TDM-based SS7 links/liksets with SIGTRAN,
+the M2UA or M2PA variants are used as a kind of drop-in replacement
+for physical links.
+
+All SIGTRAN share that while they use IP, they don't use TCP or UDP
+but operate over a (then) newly-introduced Layer 4 transport protocol
+on top of IP: SCTP (Stream Control Transmission Protocol).
+
+Despite first being specified in October 2000 as IETF RFC 2960, it
+took a long time until solid implementations of SCTP ended up in
+general-purpose operating systems.  SCTP is not used much outside the
+context of SIGTAN, which means implementations often suffer from bugs,
+and many parts of the public Internet do not carry SCTP traffic due to
+restrictive firewalls and/or ignorant network administrators.
+
+==== SIGTRAN Concepts / Terminology
+
+Like every protocol or technology, SIGTRAN brings with it its own
+terminology and concepts.  This section tries to briefly introduce
+them.  For more information, please see the related IETF RFCs.
+
+===== Signaling Gateway (SG)
+
+The Signaling Gateway (SG) interconnects the SS7 network wit external
+applications.  It translates (parts of) the SS7 protocol stack into an
+IP based SIGTRAN protocol stack.  Which parts at which level of the
+protocol stack are translated to what depends on the specific SIGTRAN
+dialect.
+
+A SG is traditionally attached to the TDM-Based SS7 network and offers
+SIGTRAN/IP based applications a way to remotely attach to the SS7
+network.
+
+A SG typically has STP functionality built-in, but it is not
+mandatory.
+
+===== Application Server (AS)
+
+An Application Server is basically a logical entity representing one
+particular external application (from the SS7 point of view) which is
+interfaced with the SS7 network by means of one of the SIGTRAN
+protocols.
+
+An Application Server can have one or more Application Server Processes
+associated with it.  This functionality (currently not implemented in
+Osmocom) can be used for load-balancing or fail-over scenarios.
+
+===== Application Server Process (ASP)
+
+An Application Server Process represents one particular SCTP
+connection used for SIGTRAN signaling between an external application
+(e.g. a BSC) and the Signaling Gateway (SG).
+
+One Application Server Process can route traffic for multiple
+Application Servers.  In order to differentiate traffic for different
+Application Servers, the Routing Context header is used.
+
+==== SIGTRAN variants / stackings
+
+SIGTRAN is the name of an IETF working group, which has released an
+entire group of different protocol specifications.  So rather than one
+way of transporting classic telecom signaling over IP, there are now
+half a dozen different ones, and all can claim to be an official IETF
+standard.
+
+FIXME: Overview picture comparing the different stackings
+
+===== MTP3 User Adaptation (M3UA)
+
+M3UA basically "chops off" everything up to and including the MTP3
+protocol layer of the SS7 protocol stack and replaces it with a stack
+comprised of M3UA over SCTP over IP.
+
+M3UA is specified in <<ietf-rfc4666>>.
+
+===== SCCP User Adaptation (SUA)
+
+SUA basically "chops off" everything up to and including the SCCP
+protocol layer of the SS7 protocol stack and replaces it with a stack
+comprised of SUA over SCTP over IP.
+
+This means that SUA can only be used for SCCP based signaling, but not
+for other SS7 protocols like e.g. TUP and ISUP.
+
+SUA is specified in <<ietf-rfc3868>>.
+
+===== MTP2 User Adaptation (M2UA)
+
+M2UA is specified in <<ietf-rfc3331>>.
+
+NOTE:: M2UA is not supported in Osmocom SIGTRAN up to this point.  Let
+us know if we can implement it for you!
+
+===== MTP2-User Peer-to-Peer Adaptation (M2PA)
+
+M2PA is specified in <<ietf-rfc4165>>.
+
+NOTE:: M2PA is not supported in Osmocom SIGTRAN up to this point.  Let
+us know if we can implement it for you!
+
+
+==== SIGTRAN security
+
+There simply is none.  There are some hints that TLS shall be used
+over SCTP in order to provide authenticity and/or confidentiality for
+SIGTRAN, but this is not widely used.
+
+As telecom signaling is not generally carried over public networks,
+private networks/links by means of MPLS, VLANs or VPNs such as IPsec
+are often used to isolate and/or secure SIGTRAN.
+
+Under no circumstances should you use unsecured SIGTRAN with
+production data over the public internet!
+
+==== IPv6 support
+
+SCTP (and thus all the higher layer protocols of the various SIGTRAN
+stackings) operates on top of both IPv4 and IPv6.  As the entire
+underlying IP transport is transparent to the SS7/SCCP applications,
+there is no restriction on whether to use SIGTRAN over IPv4 or IPv6.

@@ -1,0 +1,24 @@
+digraph G {
+        rankdir=LR;
+        UE0 [label="UE"];
+        UE1 [label="UE"];
+        UE2 [label="UE"];
+        UE3 [label="UE"];
+        HNB0 [label="hNodeB"];
+        HNB1 [label="hNodeB"];
+        HNBGW [label="OsmoHNBGW"];
+        MSC [label="OsmoMSC"];
+        SGSN [label="OsmoSGSN"];
+        STP [label="OsmoSTP"];
+
+	UE0 -> HNB0;
+	UE1 -> HNB0;
+	UE2 -> HNB1;
+	UE3 -> HNB1;
+	HNB0 -> HNBGW [label="Iuh (RUA)"];
+	HNB1 -> HNBGW [label="Iuh (RUA)"];
+	HNBGW -> STP [label="Iu (SCCP/M3UA)"];
+	STP -> MSC [label="Iu (SCCP/M3UA)", dir="back"];
+	STP -> SGSN [label="Iu (SCCP/M3UA)", dir="back"];
+}
+

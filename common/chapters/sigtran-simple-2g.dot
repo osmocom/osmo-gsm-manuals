@@ -1,0 +1,22 @@
+digraph G {
+        rankdir=LR;
+        MS0 [label="MS"];
+        MS1 [label="MS"];
+        MS2 [label="MS"];
+        MS3 [label="MS"];
+        BTS0 [label="BTS"];
+        BTS1 [label="BTS"];
+        BSC [label="OsmoBSC"];
+        MSC [label="OsmoMSC"];
+        STP [label="OsmoSTP"];
+
+	MS0 -> BTS0;
+	MS1 -> BTS0;
+	MS2 -> BTS1;
+	MS3 -> BTS1;
+	BTS0 -> BSC [label="Abis/IP"];
+	BTS1 -> BSC [label="Abis/IP"];
+	BSC -> STP [label="SCCP/M3UA"];
+	STP -> MSC [label="SCCP/M3UA", dir="back"];
+}
+

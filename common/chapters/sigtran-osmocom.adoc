@@ -1,0 +1,432 @@
+== Osmocom SS7 + SIGTRAN support
+
+=== History / Background
+
+If you're upgrading from earlier releases of the Osmocom stack, this
+section will give you some background about the evolution.
+
+==== The Past (before 2017)
+
+In the original implementation of the GSM BSC inside Osmocom (the
+OsmoBSC program, part of OpenBSC), no SS7 support was included.
+
+This is despite the fact that ETSI/3GPP mandated the use of SCCP over
+MTP over E1/T1 TDM lines for the A interface at that time.
+
+Instead of going down to the TDM based legacy physical layers, OsmoBSC
+implemented someting called an IPA multiplex, which apparently some
+people also refer to as SCCPlite.  We have never seen any
+specifications for this interface, but implemented it from scratch
+using protocol traces.
+
+The IPA protocol stack is based on a minimal sub-set of SCCP
+(including connection oriented SCCP) wrapped into a 3-byte header to
+packetize a TCP stream.
+
+The IPA/SCCPlite based A interface existed at a time when the
+ETSI/3GPP specifications did not offer any IP based transport for the
+A interface.  An official as added only in Release FIXME of the 3GPP
+specifications.
+
+The A interface BSSMAP protocol refers to voice circuits (E1/T1
+timeslots) using circuit identity codes (CICs).  As there are no
+physical timeslots on a TCP/IP based transport layer, the CICs get
+mapped to RTP streams for circuit-switched data using out-of-band
+signaling via MGCP, the IETF-standardized Media Gateway Control
+Protocol.
+
+==== The present (2017)
+
+In 2017, sysmocom was tasked with implementing a 3GPP AoIP compliant A
+interface.  This meant that lot of things had to change in the
+existing code:
+
+* removal of the existing hard-wired SCCPlite/IPA code from OsmoBSC
+* introduction of a formal SCCP User SAP at the lower boundary of
+  BSSMAP
+* introduction of libosmo-sigtran, a comprehensive SS7 and SIGTRAN
+  library which includes a SCCP implementation for connectionless and
+  connection-oriented procedures, offering the SCCP User SAP towards
+  BSSAP
+* introduction of an A interface in OsmoMSC (which so far offered Iu
+  only)
+* port of the existing SUA-baesd IuCS and IuPS over to the SCCP User
+  SAP of libosmo-sigtran.
+* Implementation of ETSI M3UA as preferred/primary transport layer for
+  SCCP
+* Implementation of an IPA transport layer inside libosmo-sigtran, in
+  order to keep backwards-compatibility.
+
+This work enables the Osmocom universe to become more compliant
+with modern Releases of 3GPP specifications, which enables
+interoperability with other MSCs or even BSCs.  However, this comes at
+a price:  Increased complexity in set-up and configuration.
+
+Using SS7 or SIGTRAN based transport of the A interface adds an
+entirely new domain that needs to be understood by system and network
+administrators setting up cellular networks based on Osmocom.
+
+One of the key advantages of the Osmocom architecture with OsmoNITB
+was exactly this simplification and reduction of complexity, enabling
+more people to set-up and operate cellular networks.
+
+So we have put some thought into how we can achieve compatibility with
+SS7/SIGTRAN and the 3GPP specifications, while at the same time
+enabling some degree of auto-configuration where a small network can
+be set up without too many configuration related to the signaling
+network.  We have achieved this by "abusing" (or extending) the M3UA
+Routing Key Management slightly.
+
+=== Osmocom extensions to SIGTRAN
+
+Osmocom has implemented some extensions to the SIGTRAN protocol suite.
+Those extensions will be documented below.
+
+==== Osmocom M3UA Routing Key Management Extensions
+
+In classic M3UA, a peer identifies its remote peer based on IP address
+and port details.  So once an ASP connects to an SG, the SG will check
+if there is any configuration that matches the source IP (and possibly
+source port) of that connection in order to understand which routing
+context is used - and subsequently which traffic is to be routed to
+this M3UA peer.
+
+This is quite inflexible, as it means that every BSC in a GSM network
+needs to be manually pre-configured at the SG/STP, and that
+configuration on the BSC and MSC must match to enable communication.
+
+M3UA specifies an optional Routing Key Management (RKM) sub-protocol.
+Using RKM, an ASP can dynamically tell the SG/STP, which traffic it
+wants to receive.  However, the idea is still that the SG has some
+matching configuration.
+
+In OsmoSTP based on libosmo-sigtran, we decided to (optionally) enable
+fully dynamic registration.  This means that any ASP can simply
+connect to the SG and request the dynamic creation of an ASP and AS
+with a corresponding routing key for a given point code.  As long as
+the SG doesn't already have a route to this requested point code, The
+SG will simply trust any ASP and set a corresponding route.
+
+This is of course highly insecure and can only be used in trusted,
+internal networks.  However, it is quite elegant in reducing the
+amount of configuration complexity.  All that is needed, is that an
+unique point code is configured at each of the ASPs (application
+programs) that connect to the STP.
+
+To put things more concretely: Each BSC and MSC connecting to OsmoSTP
+simply needs to be configured to have a different point code, and to
+know to which IP/port of the STP to connect.  There's no other
+configuration required for a small, autonomous, self-contained
+network.  OsmoSTP will automatically install ASP, AS and route
+definitions on demand, and route messages between all connected
+entities.
+
+The same above of course also applies to HNB-GW and OsmoSGSN in the
+case of Iu interfaces.
+
+==== IPA / SCCPlite backwards compatibility
+
+The fundamental problem with IPA/SCCPlite is that there's no MTP
+routing label surrounding the SCCP message.  This is generally
+problematic in the context of connection-oriented SCCP, as there is no
+addressing information inside the SCCP messages after the connection
+has been established.  Instead, the messages are routed based on the
+MTP label, containing point codes established during connection set-up
+time.
+
+This means that even if the SCCP messages did contain Called/Calling
+Party Addresses with point codes or global titles, it would only help
+us for routing connectionless SCCP.  The A interface, however, is
+connection-oriented.
+
+So in order to integrate IPA/SCCPlite with a new full-blown
+SS7/SIGTRAN stack, there are the following options:
+
+. implement SCCP connection coupling.  This is something like a proxy
+  for connection-oriented SCCP, and is what is used in SS7 to route
+  beyond a given MTP netwokr (e.g. at gateways between different MTP
+  networks)
+
+. consider all SCCP messages to be destined for the local point code
+  of the receiver.  This then means that the SG functionality must be
+  included inside the MSC, and the MSC be bound to the SSN on the
+  local point code.
+
+. hard-code some DPC when receiving a message from an IPA connection.
+  It could be any remote PC and we'd simply route the message towards
+  that point code.
+
+But then we also have the return direction:
+
+. We could "assign" a unique SPC to each connected IPA client (BSC),
+  and then announce that PC towards the SS7 side.  Return packets
+  would then end up at our IPA-server-bearing STP, which forwards them
+  to the respective IPA connection and thus BSC.  On the transmit
+  side, we'd simply strip the MTP routing label and send the raw SCCP
+  message over IPA.
+
+. If the IPA server / SGW resides within the MSC, one could also have
+  some kind of handle/reference to the specific TCP connection through
+  which the BSC connected.  All responses for a given peer would then
+  have to be routed back to the same connection.   This is quite ugly
+  as it completely breaks the concepts of the SCCP User SAP, where a
+  user has no information (nor to worry about ) any "physical"
+  signaling links.
+
+
+=== Minimal Osmocom SIGTRAN configurations for small networks
+
+If you're not an SS7 expert, and all you want is to run your own small
+self-contained cellular network, this section explains what you need
+to do.
+
+In general, you can consider OsmoSTP as something like an IP router.
+On the application layer (in our case the BSSAP/BSSMAP or RANAP
+protocols between Radio Access Network and Core Network), it is
+completely invisible/transparent.  The BSC connects via SCCP to the
+MSC.  It doesn't know that there's an STP in between, and that this
+STP is performing some routing function.  Compares this to your web
+browser not knowing about IP routers, it just establishes an http
+connection to a web server.
+
+This is also why most GSM nework architecture diagrams will not
+explicitly show an STP.  It is not part of the cellular network.
+Rather, one or many STPs are part of the underlying SS7 signaling
+transport network, on top of which the cellular network elements are
+built.
+
+==== A minimal 2G configuration to get started
+
+You will be running the following programs:
+
+* OsmoBSC as the base-station controller between your BTS (possibly
+  running OsmoBTS) and the MSC
+* OsmoMSC as the mobile switching center providing SMS and telephony
+  service to your subscribers
+* OsmoSTP as the signal transfer point, routing messages between one
+  or more BSCs and the MSC
+
+[[fig-sigtran-simple-2g]]
+.Simple signaling network for 2G (GSM)
+[graphviz]
+----
+include::sigtran-simple-2g.dot[]
+----
+
+You can use the OsmoSTP fully dynamic registration feature, so the BSCs
+and the MSC will simply register with their point codes to the STP,
+and the STP will create most configuration on the fly.
+
+All you need to make sure is:
+
+* to assign one unique point code to each BSC and MSC
+* to point all BSCs and the MSC to connect to the IP+Port of the STP
+* to configure the point code of the MSC in the BSCs
+
+==== A minimaal 3G configuration to get started
+
+You will be running the following programs:
+
+* OsmoHNBGW as the homeNodeB Gateway between your femtocells / small
+  cells  and the MSC+SGSN
+* OsmoMSC as the mobile switching center providing SMS and telephony
+  service to your subscribers
+* OsmoSGSN as the Serving GPRS Support Node, providing packet data
+  (internet) services to your subscribers
+* OsmoSTP as the signal transfer point, routing messages between one
+  or more HNBGWs and the MSC and SGSN
+
+[[fig-sigtran-simple-3g]]
+.Simple signaling network for 3G (UMTS)
+[graphviz]
+----
+include::sigtran-simple-3g.dot[]
+----
+
+You can use the OsmoSTP fully dynamic registration feature, so the
+HNBGWs, the SMC and the SGSNwill simply register with their point
+codes to the STP, and the STP will create most configuration on the
+fly.
+
+All you need to make sure is:
+
+* to assign one unique point code to each HNBGW, MSC and SGSN
+* to point all HNBGWs and the MSC and SGSN to connect to the IP+Port of STP
+* to configure the point code of the MSC in the HNBGWs
+* to configure the point code of the SGSN in the HNBGWs
+
+=== Osmocom SS7 Instances
+
+The entire SS7 stack can be operated multiple times within one
+application/program by means of so-called SS7 Instances.
+
+There can be any number of SS7 Instances, and each instance has its
+own set of XUA Servers, ASPs, ASs, Routes, etc.
+
+Each SS7 Instance can have different point code formats / lengths.
+
+.Major Attributes of an Osmocom SS7 Instance
+[options="header",cols="25%,35%,40%"]
+|====
+|Name|VTY Command|Description
+|ID|(config)# cs7 instance ID|The numeric identifier of this instance
+|Name|(config-cs7)# name NAME|A human-readable name for this instance
+|Description|(cnfig-cs7)# description DESC| More verbose description
+|Primary PC|(config-cs7)# point-code PC|Primary local point code
+|Network Indicator|(config-cs7)# network-indicator|Network Indicator used in MTP3 Routing Label
+|Point Code Format|(config-cs7)# point-code format|Point Code Format (Default: 3.8.3)
+|Point Code Delimiter|(config-cs7)# point-code delimiter|Point Code Delimiter: . or -
+|====
+
+=== Osmocom SS7 xUA Server
+
+A *xUA Server* is a server that binds + listens to a given SCTP
+(SIGTRAN) or TCP (IPA) port and accepts connections from remote peers
+(ASPs).
+
+There can be any number of xUA Servers within one SS7 Instance, as
+long as they all run on a different combination of IP address and
+port.
+
+.Major Attributes of an Osmocom SS7 xUA Server
+[options="header",cols="25%,75%"]
+|====
+|Name|Description
+|Local IP|Local Port Number to which the server shall bind/listen
+|Local Port|Local IP Address to which the server shall bind/listen
+|Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
+|Accept Dynamic ASPs|Should we accept connections from ASPs that are not explicitly pre-configured with their source IP and port?
+|====
+
+
+=== Osmocom SS7 Users
+
+A SS7 User is part of a program that binds to a given MTP-Layer
+Service Indicator (SI).  The Osmocom SS7 stack offers an API to
+register SS7 Users, as well as the VTY command ``show cs7 instance
+<0-15> users'' to list the currently registered users.
+
+=== Osmocom SS7 Links
+
+TBD.
+
+=== Osmocom SS7 Linksets
+
+TBD.
+
+=== Osmocom SS7 Application Servers
+
+This corresponds 1:1 to the SIGTRAN concept of an Application Server,
+i.e. a given external Application that interfaces the SS7 network via
+a SS7 protocol variant such as M3UA.
+
+In the context of Osmocom, for each program connecting to a STP (like
+a BSC or MSC), you will have one Application Server definition.
+
+An AS has the following properties:
+
+.Major Attributes of an Osmocom SS7 Application Server
+[options="header",cols="25%,75%"]
+|====
+|Name|Description
+|Name|A human-readable name for this instance
+|Description|More verbose description (for human user only)
+|Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
+|Routing Key|Routing Key (mostly Point Code) routed to this AS
+|Traffic Mode|Theoretically Bradcast, Load-Balance.  Currently only Ovverride
+|Recovery Timeout|Duration of the AS T(r) recovery timer.  During this time,
+                  outgoing messages are queued. If the AS is ACTIVE
+                  before timer expiration, the queue is drained.  At
+                  expriation, the queue is flushed.
+|State|Application Server State (Down, Inactive, Active, Pending)
+|ASPs|Which ASPs are permitted to transfer traffic for this AS
+|====
+
+=== Osmocom SS7 Application Server Processes
+
+An Application Server Process corresponds to a given SCTP (or TCP)
+connection.  From the STP/SG (Server) point-of-view, those are
+incoming connections from Application Servers such as the BSCs.  From
+the ASP (Client) Point of view, it has one ``osmo_ss7_asp'' object for
+each outbound SIGTARN connection.
+
+An ASP has the following properties:
+
+.Major Attributes of an Osmocom SS7 Application Server Process
+[options="header",cols="25%,75%"]
+|====
+|Name|Description
+|Name|A human-readable name for this instance
+|Description|More verbose description (for human user only)
+|Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
+|Role|Server (SG) or Client (ASP)?
+|Local Port|Port Number of the local end of the connection
+|Local IP|IP Address of the local end of the connection
+|Remote Port|Port Number of the remote end of the connection
+|Remote IP|IP Address of the remote end of the connection
+|State|ASP State (Down, Inactive, Active)
+|====
+
+=== Osmocom SS7 Routes
+
+An Osmocom SS7 Route routes traffic with a matching destination point
+code and point code mask (similar to IP Address + Netmask) towards a
+specified SS7 Linkset or Application Server.  The Linkset or
+Application Servers are identified by their name.
+
+.Major Attributes of an Osmocom SS7 Application Server Process
+[options="header",cols="25%,75%"]
+|====
+|Name|Description
+|Point Code|Destination Point Code for this route
+|Mask|Destination Mask for this route (like an IP netmask)
+|Linkset/AS Name|Destination Linkset or AS, identified by name
+|====
+
+
+=== Osmocom SCCP Instances
+
+An Osmocom SS7 Instance can be bound to an Osmocom SS7 Instance.  It
+will register/bind for the ITU-standard Service Indicator (SI).
+
+=== Osmocom SCCP User
+
+An Program (like a BSC) will _bind_ itself to a given well-known
+sub-system number (SSN) in order to receive SCCP messages destined for
+this SSN.
+
+There is an API to bind a program to a SSN, which implicitly generates
+an SCCP User object.
+
+The ``show cs7 instance <0-15> sccp users'' command can be used on the
+VTY to obtain a list of currently bound SCCP users, as well as their
+corresponding SSNs.
+
+=== Osmocom SCCP Connection
+
+This is how Osmocom represents each individual connection of
+connection-oriented SCCP.
+
+To illustrate the practical applicaiton: For the common use case of
+the A or Iu interfaces, this means that every dedicated radio channel
+that is currently active to any UE/MS has one SCCP connection to the
+MSC and/or SGSN.
+
+The ``show cs7 instance <0-15> sccp connections'' command can be used
+on the VTY to obtain a list of currently active SCCP connections, as
+well as their source/destination and current state.
+
+
+=== Osmocom SCCP User SAP
+
+The Osmocom SCCP User SAP (Service Access Point) is the programming
+interface between the SCCP Provider (libosmo-sigtran) and the SCCP
+User.  It follows primitives as laid out in <<itu-t-q711>>, encapsulated
+in ``osmo_prim'' structures.
+
+=== Osmocom MTP User SAP
+
+The Osmocom MTP User SAP (Service Access Point) is the programming
+interface between the MTP Provider and the MTP User (e.g. SCCP).  It
+follows primitives as laid out in <<itu-t-q711>>, encapsulated in
+``osmo_prim'' structures.

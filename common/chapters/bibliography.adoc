@@ -116,11 +116,29 @@
   https://tools.ietf.org/html/rfc1350
 - [[[ietf-rfc2131]]] IETF RFC 2131: Dynamic Host Configuration Protocol
   https://tools.ietf.org/html/rfc2131
+- [[[ietf-rfc2719]]] IETF RFC 2719: Signal Transport over IP
+  https://tools.ietf.org/html/rfc2719
+- [[[ietf-rfc3331]]] IETF RFC 3331: Message Transfer Part 2 User Adaptation Layer
+  https://tools.ietf.org/html/rfc3331
 - [[[ietf-rfc3550]]] IETF RFC 3550: RTP: A Transport protocol for Real-Time Applications
   https://tools.ietf.org/html/rfc3550
+- [[[ietf-rfc3868]]] IETF RFC 3868: SCCP User Adaptation Layer
+  https://tools.ietf.org/html/rfc3868
+- [[[ietf-rfc4165]]] IETF RFC 4165: Message Transfer Part 2 Peer-to-Peeer Adaptation Layer
+  https://tools.ietf.org/html/rfc4165
 - [[[ietf-rfc4251]]] IETF RFC 4251: The Secure Shell (SSH) Protocol Architecture
   https://tools.ietf.org/html/rfc4251
+- [[[ietf-rfc4666]]] IETF RFC 4666: Message Transfer Part 3 User Adaptation Layer
+  https://tools.ietf.org/html/rfc4666
 
+- [[[itu-t-q701]]] ITU-T Q.701: Functional Description of the Message Transfer Part (MTP)
+  https://www.itu.int/rec/T-REC-Q.701/en/
+- [[[itu-t-q711]]] ITU-T Q.711: Functional Description of the Signalling Connection Control Part
+  https://www.itu.int/rec/T-REC-Q.711/en/
+- [[[itu-t-q713]]] ITU-T Q.713: Signalling connection control part formats and codes
+  https://www.itu.int/rec/T-REC-Q.713/en/
+- [[[itu-t-q714]]] ITU-T Q.714: Signalling connection control part procedures
+  https://www.itu.int/rec/T-REC-Q.714/en/
 - [[[itu-t-q921]]] ITU-T Q.921: ISDN user-network interface -
   Data link layer specification
   https://www.itu.int/rec/T-REC-Q.921/en
