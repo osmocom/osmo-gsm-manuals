@@ -35,9 +35,9 @@ digraph G {
 		label = "GSM Hardware";
 		style=dotted
 
-		modem0 [shape=box label=Modem]
-		modem1 [shape=box label=Modem]
-		modem2 [shape=box label=Modem]
+		modem0 [shape=box label="Modems..."]
+		modem1 [shape=box label="Modems..."]
+		modem2 [shape=box label="Modems..."]
 		osmo_bts_sysmo [label="sysmocom sysmoBTS\nrunning osmo-bts-sysmo" shape=box]
 		B200 [label="Ettus B200" shape=box]
 		octphy [label="Octasic octphy BTS" shape=box]
@@ -49,24 +49,107 @@ digraph G {
 	subgraph cluster_main_unit {
 	  label = "Main Unit"
 	  osmo_gsm_tester [label="Osmo-GSM-Tester\ntest suites\n& scenarios"]
-	  ofono [label="ofono daemon"]
-	  OsmoNITB
-	  osmo_bts_trx [label="osmo-bts-trx"]
-	  osmo_bts_octphy [label="osmo-bts-octphy"]
+	  subgraph {
+		rank=same
+		ofono [label="ofono daemon"]
+		OsmoNITB
+		osmo_bts_trx [label="osmo-bts-trx\n+ osmo-trx"]
+		osmo_bts_octphy [label="osmo-bts-octphy"]
+	  }
 	}
 
 
 	jenkins->osmo_gsm_tester [label="trial\n(binaries)"]
 	osmo_gsm_tester->jenkins [label="results"]
-	ofono->modem0 [label="USB"]
-	ofono->modem1 [label="USB"]
-	ofono->modem2 [label="USB"]
+	ofono->{modem0 modem1 modem2} [label="USB"]
 	osmo_gsm_tester-> {OsmoNITB osmo_bts_trx osmo_bts_octphy}
 	osmo_gsm_tester-> osmo_bts_sysmo [taillabel="SSH"]
 	osmo_gsm_tester-> ofono [taillabel="DBus"]
 	osmo_bts_trx->B200 [label="USB"]
 	osmo_bts_octphy->octphy [label="raw eth"]
-	{osmo_bts_sysmo B200 octphy nanoBTS}->OsmoNITB [label="eth"]
+	{osmo_bts_sysmo nanoBTS}->OsmoNITB [label="eth"]
+	{B200 octphy}->OsmoNITB [label="eth" style=invis]
+	{osmo_bts_trx osmo_bts_octphy}->OsmoNITB
+}
+----
+
+.Example of how to select resources and configurations: scenarios may pick specific resources (here BTS and ARFCN), remaining requirements are picked as available (here two modems and a NITB interface)
+[graphviz]
+----
+digraph G {
+	rankdir=TB;
+
+	suite_scenarios [label="Suite+Scenarios selection\nsms:sysmo+band1800"]
+
+	subgraph {
+		rank=same;
+		suite
+		scenarios
+	}
+
+	subgraph cluster_scenarios {
+		label = "Scenarios";
+		u_sysmoBTS [label="Scenario: sysmo\nbts: type: osmo-bts-sysmo"]
+		u_trx [label="Scenario: trx\nbts: type: osmo-bts-trx"]
+		u_arfcn [label="Scenario: band1800\narfcn: band: GSM-1800"]
+	}
+
+	subgraph cluster_suite {
+		label = "Suite: sms";
+		requires [label="Requirements (suite.conf):\nmodem: times: 2\nbts\nnitb_iface\narfcn"]
+		subgraph cluster_tests {
+			label = "Test Scripts (py)";
+			mo_mt_sms
+			etc
+		}
+	}
+
+	subgraph cluster_resources {
+		label = "Resources";
+		rankdir=TB;
+			nitb_addr1 [label="NITB interface addr\n10.42.42.1"]
+			nitb_addr2 [label="NITB interface addr\n10.42.42.2"]
+			Modem0
+			Modem1
+			Modem2
+			sysmoBTS [label="osmo-bts-sysmo"]
+			osmo_bts_trx [label="osmo-bts-trx"]
+			arfcn1 [label="arfcn: 512\nband: GSM-1800"]
+			arfcn2 [label="arfcn: 540\nband: GSM-1900"]
+
+			arfcn1->arfcn2 [style=invis]
+			nitb_addr1->nitb_addr2 [style=invis]
+			Modem0 -> Modem1 -> Modem2 [style=invis]
+			sysmoBTS -> osmo_bts_trx [style=invis]
+	}
+
+	suite_scenarios -> {suite scenarios}
+	scenarios -> { u_arfcn u_sysmoBTS }
+
+	suite -> requires
+	requires -> Modem0
+	requires -> Modem1
+	requires -> sysmoBTS
+	requires -> arfcn1
+	requires -> nitb_addr1
+
+	{ u_sysmoBTS u_arfcn } -> requires [label="influences\nresource\nselection"]
+}
+----
+
+.Example of a "trial" containing binaries built by a jenkins
+[graphviz]
+----
+digraph G {
+	subgraph cluster_trial {
+		label = "Trial (binaries)"
+		sysmo [label="osmo-bts-sysmo.build-23.tgz\n(osmo-bts-sysmo\n+ deps\ncompiled for sysmoBTS)"]
+		trx [label="osmo-bts-trx.build-5.tgz\n(osmo-trx + osmo-bts-trx\n+ deps\ncompiled for main unit)"]
+		nitb [label="osmo-nitb.build-42.tgz\n(osmo-nitb\n+ deps\ncompiled for main unit)"]
+		checksums [label="checksums.md5"]
+
+		checksums -> {sysmo trx nitb}
+	}
 }
 ----
 
