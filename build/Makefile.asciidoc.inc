@@ -16,15 +16,15 @@ ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex.sty
 cleanfiles += $(ASCIIDOCPDFS)
 
 ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf
-DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes
+DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
 
 ifeq (,$(BUILD_RELEASE))
-	DBLATEX_OPTS += -P draft.watermark=1
+	REVNUMBER := DRAFT $(GIT_VERSION)
 else
-	DBLATEX_OPTS += -P draft.watermark=0
+	REVNUMBER := $(GIT_VERSION)
 endif
 
-A2X_OPTS := -L --asciidoc-opts="$(ASCIIDOC_OPTS)" --dblatex-opts="$(DBLATEX_OPTS)" -a docinfo -a revnumber="$(GIT_VERSION)" -a revdate="$(GIT_DATE)"
+A2X_OPTS := -L --asciidoc-opts="$(ASCIIDOC_OPTS)" --dblatex-opts="$(DBLATEX_OPTS)" -a docinfo -a revnumber="$(REVNUMBER)" -a revdate="$(GIT_DATE)"
 
 
 all: $(ASCIIDOCPDFS)
