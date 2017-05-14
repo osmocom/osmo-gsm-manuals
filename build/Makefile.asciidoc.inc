@@ -29,7 +29,14 @@ A2X_OPTS := -L --asciidoc-opts="$(ASCIIDOC_OPTS)" --dblatex-opts="$(DBLATEX_OPTS
 
 all: $(ASCIIDOCPDFS)
 
-$(ASCIIDOCPDFS): %.pdf: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc
+.PHONY: hint_to_remove_draft_mode
+hint_to_remove_draft_mode:
+	@test -n "$(BUILD_RELEASE)" && echo -e "\n\n\
+	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
+	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
+	  || true
+
+$(ASCIIDOCPDFS): %.pdf: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc hint_to_remove_draft_mode
 	a2x $(A2X_OPTS) $< || asciidoc -v $(ASCIIDOC_OPTS) $<
 
 check: $(ASCIIDOC_CHECKS)
