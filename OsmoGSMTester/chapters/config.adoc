@@ -1,5 +1,8 @@
 == Configuration
 
+[[config_paths]]
+=== Config Paths
+
 The osmo-gsm-tester looks for configuration files in various standard
 directories in this order:
 
@@ -17,6 +20,8 @@ configuration directory:
 - 'resources.conf'
 - 'default-suites.conf' (optional)
 - 'defaults.conf' (optional)
+
+These are described in detail in the following sections.
 
 === Format: YAML, and its Drawbacks
 
@@ -44,14 +49,14 @@ the directory of that 'paths.conf' file.
 Example:
 
 ----
-state_dir: '/var/run/osmo-gsm-tester'
-suites_dir: './suites'
+state_dir: '/var/tmp/osmo-gsm-tester/state'
+suites_dir: '/usr/local/src/osmo-gsm-tester/suites'
 scenarios_dir: './scenarios'
 ----
 
-If you would like to set up several separate 'paths.conf' files (not typical),
-note that the 'state_dir' is used to reserve resources, which only works when
-all configurations that share resources also use the same 'state_dir'.
+If you would like to set up several separate configurations (not typical), note
+that the 'state_dir' is used to reserve resources, which only works when all
+configurations that share resources also use the same 'state_dir'.
 
 [[resources_conf]]
 === 'resources.conf'
@@ -172,6 +177,8 @@ Example of a 'default-suites.conf' file:
 - voice:trx+tch_h
 - voice:trx+dyn_ts
 ----
+
+*TODO*: voice is not actually implemented yet
 
 === 'defaults.conf' (optional)
 

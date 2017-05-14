@@ -3,7 +3,7 @@
 
 A trial is a set of pre-built binaries to be tested. They are typically built
 by jenkins using the build scripts found in osmo-gsm-tester's source in the
-'contrib/' dir.
+'contrib/' dir, see <<install_add_build_slave>>.
 
 A trial comes in the form of a directory containing a number of '*.tgz' tar
 archives as well as a 'checksums.md5' file to verify the tar archives'
@@ -14,8 +14,10 @@ create a sub directory named 'inst' and unpack the tar archives into it.
 
 For each test run on this trial, a new subdirectory in the trial dir is
 created, named in the form of 'run.<timestamp>'. A symbolic link 'last-run'
-will point at the most recently created run dir. This run dir will accumulate
-the rendered configuration files used for the trial run as well as a test log
-(<- *TODO*) and stdout and stderr outputs of the binaries run for the trial.
-(*TODO*->) When the test is complete, jenkins parsable XML reports for the test
-run will be written to the 'run.<timestamp>' subdir.
+will point at the most recently created run dir. This run dir will accumulate:
+
+* the rendered configuration files used to run the binaries
+* stdout and stderr outputs of the binaries
+* a test log
+* *TODO*: jenkins parsable XML reports
+

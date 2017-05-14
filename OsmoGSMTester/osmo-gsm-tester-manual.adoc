@@ -9,6 +9,8 @@ incomplete, and details will still change and move around.*
 
 include::chapters/intro.adoc[]
 
+include::chapters/install.adoc[]
+
 include::chapters/config.adoc[]
 
 include::chapters/trial.adoc[]

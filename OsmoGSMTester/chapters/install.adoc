@@ -1,0 +1,600 @@
+== Installation on Main Unit
+
+The main unit is a general purpose computer that orchestrates the tests. It
+runs the core network components, controls the modems and so on. This can be
+anything from a dedicated production rack unit to your laptop at home.
+
+This manual will assume that tests are run from a jenkins build slave, by a
+user named 'jenkins'. The user configuration for manual test runs and/or a
+different user name is identical, simply replace the user name.
+
+=== Dependencies
+
+On a Debian/Ubuntu based system, these commands install the packages needed to
+run the osmo-gsm-tester.py code, i.e. install these on your main unit:
+
+----
+apt-get install \
+  dbus \
+  tcpdump \
+  python3 \
+  python3-yaml \
+  python3-mako \
+  python3-gi \
+  ofono \
+  python3-pip
+pip3 install pydbus
+----
+
+IMPORTANT: ofono may need to be installed from source to contain the most
+recent fixes needed to operate your modem. This depends on the modem hardware
+used and the tests run. Please see <<hardware_modems>>.
+
+To run osmo-bts-trx with a USRP attached, you may need to install a UHD driver.
+Please refer to http://osmocom.org/projects/osmotrx/wiki/OsmoTRX#UHD for
+details; the following is an example for the B200 family USRP devices:
+
+----
+apt-get install libuhd-dev uhd-host
+/usr/lib/uhd/utils/uhd_images_downloader.py
+----
+
+[[jenkins_deps]]
+==== Jenkins Build Dependencies
+
+Each of the jenkins builds requires individual dependencies. This is generally
+the same as for building the software outside of osmo-gsm-tester and will not
+be detailed here. For the Osmocom projects, refer to
+http://osmocom.org/projects/cellular-infrastructure/wiki/Build_from_Source . Be
+aware of specific requirements for BTS hardware: for example, the
+osmo-bts-sysmo build needs the sysmoBTS SDK installed on the build slave, which
+should match the installed sysmoBTS firmware.
+
+
+[[configure_build_slave]]
+=== Jenkins Build Slave
+
+==== Create 'jenkins' User on Main Unit
+
+On the main unit, create a jenkins user:
+
+----
+useradd -m jenkins
+----
+
+==== Allow SSH Access from Jenkins Master
+
+Create an SSH keypair to be used for login on the osmo-gsm-tester. This may be
+entered on the jenkins web UI; alternatively, use the jenkins server's shell:
+
+Login on the main jenkins server shell and create an SSH keypair, for example:
+
+----
+# su jenkins
+$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/jenkins/.ssh/id_rsa): /usr/local/jenkins/keys/osmo-gsm-tester-rnd
+Enter passphrase (empty for no passphrase): <enter a passphrase>
+Enter same passphrase again: <enter a passphrase>
+Your identification has been saved in /usr/local/jenkins/keys/osmo-gsm-tester-rnd
+Your public key has been saved in /usr/local/jenkins/keys/osmo-gsm-tester-rnd.pub.
+The key fingerprint is:
+...
+----
+
+Copy the public key to the main unit, e.g. copy-paste:
+
+----
+cat /usr/local/jenkins/keys/osmo-gsm-tester-rnd.pub
+# copy this public key
+----
+
+On the main unit:
+
+----
+mkdir ~jenkins/.ssh
+cat > ~jenkins/.ssh/authorized_keys
+# paste above public key and hit Ctrl-D
+chown -R jenkins: ~jenkins/.ssh
+----
+
+Make sure that the user running the jenkins master accepts the main unit's host
+identification. There must be an actual RSA host key available in the
+known_hosts file for the jenkins master to be able to log in. Simply calling
+ssh and accepting the host key as usual is not enough. Jenkins may continue to
+say "Host key verification failed".
+
+To place an RSA host key in the jenkins' known_hosts file, you may do:
+
+On the Jenkins master:
+
+----
+main_unit_ip=10.9.8.7
+ssh-keyscan -H $main_unit_ip >> ~jenkins/.ssh/known_hosts
+chown jenkins: ~jenkins/.ssh/known_hosts
+----
+
+Verify that the jenkins user on the Jenkins master has SSH access to the main
+unit:
+
+----
+su jenkins
+main_unit_ip=10.9.8.7
+ssh jenkins@$main_unit_ip
+exit
+----
+
+[[install_add_build_slave]]
+==== Add Build Slave
+
+In the jenkins web UI, add a new build slave for the osmo-gsm-tester:
+
+* 'Manage Jenkins'
+** 'Manage Nodes'
+*** 'New Node'
+**** Enter a node name, e.g. "osmo-gsm-tester-1" +
+     (the "-1" is just some identification in case you'd like to add another
+     setup later).
+**** 'Permanent Agent'
+
+Configure the node as:
+
+* '# of executors': 1
+* 'Remote root directory': "/home/jenkins"
+* 'Labels': "osmo-gsm-tester" +
+  (This is a general label common to all osmo-gsm-tester build slaves you may set up in the future.)
+* 'Usage': 'Only build jobs with label expressions matching this node'
+* 'Launch method': 'Launch slave agents via SSH'
+** 'Host': your main unit's IP address
+** 'Credentials': choose 'Add' / 'Jenkins'
+*** 'Domain': 'Global credentials (unrestricted)'
+*** 'Kind': 'SSH Username with private key'
+*** 'Scope': 'Global'
+*** 'Username': "jenkins" +
+    (as created on the main unit above)
+*** 'Private Key': 'From a file on Jenkins master'
+**** 'File': "/usr/local/jenkins/keys/osmo-gsm-tester-rnd"
+*** 'Passphrase': enter same passphrase as above
+*** 'ID': "osmo-gsm-tester-1"
+*** 'Name': "jenkins for SSH to osmo-gsm-tester-1"
+
+The build slave should be able to start now.
+
+
+==== Add Build Jobs
+
+There are various jenkins-build-* scripts in osmo-gsm-tester/contrib/, which
+can be called as jenkins build jobs to build and bundle binaries as artifacts,
+to be run on the osmo-gsm-tester main unit and/or BTS hardware.
+
+Be aware of the dependencies, as hinted at in <<jenkins_deps>>.
+
+While the various binaries could technically be built on the osmo-gsm-tester
+main unit, it is recommended to use a separate build slave, to take load off
+of the main unit.
+
+On your jenkins master, set up build jobs to call these scripts -- typically
+one build job per script. Look in contrib/ and create one build job for each of
+the BTS types you would like to test, as well as one for the 'build-osmo-nitb'.
+
+These are generic steps to configure a jenkins build
+job for each of these build scripts, by example of the
+jenkins-build-osmo-nitb.sh script; all that differs to the other scripts is the
+"osmo-nitb" part:
+
+* 'Project name': "osmo-gsm-tester_build-osmo-nitb" +
+  (Replace 'osmo-nitb' according to which build script this is for)
+* 'Discard old builds' +
+  Configure this to taste, for example:
+** 'Max # of build to keep': "20"
+* 'Restrict where this project can be run': Choose a build slave label that
+  matches the main unit's architecture and distribution, typically a Debian
+  system, e.g.: "linux_amd64_debian8"
+* 'Source Code Management':
+** 'Git'
+*** 'Repository URL': "git://git.osmocom.org/osmo-gsm-tester"
+*** 'Branch Specifier': "*/master"
+*** 'Additional Behaviors'
+**** 'Check out to a sub-directory': "osmo-gsm-tester"
+* 'Build Triggers' +
+  The decision on when to build is complex. Here are some examples:
+** Once per day: +
+   'Build periodically': "H H * * *"
+** For the Osmocom project, the purpose is to verify our software changes.
+   Hence we would like to test every time our code has changed:
+*** We could add various git repositories to watch, and enable 'Poll SCM'.
+*** On jenkins.osmocom.org, we have various jobs that build the master branches
+    of their respective git repositories when a new change was merged. Here, we
+    can thus trigger e.g. an osmo-nitb build for osmo-gsm-tester everytime the
+    master build has run: +
+    'Build after other projects are built': "OpenBSC"
+*** Note that most of the Osmocom projects also need to be re-tested when their
+    dependencies like libosmo* have changed. Triggering on all those changes
+    typically causes more jenkins runs than necessary: for example, it rebuilds
+    once per each dependency that has rebuilt due to one libosmocore change.
+    There is so far no trivial way known to avoid this. It is indeed safest to
+    rebuild more often.
+* 'Build'
+** 'Execute Shell'
++
+----
+#!/bin/sh
+set -e -x
+./osmo-gsm-tester/contrib/jenkins-build-osmo-nitb.sh
+----
++
+(Replace 'osmo-nitb' according to which build script this is for)
+
+* 'Post-build Actions'
+** 'Archive the artifacts': "*.tgz, *.md5" +
+   (This step is important to be able to use the built binaries in the run job
+   below.)
+
+
+TIP: When you've created one build job, it is convenient to create further
+build jobs by copying the first and, e.g., simply replacing all "osmo-nitb"
+with "osmo-bts-trx".
+
+==== Add Run Job
+
+This is the build job that actually runs the tests on the GSM hardware:
+
+* It sources the artifacts from the build jobs.
+* It runs on the osmo-gsm-tester main unit's build slave.
+
+Here is the configuration for the run job:
+
+* 'Project name': "osmo-gsm-tester_run"
+* 'Discard old builds' +
+  Configure this to taste, for example:
+** 'Max # of build to keep': "20"
+* 'Restrict where this project can be run': "osmo-gsm-tester" +
+  (to match the 'Label' configured in <<install_add_build_slave>>).
+* 'Source Code Management':
+** 'Git'
+*** 'Repository URL': "git://git.osmocom.org/osmo-gsm-tester"
+*** 'Branch Specifier': "*/master"
+*** 'Additional Behaviors'
+**** 'Check out to a sub-directory': "osmo-gsm-tester"
+**** 'Clean before checkout'
+* 'Build Triggers' +
+  The decision on when to build is complex. For this run job, it is suggested
+  to rebuild:
+** after each of above build jobs that produced new artifacts: +
+   'Build after other projects are built': "osmo-gsm-tester_build-osmo-nitb,
+   osmo-gsm-tester_build-osmo-bts-sysmo, osmo-gsm-tester_build-osmo-bts-trx" +
+   (Add each build job name you configured above)
+** as well as once per day: +
+   'Build periodically': "H H * * *"
+** and, in addition, whenever the osmo-gsm-tester scripts have been modified: +
+   'Poll SCM': "H/5 * * * *" +
+   (i.e. look every five minutes whether the upstream git has changed)
+* 'Build'
+** Copy artifacts from each build job you have set up:
+*** 'Copy artifacts from another project'
+**** 'Project name': "osmo-gsm-tester_build-osmo-nitb"
+**** 'Which build': 'Latest successful build'
+**** enable 'Stable build only'
+**** 'Artifacts to copy': "*.tgz, *.md5"
+*** Add a separate similar 'Copy artifacts...' section for each build job you
+    have set up.
+** 'Execute Shell'
++
+----
+#!/bin/sh
+set -e -x
+
+# debug: provoke a failure
+#export OSMO_GSM_TESTER_OPTS="-s debug -t fail"
+
+PATH="$PWD/osmo-gsm-tester/src:$PATH" \
+  ./osmo-gsm-tester/contrib/jenkins-run.sh
+----
++
+Details:
+
+*** The 'jenkins-run.sh' script assumes to find the 'osmo-gsm-tester.py' in the
+    '$PATH'. To use the most recent osmo-gsm-tester code here, we direct
+    '$PATH' to the actual workspace checkout. This could also run from a sytem
+    wide install, in which case you could omit the explicit PATH to
+    "$PWD/osmo-gsm-tester/src".
+*** This assumes that there are configuration files for osmo-gsm-tester placed
+    on the system (see <<config_paths>>).
+*** If you'd like to check the behavior of test failures, you can uncomment the
+    line below "# debug" to produce a build failure on every run. Note that
+    this test typically produces a quite empty run result, since it launches no
+    NITB nor BTS.
+* 'Post-build Actions'
+** 'Archive the artifacts'
+*** 'Files to archive': "*-run.tgz" +
+    This stores the complete test report with config files, logs, stdout/stderr
+    output as well as pcaps in an artifact. This allows analysis of older
+    builds, instead of only the most recent build (which cleans up the jenkins
+    workspace every time). The 'trial-N-run.tgz' archive is produced by the
+    'jenkins-run.sh' script, both for successful and failing runs.
+
+
+=== Install osmo-gsm-tester on Main Unit
+
+This assumes you have already created the jenkins user (see <<configure_build_slave>>).
+
+==== Allow Core Files
+
+In case a binary run for the test crashes, a core file of the crash should be
+written. This requires a limit rule. Copy the following config file from the
+osmo-gsm-tester source tree to the main unit:
+
+----
+cp install/osmo-gsm-tester-limits.conf /etc/security/limits.d/
+----
+
+==== User Permissions
+
+On the main unit, create a group for all users that should be allowed to use
+the osmo-gsm-tester, and add users (here 'jenkins') to this group.
+
+----
+groupadd osmo-gsm-tester
+gpasswd -a jenkins osmo-gsm-tester
+----
+
+NOTE: you may also need to add users to the 'usrp' group, see
+<<user_config_uhd>>.
+
+A user added to a group needs to re-login for the group permissions to take
+effect.
+
+This group needs the following permissions:
+
+===== Paths
+
+Assuming that you are using the example config, prepare a system wide state
+location in '/var/tmp':
+
+----
+mkdir -p /var/tmp/osmo-gsm-tester/state
+chown -R :osmo-gsm-tester /var/tmp/osmo-gsm-tester
+chmod -R g+rwxs /var/tmp/osmo-gsm-tester
+setfacl -d -m group:osmo-gsm-tester:rwx /var/tmp/osmo-gsm-tester/state
+----
+
+IMPORTANT: the state directory needs to be shared between all users potentially
+running the osmo-gsm-tester to resolve resource allocations. Above 'setfacl'
+command sets the access control to keep all created files group writable.
+
+With the jenkins build as described here, the trials will live in the build
+slave's workspace. Other modes of operation (a daemon scheduling concurrent
+runs, *TODO*) may use a system wide directory to manage trials to run:
+
+----
+mkdir -p /var/tmp/osmo-gsm-tester/trials
+chown -R :osmo-gsm-tester /var/tmp/osmo-gsm-tester
+chmod -R g+rwxs /var/tmp/osmo-gsm-tester
+----
+
+===== Allow DBus Access to ofono
+
+Put a DBus configuration file in place that allows the 'osmo-gsm-tester' group
+to access the org.ofono DBus path:
+
+----
+cat > /etc/dbus-1/system.d/osmo-gsm-tester.conf <<END
+<!-- Additional rules for the osmo-gsm-tester to access org.ofono from user
+     land -->
+
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+
+  <policy group="osmo-gsm-tester">
+    <allow send_destination="org.ofono"/>
+  </policy>
+
+</busconfig>
+END
+----
+
+(No restart of dbus nor ofono necessary.)
+
+[[install_capture_packets]]
+===== Capture Packets
+
+In order to allow collecting pcap traces of the network communication for later
+reference, allow the osmo-gsm-tester group to capture packets using the 'tcpdump'
+program:
+
+----
+chgrp osmo-gsm-tester /usr/sbin/tcpdump
+chmod 750 /usr/sbin/tcpdump
+setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+----
+
+Put 'tcpdump' in the '$PATH' -- assuming that 'tcpdump' is available for root:
+
+----
+ln -s `which tcpdump` /usr/local/bin/tcpdump
+----
+
+TIP: Why a symlink in '/usr/local/bin'? On Debian, 'tcpdump' lives in
+'/usr/sbin', which is not part of the '$PATH' for non-root users. To avoid
+hardcoding non-portable paths in the osmo-gsm-tester source, 'tcpdump' must be
+available in the '$PATH'. There are various trivial ways to modify '$PATH' for
+login shells, but the jenkins build slave typically runs in a *non-login*
+shell; modifying non-login shell enviroments is not trivially possible without
+also interfering with files installed from debian packages. Probably the
+easiest way to allow all users and all shells to find the 'tcpdump' binary is
+to actually place a symbolic link in a directory that is already part of the
+non-login shell's '$PATH'. Above example places such in '/usr/local/bin'.
+
+Verify that a non-login shell can find 'tcpdump':
+
+----
+su jenkins -c 'which tcpdump'
+# should print: "/usr/local/bin/tcpdump"
+----
+
+WARNING: When logged in via SSH on your main unit, running 'tcpdump' to capture
+packets may result in a feedback loop: SSH activity to send tcpdump's output to
+your terminal is in turn is picked up in the tcpdump trace, and so forth. When
+testing 'tcpdump' access, make sure to have proper filter expressions in place.
+
+TODO: allow skipping pcaps by configuration if access to tcpdump is not wanted
+
+[[user_config_uhd]]
+==== UHD
+
+Grant permission to use the UHD driver to run USRP devices for osmo-bts-trx, by
+adding the jenkins user to the 'usrp' group:
+
+----
+gpasswd -a jenkins usrp
+----
+
+==== Install Scripts
+
+IMPORTANT: When using the jenkins build slave as configured above, *there is no
+need to install the osmo-gsm-tester sources on the main unit*. The jenkins job
+will do so implicitly by checking out the latest osmo-gsm-tester sources in the
+workspace for every run. If you're using only the jenkins build slave, you may
+skip this section.
+
+If you prefer to use a fixed installation of the osmo-gsm-tester sources
+instead of the jenkins workspace, you can:
+
+. From the run job configured above, remove the line that says
++
+----
+PATH="$PWD/osmo-gsm-tester/src:$PATH" \
+----
++
+so that this uses a system wide installation instead.
+
+. Install the sources e.g. in '/usr/local/src' as indicated below.
+
+On the main unit, to install the latest in '/usr/local/src':
+
+----
+apt-get install git
+mkdir -p /usr/local/src
+cd /usr/local/src
+git clone git://git.osmocom.org/osmo-gsm-tester
+----
+
+To allow all users to run 'osmo-gsm-tester.py', from login as well as non-login
+shells, the easiest solution is to place a symlink in '/usr/local/bin':
+
+----
+ln -s /usr/local/src/osmo-gsm-tester/src/osmo-gsm-tester.py /usr/local/bin/
+----
+
+(See also the tip in <<install_capture_packets>> for a more detailed
+explanation.)
+
+The example configuration provided in the source is suitable for running as-is,
+*if* your hardware setup matches (you could technically use that directly by a
+symlink e.g. from '/usr/local/etc/osmo-gsm-tester' to the 'example' dir). If in
+doubt, rather copy the example, point 'paths.conf' at the 'suites' dir, and
+adjust your own configuration as needed. For example:
+
+----
+cd /etc
+cp -R /usr/local/src/osmo-gsm-tester/example osmo-gsm-tester
+sed -i 's#\.\./suites#/usr/local/src/osmo-gsm-tester/suites#' osmo-gsm-tester/paths.conf
+----
+
+NOTE: The configuration will be looked up in various places, see
+<<config_paths>>.
+
+
+== Hardware Choice and Configuration
+
+=== SysmoBTS
+
+To use the SysmoBTS in the osmo-gsm-tester, the following systemd services must
+be disabled:
+
+----
+systemctl mask osmo-nitb
+systemctl mask sysmobts
+systemctl mask sysmopcu
+systemctl mask sysmobts-mgr
+----
+
+This stops the stock setup keeping the BTS in operation and hence allows the
+osmo-gsm-tester to install and launch its own versions of the SysmoBTS
+software.
+
+==== IP Address
+
+To ensure that the SysmoBTS is always reachable at a fixed known IP address,
+configure the eth0 to use a static IP address:
+
+Adjust '/etc/network/interfaces' and replace the line
+
+----
+iface eth0 inet dhcp
+----
+
+with
+
+----
+iface eth0 inet static
+  address 10.42.42.114
+  netmask 255.255.255.0
+  gateway 10.42.42.1
+----
+
+You may set the name server in '/etc/resolve.conf' (most likely to the IP of
+the gateway), but this is not really needed by the osmo-gsm-tester.
+
+==== SSH Access
+
+Copy an SSH public key from the system/user that runs the osmo-gsm-tester,
+presumably user 'jenkins' on the *main unit* (not from the jenkins master!), to
+the 'authorized_keys' file of user 'root' on the SysmoBTS.
+
+If the 'jenkins' user on the *main unit* has no key pair yet, generate one
+first, with an empty passphrase:
+
+----
+ssh jenkins@my_main_unit
+ssh-keygen
+----
+
+Then copy the public key to the SysmoBTS:
+
+----
+ssh jenkins@my_main_unit
+cat ~/.ssh/id_rsa.pub
+# copy this public key
+----
+
+----
+sysmobts=root@10.42.42.114
+ssh $sysmobts
+cat id_rsa.pub >> ~/.ssh/authorized_keys
+# paste above public key and hit Ctrl-D
+----
+
+==== Allow Core Files
+
+In case a binary run for the test crashes, a core file of the crash should be
+written. This requires a limit rule. Copy the following config file from the
+osmo-gsm-tester source tree to the SysmoBTS:
+
+----
+sysmobts=root@10.42.42.114
+scp install/osmo-gsm-tester-limits.conf $sysmobts:/etc/security/limits.d/
+----
+
+
+[[hardware_modems]]
+=== Modems
+
+TODO: describe modem choices and how to run ofono
+
+[[hardware_trx]]
+=== osmo-bts-trx
+
+TODO: describe B200 family
+
