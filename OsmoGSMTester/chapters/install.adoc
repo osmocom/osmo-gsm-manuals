@@ -27,7 +27,7 @@ pip3 install pydbus
 ----
 
 IMPORTANT: ofono may need to be installed from source to contain the most
-recent fixes needed to operate your modem. This depends on the modem hardware
+recent fixes needed to operate your modems. This depends on the modem hardware
 used and the tests run. Please see <<hardware_modems>>.
 
 To run osmo-bts-trx with a USRP attached, you may need to install a UHD driver.
