@@ -75,7 +75,7 @@ where each item has one or more settings -- for an example, see
 
 These kinds of resource are known:
 
-'nitb_iface'::
+'ip_address'::
 	List of IP addresses to run osmo-nitb instances on. The main unit
 	typically has a limited number of such IP addresses configured, which
 	the connected BTS models can see on their network.
@@ -138,7 +138,7 @@ These kinds of resource are known:
 	currently always comp128v1)
 
 Side note: at first sight it might make sense to the reader to rather structure
-e.g. the 'nitb_iface' or 'arfcn' configuration as +
+e.g. the 'ip_address' or 'arfcn' configuration as +
 '"arfcn: GSM-1800: [512, 514, ...]"', +
 but the more verbose format is chosen to stay consistent with the general
 structure of resource configurations, which the resource allocation algorithm

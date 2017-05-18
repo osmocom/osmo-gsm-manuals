@@ -96,7 +96,7 @@ digraph G {
 
 	subgraph cluster_suite {
 		label = "Suite: sms";
-		requires [label="Requirements (suite.conf):\nmodem: times: 2\nbts\nnitb_iface\narfcn"]
+		requires [label="Requirements (suite.conf):\nmodem: times: 2\nbts\nip_address\narfcn"]
 		subgraph cluster_tests {
 			label = "Test Scripts (py)";
 			mo_mt_sms
@@ -202,7 +202,7 @@ A global configuration of hardware may look like below; for details, see
 <<resources_conf>>.
 
 ----
-nitb_iface:
+ip_address:
 - addr: 10.42.42.1
 - addr: 10.42.42.2
 - addr: 10.42.42.3
@@ -268,7 +268,7 @@ like this:
 
 ----
 resources:
-  nitb_iface:
+  ip_address:
   - times: 1
   bts:
   - times: 1
@@ -291,7 +291,7 @@ resources:
   - type: osmo-bts-sysmo
 ----
 
-Which 'nitb_iface' or 'modem' is used in particular doesn't really matter, so
+Which 'ip_address' or 'modem' is used in particular doesn't really matter, so
 it can be left up to the osmo-gsm-tester to pick these automatically.
 
 Any number of such scenario configurations can be combined in the form
