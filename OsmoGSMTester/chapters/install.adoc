@@ -325,8 +325,23 @@ written. This requires a limit rule. Copy the following config file from the
 osmo-gsm-tester source tree to the main unit:
 
 ----
-cp install/osmo-gsm-tester-limits.conf /etc/security/limits.d/
+sudo -s
+echo "@osmo-gsm-tester - core unlimited" > /etc/security/limits.d/osmo-gsm-tester_allow-core.conf
 ----
+
+Re-login the user to make these changes take effect.
+
+==== Allow Realtime Priority
+
+Certain binaries should be run with real-time priority, like 'osmo-bts-trx'.
+Add this permission on the main unit:
+
+----
+sudo -s
+echo "@osmo-gsm-tester - rtprio 99" > /etc/security/limits.d/osmo-gsm-tester_allow-rtprio.conf
+----
+
+Re-login the user to make these changes take effect.
 
 ==== User Permissions
 
