@@ -1,0 +1,75 @@
+[[cell_broadcast]]
+== Cell Broadcast
+
+Normally, all user plane data in GSM/GPRS networks are sent in
+point-to-point channels from the network to the user. Those are called
+"dedicated" radio channels which exist between the network and one
+given phone/subscriber at a time.
+
+Cell Broadcast is an exception to that rule. It permits user data
+(so-called SMS-CB data) to be broadcast by the network in a way that
+can be received by all phones in the coverage area of the given BTS
+simultaneously.
+
+More high-level information can be found at
+https://en.wikipedia.org/wiki/Cell_Broadcast and the related
+specification is <<3gpp-ts-23-041>>.
+
+=== Use Cases
+
+Cell Broadcast was used for various different use cases primarily in
+the 1990ies and early 2000s, including
+
+* advertisement of the GPS position of the cell tower you're currently camping on
+* advertisement of the calling codes of your current "home zone", i.e. a
+ "lower cost short distance" call zone travelling with you as you roam around.
+
+More recently, SMS-CB is seeing some uptake by various disaster
+warning systems, such as
+
+* CMAS (Commercial Mobile Alert System), later renamed to WEA (Wireless Emergency Alerts) in the US.
+* EU-Alert in the European union
+* Messer Ishi (Rocket Alert) in Israel
+* ETWS (Earthquake and Tsunami Warning System) in Japan
+* KPAS (Korean Public Alert System)
+
+=== Osmocom Cell Broadcast support
+
+* OsmoBTS implements the "SMS BROADCAST COMMAND" Message in RSL
+  according to Section 8.5.8 of 3GPP TS 08.58
+* OsmoNITB and OsmoBSC implement a VTY command
+  `bts <0-255> smscb-command <1-4> HEXSTRING` to send a given hex-formatted cell
+  broadcast message to a specified BTS
+
+[mscgen]
+----
+include::osmocom-cbs.msc[]
+----
+
+==== What'a miaaing
+
+What's missing (for production operation in larger networks)
+
+* mechanism to broadcast one (set of) cell broadcast messages from the
+  BSC to multiple/all BTSs, rather than one BTS individually
+* OsmoBTS reporting of current CBCH load
+* BSC scheduler scheduling multiple alternating sets of CBCH messages
+  based on the current CBCH load reported by BTS
+* external interface from BSC to a Cell Broadcast Center (CBC), e.g.
+  according to 3GPP TS 48.049
+* an Osmocom implementation of the Cell Broadcast Center (OsmoCBC)
+  which can manage and distribute messages to multiple BSCs and which
+  has an external interface by which cell-broadcast can be entered
+  into the network
+
+If you would like to contribute in any of those areas (by means of
+code or funding), please reach out to us any time.
+
+=== Message Structure
+
+* Each message has a meximum of 15 pages
+* Each page is 82 bytes of data, resulting in 93 characters in GSM
+  7-bit default alphabet
+* Messages are broadcast on logical channels (more like an address)
+* Subscribers can activate/deactivate selective addresses
+

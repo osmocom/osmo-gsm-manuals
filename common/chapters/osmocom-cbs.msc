@@ -1,0 +1,12 @@
+msc {
+  hscale="2";
+  ms [label="MS"], bts [label="BTS"], bsc [label="BSC"], user [label="User"];
+
+  user -> bsc [label="Establish VTY connection"];
+  user -> bsc [label="VTY command"];
+  bsc -> bts [label="08.58 RSL SMS BROADCAST CMD"];
+  bts -> ms [label="04.12 SMS BC REQ (1st block)"];
+  bts -> ms [label="04.12 SMS BC REQ (2nd block)"];
+  bts -> ms [label="04.12 SMS BC REQ (3rd block)"];
+  bts -> ms [label="04.12 SMS BC REQ (4th block)"];
+}
