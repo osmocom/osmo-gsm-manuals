@@ -530,10 +530,7 @@ To use the SysmoBTS in the osmo-gsm-tester, the following systemd services must
 be disabled:
 
 ----
-systemctl mask osmo-nitb
-systemctl mask sysmobts
-systemctl mask sysmopcu
-systemctl mask sysmobts-mgr
+systemctl mask osmo-nitb sysmobts sysmopcu sysmobts-mgr
 ----
 
 This stops the stock setup keeping the BTS in operation and hence allows the
@@ -563,45 +560,39 @@ iface eth0 inet static
 You may set the name server in '/etc/resolve.conf' (most likely to the IP of
 the gateway), but this is not really needed by the osmo-gsm-tester.
 
-==== SSH Access
-
-Copy an SSH public key from the system/user that runs the osmo-gsm-tester,
-presumably user 'jenkins' on the *main unit* (not from the jenkins master!), to
-the 'authorized_keys' file of user 'root' on the SysmoBTS.
-
-If the 'jenkins' user on the *main unit* has no key pair yet, generate one
-first, with an empty passphrase:
-
-----
-ssh jenkins@my_main_unit
-ssh-keygen
-----
-
-Then copy the public key to the SysmoBTS:
-
-----
-ssh jenkins@my_main_unit
-cat ~/.ssh/id_rsa.pub
-# copy this public key
-----
-
-----
-sysmobts=root@10.42.42.114
-ssh $sysmobts
-cat id_rsa.pub >> ~/.ssh/authorized_keys
-# paste above public key and hit Ctrl-D
-----
-
 ==== Allow Core Files
 
 In case a binary run for the test crashes, a core file of the crash should be
-written. This requires a limit rule. Copy the following config file from the
-osmo-gsm-tester source tree to the SysmoBTS:
+written. This requires a limits rule. Append a line to /etc/limits like:
 
 ----
-sysmobts=root@10.42.42.114
-scp install/osmo-gsm-tester-limits.conf $sysmobts:/etc/security/limits.d/
+ssh root@10.42.42.114
+echo "* C16384" >> /etc/limits
 ----
+
+==== Reboot
+
+Reboot the BTS and make sure that the IP address for eth0 is now indeed
+10.42.42.114, and that no osmo* programs are running.
+
+----
+ip a
+ps w | grep osmo
+----
+
+==== SSH Access
+
+Make sure that the jenkins user on the main unit is able to login on the
+sysmoBTS, possibly erasing outdated host keys after a new rootfs was loaded:
+
+On the main unit, for example do:
+
+----
+su - jenkins
+ssh root@10.42.42.114
+----
+
+Fix any problems until you get a login on the sysmoBTS.
 
 
 [[hardware_modems]]
