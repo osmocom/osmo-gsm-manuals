@@ -17,6 +17,7 @@ run the osmo-gsm-tester.py code, i.e. install these on your main unit:
 apt-get install \
   dbus \
   tcpdump \
+  sqlite3 \
   python3 \
   python3-yaml \
   python3-mako \
