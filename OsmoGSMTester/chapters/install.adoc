@@ -605,4 +605,3 @@ TODO: describe modem choices and how to run ofono
 === osmo-bts-trx
 
 TODO: describe B200 family
-
