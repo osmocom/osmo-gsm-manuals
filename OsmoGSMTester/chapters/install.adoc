@@ -25,6 +25,7 @@ apt-get install \
   ofono \
   python3-pip
 pip3 install pydbus
+pip3 install git+git://github.com/podshumok/python-smpplib.git
 ----
 
 IMPORTANT: ofono may need to be installed from source to contain the most
