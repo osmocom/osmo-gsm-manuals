@@ -308,13 +308,13 @@ Details:
     NITB nor BTS.
 * 'Post-build Actions'
 ** 'Archive the artifacts'
-*** 'Files to archive': "*-run.tgz" +
+*** 'Files to archive': "*-run.tgz, *-bin.tgz" +
     This stores the complete test report with config files, logs, stdout/stderr
-    output as well as pcaps in an artifact. This allows analysis of older
-    builds, instead of only the most recent build (which cleans up the jenkins
-    workspace every time). The 'trial-N-run.tgz' archive is produced by the
-    'jenkins-run.sh' script, both for successful and failing runs.
-
+    output, pcaps as well as the binaries used for the test run in artifacts.
+    This allows analysis of older builds, instead of only the most recent build
+    (which cleans up the jenkins workspace every time). The 'trial-N-run.tgz'
+    and 'trial-N-bin.tgz' archives are produced by the 'jenkins-run.sh' script,
+    both for successful and failing runs.
 
 === Install osmo-gsm-tester on Main Unit
 
