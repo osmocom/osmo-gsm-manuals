@@ -541,7 +541,7 @@ To use the SysmoBTS in the osmo-gsm-tester, the following systemd services must
 be disabled:
 
 ----
-systemctl mask osmo-nitb sysmobts sysmopcu sysmobts-mgr
+systemctl mask osmo-nitb osmo-bts-sysmo osmo-pcu sysmobts-mgr
 ----
 
 This stops the stock setup keeping the BTS in operation and hence allows the
