@@ -246,7 +246,7 @@ OpenBSC> list
   logging print extended-timestamp (0|1)
   logging print category (0|1)
   logging set-log-mask MASK
-  logging level (all|rll|cc|mm|rr|rsl|nm|mncc|pag|meas|sccp|msc|mgcp|ho|db|ref|gprs|ns|bssgp|llc|sndcp|nat|ctrl|smpp|filter|lglobal|llapd|linp|lmux|lmi|lmib|lsms|lctrl|lgtp|lstats) (everything|debug|info|notice|error|fatal)
+  logging level (all|rll|cc|mm|rr|rsl|nm|mncc|pag|meas|sccp|msc|mgcp|ho|db|ref|gprs|ns|bssgp|llc|sndcp|nat|ctrl|smpp|filter|lglobal|llapd|linp|lmux|lmi|lmib|lsms|lctrl|lgtp|lstats) (debug|info|notice|error|fatal)
   show logging vty
   show alarms
   show stats
