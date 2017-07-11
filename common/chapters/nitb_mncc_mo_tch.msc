@@ -1,0 +1,92 @@
+# Mobile Originated call handled via OsmoNITB with RTP proxy or E1 BTS # and external MNCC Handler
+msc {
+	hscale="4";
+	ms [label="MS"], bts [label="BTS"], nitb [label="OsmoNITB"], emh [label="External MNCC Hdlr"];
+
+	|||;
+	...		[label="Mobile Originated call handled via OsmoNITB with RTP proxy or E1 BTS and external MNCC Handler"];
+	|||;
+	---		[label="User on A-side dials a MO call from his phone"];
+	ms <=> nitb	[label="RF Channel Establishment"];
+	...;
+
+	# MS sends CC SETUP, deliver it to MNCC
+	ms -> nitb 	[label="CC SETUP [MSISDN]"];
+	nitb rbox nitb	[label="CSTATE_INITIATED"];
+	nitb -> emh	[label="MNCC-SETUP.ind [CALLING, BEARER_CAP,
+FACILITY, CALLED, USERUSER, SSVERSION, CCCAP"];
+	emh rbox emh	[label="1 CALL_INIT"];
+	...;
+
+	nitb <- emh	[label="MNCC-CALL-PROC.req [BEARER_CAP, FACILITY, PROGRESS]"];
+	emh rbox emh	[label="3 MO_CALL_PROC"];
+	nitb rbox nitb	[label="CSTATE_MO_CALL_PROC"];
+	ms <- nitb	[label="CC CALL PROCEDING"];
+	...;
+
+	# optional
+	---		[label="Optional PROGRESS, can happen 0-N times"];
+	nitb <- emh	[label="MNCC-PROGRESS.req [USERUSER]"];
+	emh rbox emh	[label="3 MO_CALL_PROC"];
+	ms <- nitb	[label="CC PROCEDING"];
+	...;
+
+	# optional
+	---		[label="Optional; Indicates when B-side is ringing"];
+	nitb <- emh	[label="MNCC-ALERT.req [FACILITY, PROGRESS, USERUSER]"];
+	emh rbox emh	[label="4 CALL_DELIVERED"];
+	nitb rbox nitb	[label="CSTATE_CALL_DELIVERED"];
+	ms <- nitb	[label="CC ALERTING"];
+	...;
+
+	# ask the BTS to connect its RTP stream to the given IP+PORT
+	---		[label="Exact time of MNCC_FRAME_RECV is up to Ext MNCC Hdlr"];
+	nitb <- emh	[label="MNCC_FRAME_RECV[.req]"];
+	ms -> nitb	[label="TCH Voice Frame (TRAU or RTP)"];
+	nitb ->emh [label="{GSM_{TCHF,TCHH}_FRAME,GSM_TCHF_FRAME_EFR,GSM_TCH_FRAME_AMR}"];
+	ms -> nitb	[label="TCH Voice Frame (TRAU or RTP)"];
+	nitb ->emh [label="{GSM_{TCHF,TCHH}_FRAME,GSM_TCHF_FRAME_EFR,GSM_TCH_FRAME_AMR}"];
+	...		[label="Unidirectional voice frames continue"];
+
+	---		[label="User on B-side answers the call"];
+	nitb <- emh	[label="MNCC-SETUP.rsp [FACILITY, PROGRERSS, CONNETED, USERUSER]"];
+	emh rbox emh	[label="? CONNECT_INDICATION"];
+	nitb rbox nitb	[label="CSTATE_CONNECT_IND"];
+	ms <- nitb	[label="CC CONNECT"];
+	...;
+
+	ms -> nitb	[label="TCH Voice Frame (TRAU or RTP)"];
+	nitb ->emh 	[label="{GSM_{TCHF,TCHH}_FRAME,GSM_TCHF_FRAME_EFR,GSM_TCH_FRAME_AMR}"];
+	...;
+	nitb <- emh	[label="{GSM_{TCHF,TCHH}_FRAME,GSM_TCHF_FRAME_EFR,GSM_TCH_FRAME_AMR}"];
+	ms <- nitb	[label="TCH Voice Frame (TRAU or RTP)"];
+	...		[label="Bi-directional voice frames continue"];
+
+	ms -> nitb	[label="CC CONNECT ACK"];
+	nitb rbox nitb	[label="CSTATE_ACTIVE"];
+	nitb -> emh	[label="MNCC-SETUP-COMPL.ind"];
+	emh rbox emh	[label="10 ACTIVE"];
+	...;
+	...;
+	...;
+
+	---		[label="User on A-side hangs up the call"];
+	ms -> nitb	[label="CC DISCONNECT"];
+	nitb rbox nitb	[label="CSTATE_DISCONNET_REQ"];
+	nitb -> emh	[label="MNCC-DISC.ind [CAUSE, FACILITY, USERUSER, SSVERSION]"];
+	emh rbox emh	[label="12 DISCONNET_IND"];
+	...;
+
+	nitb <- emh	[label="MNCC-RELEASE.req [CAUSE, FACILITY, USERUSER]"];
+	emh rbox emh	[label="19 RELEASE_REQ"];
+	nitb rbox nitb	[label="CSTATE_RELEASE_REQ"];
+	ms <- nitb	[label="CC RELEASE"];
+	...;
+
+	ms -> nitb	[label="CC RELEASE COMPLETE"];
+	nitb -> emh	[label="MNCC-RELEASE.cnf [CAUSE, FACILITY, USERUSER, SSVERSION]"];
+	...;
+
+	ms <=> nitb	[label="RF Channel Release"];
+	...;
+}
