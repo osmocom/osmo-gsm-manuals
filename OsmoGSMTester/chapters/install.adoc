@@ -64,6 +64,15 @@ On the main unit, create a jenkins user:
 useradd -m jenkins
 ----
 
+==== Install Java on Main Unit
+
+To be able to launch the Jenkins build slave, a Java RE must be available on
+the main unit. For example:
+
+----
+apt-get install default-jdk
+----
+
 ==== Allow SSH Access from Jenkins Master
 
 Create an SSH keypair to be used for login on the osmo-gsm-tester. This may be
@@ -73,6 +82,7 @@ Login on the main jenkins server shell and create an SSH keypair, for example:
 
 ----
 # su jenkins
+$ mkdir -p /usr/local/jenkins/keys
 $ ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/jenkins/.ssh/id_rsa): /usr/local/jenkins/keys/osmo-gsm-tester-rnd
@@ -122,7 +132,7 @@ unit:
 ----
 su jenkins
 main_unit_ip=10.9.8.7
-ssh jenkins@$main_unit_ip
+ssh -i /usr/local/jenkins/keys/osmo-gsm-tester-rnd jenkins@$main_unit_ip
 exit
 ----
 
