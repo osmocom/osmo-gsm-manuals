@@ -6,7 +6,8 @@ apt-get install \
   xsltproc \
   dblatex \
   mscgen \
-  graphviz
+  graphviz \
+  python-pychart
 
 Build PDFs, run:
   make

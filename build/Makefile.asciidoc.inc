@@ -15,7 +15,7 @@ ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex.sty
 
 cleanfiles += $(ASCIIDOCPDFS)
 
-ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf
+ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf
 DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
 
 ifeq (,$(BUILD_RELEASE))
