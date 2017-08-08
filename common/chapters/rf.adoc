@@ -576,7 +576,7 @@ several models that can help, depending on the general terrain:
 
 [[path-loss-models]]
 .List of common path loss models
-[options="header",cols="20%,20%,60%"]
+[options="header",cols="10%,10%,20%,60%"]
 |===
 |Type|Sub-Type|Bands|Name
 |Terrain|-|850, 900, 1800, 1900|ITU terrain model
