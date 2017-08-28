@@ -330,31 +330,6 @@ Details:
 
 This assumes you have already created the jenkins user (see <<configure_build_slave>>).
 
-==== Allow Core Files
-
-In case a binary run for the test crashes, a core file of the crash should be
-written. This requires a limit rule. Copy the following config file from the
-osmo-gsm-tester source tree to the main unit:
-
-----
-sudo -s
-echo "@osmo-gsm-tester - core unlimited" > /etc/security/limits.d/osmo-gsm-tester_allow-core.conf
-----
-
-Re-login the user to make these changes take effect.
-
-==== Allow Realtime Priority
-
-Certain binaries should be run with real-time priority, like 'osmo-bts-trx'.
-Add this permission on the main unit:
-
-----
-sudo -s
-echo "@osmo-gsm-tester - rtprio 99" > /etc/security/limits.d/osmo-gsm-tester_allow-rtprio.conf
-----
-
-Re-login the user to make these changes take effect.
-
 ==== User Permissions
 
 On the main unit, create a group for all users that should be allowed to use
@@ -466,6 +441,38 @@ your terminal is in turn is picked up in the tcpdump trace, and so forth. When
 testing 'tcpdump' access, make sure to have proper filter expressions in place.
 
 TODO: allow skipping pcaps by configuration if access to tcpdump is not wanted
+
+==== Allow Core Files
+
+In case a binary run for the test crashes, a core file of the crash should be
+written. This requires a limit rule. Create a file with the required rule:
+
+----
+sudo -s
+echo "@osmo-gsm-tester - core unlimited" > /etc/security/limits.d/osmo-gsm-tester_allow-core.conf
+----
+
+Re-login the user to make these changes take effect.
+
+Set the *kernel.core_pattern* sysctl to *core* (usually the default). For each
+binary run by osmo-gsm-tester, a core file will then appear in the same dir that
+contains stdout and stderr for that process (because this dir is set as CWD).
+
+----
+sysctl -w kernel.core_pattern=core
+----
+
+==== Allow Realtime Priority
+
+Certain binaries should be run with real-time priority, like 'osmo-bts-trx'.
+Add this permission on the main unit:
+
+----
+sudo -s
+echo "@osmo-gsm-tester - rtprio 99" > /etc/security/limits.d/osmo-gsm-tester_allow-rtprio.conf
+----
+
+Re-login the user to make these changes take effect.
 
 [[user_config_uhd]]
 ==== UHD
