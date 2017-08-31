@@ -96,8 +96,10 @@ Gb::
   Interface between PCU and SGSN in GPRS/EDGE network; uses NS, BSSGP, LLC
 GERAN::
   GPRS/EDGE Radio Access Network
+ifdef::gfdl-enabled[]
 GFDL::
   GNU Free Documentation License; a copyleft-style Documentation License
+endif::[]
 GGSN::
   GPRS Gateway Support Node; gateway between GPRS and external (IP) network
 GMSK::

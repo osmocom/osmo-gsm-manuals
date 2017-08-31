@@ -78,6 +78,7 @@ May the source be with you!
 -- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
 
 
+ifdef::gfdl-enabled[]
 === Endorsements
 
 This version of the manual is endorsed by Harald Welte as the official
@@ -86,7 +87,7 @@ version of the manual.
 While the GFDL license (see <<licenses-gfdl>>) permits anyone to create
 and distribute modified versions of this manual, such modified
 versions must remove the above endorsement.
-
+endif::[]
 
 == Preface
 
@@ -219,9 +220,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the License
 text included with the software for more details.
 
 
+ifdef::gfdl-enabled[]
 ==== Documentation License
 
 Please see <<licenses-gfdl>> for further information.
+endif::[]
 
 
 == Introduction
