@@ -484,6 +484,14 @@ adding the jenkins user to the 'usrp' group:
 gpasswd -a jenkins usrp
 ----
 
+==== Log Rotation
+
+To avoid clogging up /var/log, it makes sense to choose a sane maximum log size:
+
+----
+echo maxsize 10M > /etc/logrotate.d/maxsize
+----
+
 ==== Install Scripts
 
 IMPORTANT: When using the jenkins build slave as configured above, *there is no
