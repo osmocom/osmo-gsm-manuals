@@ -4,6 +4,7 @@ all: check-deps
 	cd OsmoBSC; $(MAKE)
 	cd OsmoMGCP; $(MAKE)
 	cd OsmoSGSN; $(MAKE)
+	cd OsmoGGSN; $(MAKE)
 	cd OsmoNAT; $(MAKE)
 	cd OsmoPCU; $(MAKE)
 	cd OsmoGSMTester; $(MAKE)
@@ -14,6 +15,7 @@ clean:
 	cd OsmoBSC; $(MAKE) clean
 	cd OsmoMGCP; $(MAKE) clean
 	cd OsmoSGSN; $(MAKE) clean
+	cd OsmoGGSN; $(MAKE) clean
 	cd OsmoNAT; $(MAKE) clean
 	cd OsmoPCU; $(MAKE) clean
 	cd OsmoGSMTester; $(MAKE) clean
@@ -24,6 +26,7 @@ upload:
 	cd OsmoBSC; $(MAKE) upload
 	cd OsmoMGCP; $(MAKE) upload
 	cd OsmoSGSN; $(MAKE) upload
+	cd OsmoGGSN; $(MAKE) upload
 	cd OsmoNAT; $(MAKE) upload
 	cd OsmoPCU; $(MAKE) upload
 	cd OsmoGSMTester; $(MAKE) upload
@@ -33,6 +36,7 @@ check:
 	cd OsmoNITB; $(MAKE) check
 	cd OsmoBSC; $(MAKE) check
 	cd OsmoSGSN; $(MAKE) check
+	cd OsmoGGSN; $(MAKE) check
 	cd OsmoPCU; $(MAKE) check
 	# These don't use asciidoc, so they have no 'make check' target:
 	#cd OsmoMGCP; $(MAKE) check
