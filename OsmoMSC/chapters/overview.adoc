@@ -1,0 +1,123 @@
+[[overview]]
+== Overview
+
+This manual should help you getting started with OsmoMSC. It will cover
+aspects of configuring and running the OsmoMSC.
+
+[[intro_overview]]
+=== About OsmoMSC
+
+OsmoMSC is the Osmocom implementation of a Mobile Switching Center (MSC) for 2G
+and 3G GSM and UMTS mobile networks. Its interfaces are:
+
+- GSUP towards OsmoHLR (or a MAP proxy);
+- A over IP towards a BSC (e.g. OsmoBSC);
+- IuCS towards an RNC or HNB-GW (e.g. OsmoHNBGW) for 3G voice;
+- MNCC (Mobile Network Call Control derived from GSM TS 04.07);
+- SMPP 3.4 (Short Message Peer-to-Peer);
+- The Osmocom typical telnet VTY and CTRL interfaces.
+
+OsmoMSC originated from the OpenBSC project, which started as a minimalistic
+all-in-one implementation of the GSM Network. In 2017, OpenBSC had reached
+maturity and diversity (including M3UA SIGTRAN and 3G support in the form of
+IuCS and IuPS interfaces) that naturally lead to a separation of the all-in-one
+approach to fully independent separate programs as in typical GSM networks.
+OsmoMSC was one of the parts split off from the old openbsc.git. Before, it was
+the libmsc part of the old OsmoNITB. Since a true __A__ interface and IuCS for
+3G support is available, OsmoMSC exists only as a separate standalone entity.
+
+Key differences of the new OsmoMSC compared to the old OsmoNITB are:
+
+- The complete VLR implementation that communicates with the separate HLR
+  (OsmoHLR) for subscriber management. In contrast to the OsmoNITB, this is now
+  fully asynchronous and allows using centralized subscriber management for
+  both circuit-switched and packet-switched domains (i.e. one OsmoHLR for both
+  OsmoMSC and OsmoSGSN), as well as full UMTS AKA (Authentication and Key
+  Agreement), i.e. Milenage authentication.
+
+- Addition of a true __A__ interface for 2G voice services. Previously, OsmoBSC
+  had an SCCPlite based __A__ interface towards 3rd party MSC implementations.
+  OsmoMSC features a true M3UA/SCCP __A__ interface, which allows running a now
+  separate OsmoBSC against an Osmocom based MSC implementation. The new
+  M3UA/SCCP SIGTRAN is implemented in libosmo-sccp, which is used by OsmoMSC
+  and OsmoBSC, among other projects, to establish a link via an STP (e.g.
+  OsmoSTP).
+
+- Addition of an __IuCS__ interface to allow operating 3G voice services.
+
+Find OsmoMSC issue tracker and wiki online at
+
+- https://osmocom.org/projects/osmomsc
+- https://osmocom.org/projects/osmomsc/wiki
+
+
+[[fig-gsm]]
+.Typical GSM network architecture used with OsmoMSC
+[graphviz]
+----
+digraph G {
+	rankdir=LR;
+	MS0 [label="MS"]
+	MS1 [label="MS"]
+	MS2 [label="MS"]
+	MS3 [label="MS"]
+	UE0 [label="UE"]
+	UE1 [label="UE"]
+	BTS0 [label="BTS"]
+	BTS1 [label="BTS"]
+	STP [label="STP\n(SCCP routing)"]
+	HLR [label="HLR+AUC+EIR"]
+	HNB [label="RNC or hNodeB"]
+	MGW
+	MS0->BTS0 [label="Um"]
+	MS1->BTS0 [label="Um"]
+	MS2->BTS1 [label="Um"]
+	MS3->BTS1 [label="Um"]
+	UE0->HNB
+	UE1->HNB
+	BTS0->BSC [label="Abis"]
+	BTS1->BSC [label="Abis"]
+	BSC->STP [label="A/M3UA"]
+	STP->MSC [label="A/M3UA"]
+	STP->MSC [label="IuCS/M3UA"]
+	VLR->HLR [label="GSUP"]
+	HNB->HNBGW [label="Iuh"]
+	HNBGW->STP [label="IuCS/M3UA"]
+	MSC->MGW [label="MGCP"]
+	BTS0->MGW [label="RTP"]
+	BTS1->MGW [label="RTP"]
+	subgraph cluster_msc {
+		label = "OsmoMSC";
+		MSC->SMSC;
+		MSC->VLR
+	}
+}
+----
+
+
+=== Software Components
+
+This is a brief description of OsmoMSC's internal software components.
+
+==== SMSC
+
+A minimal store-and-forward server for SMS, supporting both MO and MT
+SMS service, as well as multi-part messages.
+
+The built-in SMSC also supports an external SMSC interface.  For more
+information, see <<smpp>>.
+
+==== MSC
+
+The MSC component implements the mobility management (MM) functions of the TS
+04.08 and delegates to SMSC for SMS message handling and the VLR for subscriber
+management.
+
+Furthermore, it can handle TS 04.08 Call Control (CC), either by use of
+an internal MNCC handler, or by use of an external MNCC agent.  For more
+information see <<mncc>>.
+
+==== VLR
+
+A fully featured Visitor Location Register handles the subscriber management
+and authentication, and interfaces via GSUP to the external HLR.
