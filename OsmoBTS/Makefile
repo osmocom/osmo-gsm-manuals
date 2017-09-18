@@ -1,8 +1,6 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-EXTRA_DEPS = gen-bts-vty-docbook
-
 topdir = .
 bts_reference = $(topdir)/osmobts-vty-reference.xml
 manuals = $(bts_reference)
@@ -19,7 +17,7 @@ ASCIIDOCS := osmobts-usermanual osmobts-abis rtp-amr
 include $(TOPDIR)/build/Makefile.asciidoc.inc
 include $(TOPDIR)/build/Makefile.inc
 
-osmobts-abis.pdf: abis/*.adoc abis/*.msc
+osmobts-abis.pdf: abis/*.adoc abis/*.msc generated/docbook_vty.xml
 osmobts-usermanual.pdf: chapters/*.adoc
 
 clean:
@@ -33,7 +31,7 @@ clean:
 	-rm osmobts-abis*.check
 	-rm osmobts-usermanual*.check
 
-gen-bts-vty-docbook: FORCE
+generated/docbook_vty.xml: osmobts-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/bts_vty_reference.xml, \

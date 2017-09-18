@@ -27,21 +27,16 @@ endif
 all: $(types)
 
 
-$(types): FORCE
-
-
 pdf: $(pdfs) $(manuals)
 
 
 # Lint the file
-%.xml-lint: %.xml FORCE
+%.xml-lint: %.xml
 	$(call command,xmllint --xinclude --postvalid --noout $<,XMLLINT,$<)
 
 # Create a PDF file and lint it before
-%.pdf: %.xml %.xml-lint $(EXTRA_DEPS) FORCE
+%.pdf: %.xml %.xml-lint $(EXTRA_DEPS)
 	$(call command,dblatex $(dblatex_quiet) -P draft.mode=no $<,DBLATEX,$<)
 
 upload: $(pdfs) $(ASCIIDOCPDFS)
 	rsync -avz $(pdfs) $(ASCIIDOCPDFS) $(UPLOAD_PATH)/
-
-FORCE:

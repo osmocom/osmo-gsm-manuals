@@ -1,8 +1,6 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-EXTRA_DEPS = gen-vty-docbook
-
 topdir = .
 pcu_reference = $(topdir)/osmopcu-vty-reference.xml
 manuals = $(bts_manual) $(pcu_reference)
@@ -19,8 +17,8 @@ ASCIIDOCS := osmopcu-usermanual osmopcu-gb
 include $(TOPDIR)/build/Makefile.asciidoc.inc
 include $(TOPDIR)/build/Makefile.inc
 
-osmopcu-gb.pdf: gb/*.adoc gb/*.msc
-osmopcu-usermanual.pdf: chapters/*.adoc
+osmopcu-gb.pdf: gb/*.adoc gb/*.msc generated/docbook_vty.xml
+osmopcu-usermanual.pdf: chapters/*.adoc generated/docbook_vty.xml
 
 clean:
 	-rm -rf $(cleanfiles)
@@ -29,7 +27,7 @@ clean:
 	-rm osmopcu-usermanual__*.svg
 	-rm osmopcu-usermanual.check
 
-gen-vty-docbook: FORCE
+generated/docbook_vty.xml: osmopcu-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/osmo-pcu_vty_reference.xml, \

@@ -1,9 +1,6 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-
-EXTRA_DEPS = gen-bsc-vty-docbook
-
 topdir = .
 bsc_reference = $(topdir)/osmobsc-vty-reference.xml
 manuals = $(bsc_reference)
@@ -20,7 +17,7 @@ ASCIIDOCS := osmobsc-usermanual osmux-reference aoip-mgw-options
 include $(TOPDIR)/build/Makefile.asciidoc.inc
 include $(TOPDIR)/build/Makefile.inc
 
-osmobsc-usermanual.pdf: chapters/*.adoc
+osmobsc-usermanual.pdf: chapters/*.adoc generated/docbook_vty.xml
 osmux-reference.pdf: osmux-reference.adoc
 aoip-mgw-options.pdf: aoip-mgw-options.adoc
 
@@ -37,7 +34,7 @@ clean:
 	-rm osmux-reference__*.png
 	-rm osmux-reference__*.check
 
-gen-bsc-vty-docbook: FORCE
+generated/docbook_vty.xml: osmobsc-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/bsc_vty_reference.xml, \

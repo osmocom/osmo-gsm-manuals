@@ -1,8 +1,6 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-EXTRA_DEPS = gen-sgsn-vty-docbook
-
 topdir = .
 sgsn_reference = $(topdir)/osmosgsn-vty-reference.xml
 manuals = $(sgsn_reference)
@@ -19,14 +17,14 @@ ASCIIDOCS := osmosgsn-usermanual
 include $(TOPDIR)/build/Makefile.asciidoc.inc
 include $(TOPDIR)/build/Makefile.inc
 
-osmosgsn-usermanual.pdf: chapters/*.adoc
+osmosgsn-usermanual.pdf: chapters/*.adoc generated/docbook_vty.xml
 
 clean:
 	-rm -rf $(cleanfiles)
 	-rm osmosgsn-usermanual__*.svg osmosgsn-usermanual__*.png
 	-rm osmosgsn-usermanual.check
 
-gen-sgsn-vty-docbook: FORCE
+generated/docbook_vty.xml: osmosgsn-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/sgsn_vty_reference.xml, \

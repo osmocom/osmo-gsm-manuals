@@ -1,8 +1,6 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-EXTRA_DEPS = gen-nitb-vty-docbook
-
 topdir = .
 nitb_reference = $(topdir)/osmonitb-vty-reference.xml
 manuals = $(nitb_reference)
@@ -19,7 +17,7 @@ ASCIIDOCS := osmonitb-usermanual
 include $(TOPDIR)/build/Makefile.asciidoc.inc
 include $(TOPDIR)/build/Makefile.inc
 
-osmonitb-usermanual.pdf: chapters/*.adoc
+osmonitb-usermanual.pdf: chapters/*.adoc generated/docbook_vty.xml
 
 clean:
 	-rm -rf $(cleanfiles)
@@ -27,7 +25,7 @@ clean:
 	-rm osmonitb-usermanual__*.png
 	-rm osmonitb-usermanual.check
 
-gen-nitb-vty-docbook: FORCE
+generated/docbook_vty.xml: osmonitb-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/nitb_vty_reference.xml, \

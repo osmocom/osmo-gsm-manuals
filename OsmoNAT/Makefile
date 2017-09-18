@@ -1,7 +1,7 @@
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/
 # Makefile from BitBake/OpenEmbedded manuals
 
-EXTRA_DEPS = gen-nat-vty-docbook
+EXTRA_DEPS = generated/docbook_vty.xml
 
 topdir = .
 nat_reference = $(topdir)/osmonat-vty-reference.xml
@@ -18,7 +18,7 @@ include ../build/Makefile.inc
 clean:
 	-rm -rf $(cleanfiles)
 
-gen-nat-vty-docbook: FORCE
+generated/docbook_vty.xml: osmonat-vty-reference.xml vty/*xml ../common/vty_additions.xml ../vty_reference.xsl
 	$(call command,xsltproc -o generated/combined1.xml \
 		--stringparam with $(PWD)/../common/vty_additions.xml \
 		$(MERGE_DOC) vty/nat_vty_reference.xml, \
