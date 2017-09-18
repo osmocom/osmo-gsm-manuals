@@ -8,6 +8,7 @@ all: check-deps
 	cd OsmoNAT; $(MAKE)
 	cd OsmoPCU; $(MAKE)
 	cd OsmoGSMTester; $(MAKE)
+	cd OsmoMSC; $(MAKE)
 
 clean:
 	cd OsmoBTS; $(MAKE) clean
@@ -19,6 +20,7 @@ clean:
 	cd OsmoNAT; $(MAKE) clean
 	cd OsmoPCU; $(MAKE) clean
 	cd OsmoGSMTester; $(MAKE) clean
+	cd OsmoMSC; $(MAKE) clean
 
 upload:
 	cd OsmoBTS; $(MAKE) upload
@@ -30,6 +32,7 @@ upload:
 	cd OsmoNAT; $(MAKE) upload
 	cd OsmoPCU; $(MAKE) upload
 	cd OsmoGSMTester; $(MAKE) upload
+	cd OsmoMSC; $(MAKE) upload
 
 check:
 	cd OsmoBTS; $(MAKE) check
@@ -42,6 +45,7 @@ check:
 	#cd OsmoMGCP; $(MAKE) check
 	#cd OsmoNAT; $(MAKE) check
 	cd OsmoGSMTester; $(MAKE) check
+	cd OsmoMSC; $(MAKE) check
 
 define check_dep_bin
     @type $(1) >/dev/null 2>&1 || { echo >&2 "Binary '$(1)' not found in path, please install $(2)."; exit 1; }

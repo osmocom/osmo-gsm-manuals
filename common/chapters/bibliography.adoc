@@ -14,6 +14,14 @@
   http://ftp.osmocom.org/docs/latest/osmobsc-usermanual.pdf
 - [[[vty-ref-osmobsc]]] Osmocom Project: OsmoBSC VTY Reference Manual.
   http://ftp.osmocom.org/docs/latest/osmobsc-vty-reference.pdf
+- [[[userman-osmomsc]]] Osmocom Project: OsmoMSC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmomsc-usermanual.pdf
+- [[[vty-ref-osmomsc]]] Osmocom Project: OsmoMSC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmomsc-vty-reference.pdf
+- [[[userman-osmohlr]]] Osmocom Project: OsmoHLR User Manual.
+  http://ftp.osmocom.org/docs/latest/osmohlr-usermanual.pdf
+- [[[vty-ref-osmohlr]]] Osmocom Project: OsmoHLR VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmohlr-vty-reference.pdf
 - [[[userman-osmopcu]]] Osmocom Project: OsmoPCU User Manual.
   http://ftp.osmocom.org/docs/latest/osmopcu-usermanual.pdf
 - [[[vty-ref-osmopcu]]] Osmocom Project: OsmoPCU VTY Reference Manual.
