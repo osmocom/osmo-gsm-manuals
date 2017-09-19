@@ -7,9 +7,31 @@ apt-get install \
   dblatex \
   mscgen \
   graphviz \
-  python-pychart
+  python-pychart \
+  python-nwdiag
 
 Build PDFs, run:
   make
 or for a parallel build using more CPU cores:
   make -j 5
+
+To update the VTY reference for a given program, use osmodumpdoc.py, available
+from git.osmocom.org/python/osmo-python-tests -- for example, for osmo-msc:
+
+  cd ~/osmo-python-tests
+  ./setup.py install
+
+  cd ~/osmo-msc
+  mkdir build
+  cd build
+  ../configure --enable-smpp
+  make
+  osmodumpdoc.py -p ~/osmo-msc
+
+  cp doc/msc_vty_reference.xml ~/osmo-gsm-manuals/OsmoMSC/vty/
+  cd ~/osmo-gsm-manuals/OsmoMSC
+  git status
+  git diff
+  make
+  git commit -a -m "OsmoMSC: update VTY reference"
+  git push origin HEAD:refs/for/master/msc_vty
