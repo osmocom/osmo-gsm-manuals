@@ -133,24 +133,24 @@ We're looking forward to receiving your contributions.
 Some of the founders of the Osmocom project have established sysmocom as
 a company to provide products and services related to Osmocom.
 
-sysmocom and its staff are the by far the largest developers and
-contributors to the Osmocom mobile network infrastructure projects.
+sysmocom and its staff have by far contributed the largest part of development
+and maintenance to the Osmocom mobile network infrastructure projects.
 
 As part of this work, sysmocom has also created the manual you are
 reading.
 
 At sysmocom, we draw a clear line between what is the Osmocom FOSS
 project, and what is sysmocom as a commercial entity.  Under no
-circumstances requires participation in the FOSS projects any commercial
+circumstances does participation in the FOSS projects require any commercial
 relationship with sysmocom as a company.
 
 
 === Corrections
 
-We have prepared this manual in the hope it will guide you through the
+We have prepared this manual in the hope that it will guide you through the
 process of installing, configuring and debugging your deployment of
 cellular network infrastructure elements using Osmocom software.  If
-you do find errors, mistakes and/or omissions, or have any suggestions
+you do find errors, typos and/or omissions, or have any suggestions
 on missing topics, please do take the extra time and let us know.
 
 
@@ -248,7 +248,7 @@ network will be tough, irrespective whether you use products with
 Osmocom software or those of traditional telecom suppliers.
 
 GSM knowledge has many different fields, from radio planning through
-site installation through to core network configuration/administration.
+site installation to core network configuration/administration.
 
 The detailed skills required will depend on the type of installation
 and/or deployment that you are planning, as well as its associated

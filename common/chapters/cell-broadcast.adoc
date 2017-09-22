@@ -46,7 +46,7 @@ warning systems, such as
 include::osmocom-cbs.msc[]
 ----
 
-==== What'a miaaing
+==== What's missing
 
 What's missing (for production operation in larger networks)
 
