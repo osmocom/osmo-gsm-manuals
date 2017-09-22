@@ -26,8 +26,10 @@
   http://ftp.osmocom.org/docs/latest/osmosgsn-usermanual.pdf
 - [[[vty-ref-osmosgsn]]] Osmocom Project: OsmoSGSN VTY Reference Manual.
   http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
-//- [[[userman-openggsn]]] Osmocom Project: OpenGGSN User Manual.
-
+- [[[userman-osmoggsn]]] Osmocom Project: OpenGGSN User Manual.
+  http://ftp.osmocom.org/docs/latest/osmoggsn-usermanual.pdf
+- [[[vty-ref-osmoggsn]]] Osmocom Project: OsmoGGSN VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmoggsn-vty-reference.pdf
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
   (U)SIM application toolkit; Stage 2
   http://www.3gpp.org/DynaReport/23048.htm
