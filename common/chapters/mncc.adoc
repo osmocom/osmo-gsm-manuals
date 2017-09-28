@@ -131,8 +131,20 @@ Direction: Handler -> {program-name}
 
 Requests that the TCH (voice) channels of two calls shall be
 inter-connected.   This is the old-fashioned way of using MNCC,
-primarily required for circuit-switched BTSs whose TRAU frames are
-received via an E1 interface card on the {program-name} machine.
+historically required for circuit-switched BTSs whose TRAU frames are
+received via an E1 interface card, and works only when the TCH channel types
+match.
+
+NOTE: Internal MNCC uses MNCC_BRIDGE to connect calls directly between
+connected BTSs or RNCs, in effect disallowing calls between mismatching TCH
+types and forcing all BTSs to be configured with exactly one TCH type and
+codec. This is a limitation that will probably remain for the old OsmoNITB. For
+the new OsmoMSC, the MNCC_BRIDGE command will instruct the separate OsmoMGW to
+bridge calls, which will be able to handle transcoding between different TCH as
+well as 3G (IuUP) payloads (but note: not yet implemented at the time of
+writing this). Hence an external MNCC may decide to bridge calls directly
+between BTSs or RNCs that both are internal to the OsmoMSC, for optimization
+reasons.
 
 ==== MNCC_FRAME_RECV
 
