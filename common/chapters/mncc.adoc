@@ -17,16 +17,16 @@ Domain Sockets. The protocol is defined in the `mncc.h` header file.
 It is exposed by the Osmocom MSC layer (both in the old OsmoNITB as well as the
 new OsmoMSC.
 
-Osmocom's MSCs can run in two different modes:
+{program-name} can run in two different modes:
 
 . with internal MNCC handler
 . with external MNCC handler
 
 === Internal MNCC handler
 
-When the internal MNCC handler is enabled, OsmoMSC/OsmoNITB will switch voice
+When the internal MNCC handler is enabled, {program-name} will switch voice
 calls between GSM subscribers internally and automatically based on the
-subscribers __extension__ number.  No external software is required.
+the subscribers _extension_ number.  No external software is required.
 
 NOTE: Internal MNCC is the default behavior.
 
@@ -48,11 +48,11 @@ by voice calls on TCH/H channels.
 [[mncc-external]]
 === External MNCC handler
 
-When the external MNCC handler is enabled, OsmoMSC/OsmoNITB will not perform
+When the external MNCC handler is enabled, {program-name} will not perform
 any internal call switching, but delegate all call-control handling towards the
 external MNCC program connected via the MNCC socket.
 
-If you intend to operate with external MNCC handler, you have
+If you intend to operate {program-name} with external MNCC handler, you have
 to start it with the `-m` or `--mncc-sock` command line option.
 
 At the time of this writing, the only external application implementing the
@@ -63,10 +63,9 @@ the OsmoSIPConnector.
 === MNCC protocol description
 
 The protocol follows the primitives specified in 3GPP TS 04.07 Chapter 7.1.
-The encoding of the primitives is provided in the `mncc.h` header file
-(`osmocom/msc/mncc.h` in `osmo-msc.git` or `openbsc/mncc.h` in old
-`openbsc.git`), which uses some common definitions from `osmocom/gsm/mncc.h`
-(part of `libosmocore.git`).
+The encoding of the primitives is provided in the `mncc.h` header file in
+{program-name}'s source tree, which uses some common definitions from
+`osmocom/gsm/mncc.h` (part of libosmocore.git).
 
 However, Osmocom's MNCC specifies a number of additional primitives beyond
 those listed in the 3GPP specification.
@@ -74,106 +73,104 @@ those listed in the 3GPP specification.
 The different calls in the network are distinguished by their callref
 (call reference), which is a unique unsigned 32bit integer.
 
-NOTE: _MSC_ below refers to both OsmoMSC and _libmsc_ of the OsmoNITB.
-
 ==== MNCC_HOLD_IND
 
-Direction: MSC -> Handler
+Direction: {program-name} -> Handler
 
 A 'CC HOLD' message was received from the MS.
 
 ==== MNCC_HOLD_CNF
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Acknowledge a previously-received 'CC HOLD' message, causes the
 transmission of a 'CC HOLD ACK' message to the MS.
 
 ==== MNCC_HOLD_REJ
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Reject a previously-received 'CC HOLD' message, causes the
 transmission of a 'CC HOLD REJ' message to the MS.
 
 ==== MNCC_RETRIEVE_IND
 
-Direction: MSC -> Handler
+Direction: {program-name} -> Handler
 
 A 'CC RETRIEVE' message was received from the MS.
 
 ==== MNCC_RETRIEVE_CNF
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Acknowledge a previously-received 'CC RETRIEVE' message, causes the
 transmission of a 'CC RETRIEVE ACK' message to the MS.
 
 ==== MNCC_RETRIEVE_REJ
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Reject a previously-received 'CC RETRIEVE' message, causes the
 transmission of a 'CC RETRIEVE REJ' message to the MS.
 
 ==== MNCC_USERINFO_REQ
 
-Direction: MSC -> Handler
+Direction: {program-name} -> Handler
 
 Causes a 'CC USER INFO' message to be sent to the MS.
 
 ==== MNCC_USERINFO_IND
 
-Direction: MSC -> Handler
+Direction: {program-name} -> Handler
 
 Indicates that a 'CC USER-USER' message has been received from the MS.
 
 ==== MNCC_BRIDGE
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Requests that the TCH (voice) channels of two calls shall be
 inter-connected.   This is the old-fashioned way of using MNCC,
 primarily required for circuit-switched BTSs whose TRAU frames are
-received via an E1 interface card on the MSC machine.
+received via an E1 interface card on the {program-name} machine.
 
 ==== MNCC_FRAME_RECV
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Enable the forwarding of TCHF voice frames via the MNCC interface in
-MSC->Handler direction for the specified call.
+{program-name}->Handler direction for the specified call.
 
 ==== MNCC_FRAME_DROP
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Disable the forwarding of TCHF voice frames via the MNCC interface in
-MSC->Handler direction for the specified call.
+{program-name}->Handler direction for the specified call.
 
 ==== MNCC_LCHAN_MODIFY
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Modify the current dedicated radio channel from signalling to voice, or
 if it is a signalling-only channel (SDCCH), assign a TCH to the MS.
 
 ==== MNCC_RTP_CREATE
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Create a RTP socket for this call at the BTS/TRAU that serves this BTS.
 
 ==== MNCC_RTP_CONNECT
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Connect the RTP socket of this call to the given remote IP address and
 port.
 
 ==== MNCC_RTP_FREE
 
-Direction: Handler -> MSC
+Direction: Handler -> {program-name}
 
 Release a RTP connection for one given call.
 
@@ -182,32 +179,32 @@ Release a RTP connection for one given call.
 Direction: both
 
 Transfer the payload of a GSM Full-Rate (FR) voice frame between the
-MSC and an external MNCC handler.
+{program-name} and an external MNCC handler.
 
 ==== GSM_TCHF_FRAME_EFR
 
 Direction: both
 
 Transfer the payload of a GSM Enhanced Full-Rate (EFR) voice frame
-between the MSC and an external MNCC handler.
+between the {program-name} and an external MNCC handler.
 
 ==== GSM_TCHH_FRAME
 
 Direction: both
 
 Transfer the payload of a GSM Half-Rate (HR) voice frame between the
-MSC and an external MNCC handler.
+{program-name} and an external MNCC handler.
 
 ==== GSM_TCH_FRAE_AMR
 
 Direction: both
 
 Transfer the payload of a GSM Adaptive-Multi-Rate (AMR) voice frame
-between the MSC and an external MNCC handler.
+between the {program-name} and an external MNCC handler.
 
 ==== GSM_BAD_FRAME
 
-Direction: MSC -> Handler
+Direction: {program-name} -> Handler
 
 Indicate that no valid voice frame, but a 'bad frame' was received over
 the radio link from the MS.
