@@ -2,16 +2,19 @@
 == Short Message Peer to Peer (SMPP)
 
 The _Short Message Peer to Peer (SMPP) Protocol_ <<smpp-34>> has been
-used for the communication with SMSCs. OsmoNITB implements version 3.4
+used for the communication with SMSCs. Osmocom implements version 3.4
 of the protocol. Using this interface one can send MT-SMS to an attached
 subscriber or receive unrouted MO-SMS.
+
+SMPP is served by the Osmocom MSC layer (both in the old OsmoNITB as well as
+the new OsmoMSC.
 
 SMPP describes a situation where multiple ESMEs (External SMS Entities)
 interact with a SMSC (SMS Service Center) via the SMPP protocol.  Each
 entity is identified by its System Id.  The System ID is a character
 string which is configured by the system administrator.
 
-OsmoNITB implements the SMSC side of SMPP and subsequently acts as a TCP
+{program-name} implements the SMSC side of SMPP and subsequently acts as a TCP
 server accepting incoming connections from ESME client programs.
 
 Each ESME identifies itself to the SMSC with its system-id and an
@@ -21,13 +24,13 @@ optional shared password.
 === Global SMPP configuration
 
 
-There is a `smpp` vty node at the top level of the OsmoNITB
+There is a `smpp` vty node at the top level of the {program-name}
 configuration. Under this node, the global SMPP configuration is
 performed.
 
 
 Use the `local-tcp-ip` command to define the TCP IP and port at which the
-OsmoNITB internal SMSC should listen for incoming SMPP connections.  The
+{program-name} internal SMSC should listen for incoming SMPP connections.  The
 default behaviour is to listen on all IPs (0.0.0.0), and the default port
 assigned to SMPP is 2775.
 
