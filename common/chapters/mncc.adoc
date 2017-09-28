@@ -150,14 +150,14 @@ reasons.
 
 Direction: Handler -> {program-name}
 
-Enable the forwarding of TCHF voice frames via the MNCC interface in
+Enable the forwarding of TCH voice frames via the MNCC interface in
 {program-name}->Handler direction for the specified call.
 
 ==== MNCC_FRAME_DROP
 
 Direction: Handler -> {program-name}
 
-Disable the forwarding of TCHF voice frames via the MNCC interface in
+Disable the forwarding of TCH voice frames via the MNCC interface in
 {program-name}->Handler direction for the specified call.
 
 ==== MNCC_LCHAN_MODIFY
