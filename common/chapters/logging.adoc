@@ -25,34 +25,20 @@ All logging is done in human-readable ASCII-text.  The logging system is
 configured by means of VTY commands that can either be entered
 interactively, or read from a configuration file at process start time.
 
-=== Logging to the VTY
+[[log_categories]]
+=== Log categories
 
-Logging messages to the interactive command-line interface (VTY) is most
-useful for occasional investigation by the system administrator.
-
-Logging to the VTY is disabled by default, and needs to be enabled
-explicitly for each such session.  This means that multiple concurrent
-VTY sessions each have their own logging configuration.  Once you close
-a VTY session, the log target will be destroyed and your log settings be
-lost.  If you re-connect to the VTY, you have to again activate and
-configure logging, if you wish.
-
-To create a logging target bound to a VTY, you have to use the following
-command: `logging enable` This doesn't really activate the
-generation of any output messages yet, it merely creates and attaches a
-log target to the VTY session.  The newly-created target still doesn't
-have any filter installed, i.e.  __all log messages will be suppressed
-by default__
-
-Next, you can configure the log levels for your VTY session.  Each
-sub-system of the program in question typically logs its messages as a
+Each sub-system of the program in question typically logs its messages as a
 different category, allowing fine-grained control over which log
 messages you will or will not see.  For example, in OsmoBSC, there are
 categories for the protocol layers `rsl`, `rr`, `mm`,
 `cc` and many others.  To get a a list of categories interactively
 on the vty, type: `logging level ?`
 
-For each of those categories, you can set an independent log level,
+[[log_levels]]
+=== Log levels
+
+For each of the log categories (see <<log_categories>>), you can set an independent log level,
 controlling the level of verbosity.  Log levels include:
 
 fatal::
@@ -84,12 +70,10 @@ So for example, in OsmoBSC, to set the log level of the Mobility
 Management category to info, you can use the following command:
 	`log level mm info`.
 
-Equally, to set the log level of the Call Control category to debug, you
-can use:
-  	`log level cc debug`
+[[log_filters]]
+=== Log filters
 
-Finally, after having configured the levels, you still need to set the
-filter.  The default behavior is to filter out everything, i.e. not to
+The default behavior is to filter out everything, i.e. not to
 log anything.  The reason is quite simple: On a busy production setup,
 logging all events for a given subsystem may very quickly be flooding
 your console before you have a chance to set a more restrictive filter.
@@ -101,13 +85,49 @@ As another example, to only see messages relating to a particular
 subscriber identified by his IMSI, you may use:
 	`log filter imsi 262020123456789`
 
+=== Log targets
+
+Each of the log targets represent certain destination for log messages.
+It can be configured independently by selecting levels (see <<log_levels>>) for categories
+(see <<log_categories>>) as well as filtering (see <<log_filters>>) and
+other options like `logging timestamp` for example.
+
+==== Logging to the VTY
+
+Logging messages to the interactive command-line interface (VTY) is most
+useful for occasional investigation by the system administrator.
+
+Logging to the VTY is disabled by default, and needs to be enabled
+explicitly for each such session.  This means that multiple concurrent
+VTY sessions each have their own logging configuration.  Once you close
+a VTY session, the log target will be destroyed and your log settings be
+lost.  If you re-connect to the VTY, you have to again activate and
+configure logging, if you wish.
+
+To create a logging target bound to a VTY, you have to use the following
+command: `logging enable` This doesn't really activate the
+generation of any output messages yet, it merely creates and attaches a
+log target to the VTY session.  The newly-created target still doesn't
+have any filter installed, i.e.  __all log messages will be suppressed
+by default__
+
+Next, you can configure the log levels for desired categories in your VTY session.
+See <<log_categories>> for more details on categories and <<log_levels>> for the log level details.
+
+For example, to set the log level of the Call Control category to debug, you
+can use:
+  	`log level cc debug`
+
+Finally, after having configured the levels, you still need to set the
+filter as it's described in <<log_filters>>.
+
 TIP: If many messages are being logged to a VTY session, it may be hard
 to impossible to still use the same session for any commands.  We
 therefore recommend to open a second VTY session in parallel, and use
 one only for logging, while the other is used for interacting with the
-system.
+system. Another option would be to use different log target.
 
-=== Logging to a file
+==== Logging to a file
 
 As opposed to Logging to the VTY, logging to files is persistent and
 stored in the configuration file.  As such, it is configured in
@@ -139,7 +159,7 @@ Please contact the Osmocom developers if you require this feature to be
 implemented.
 
 
-=== Logging to syslog
+==== Logging to syslog
 
 syslog is a standard for computer data logging maintained by the IETF.
 Unix-like operating systems like GNU/Linux provide several syslog
@@ -168,7 +188,7 @@ with a time-stamp, so you should disable the libosmocore time-stamping
 by issuing the `logging timestamp 0` command.
 
 
-=== Logging to stderr
+==== Logging to stderr
 
 If you're not running the respective application as a daemon in the
 background, you can also use the stderr log target in order to log to
