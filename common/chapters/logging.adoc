@@ -47,7 +47,7 @@ by default__
 Next, you can configure the log levels for your VTY session.  Each
 sub-system of the program in question typically logs its messages as a
 different category, allowing fine-grained control over which log
-messages you will or will not see.  For example, in OpenBSC, there are
+messages you will or will not see.  For example, in OsmoBSC, there are
 categories for the protocol layers `rsl`, `rr`, `mm`,
 `cc` and many others.  To get a a list of categories interactively
 on the vty, type: `logging level ?`
@@ -80,7 +80,7 @@ The log levels are inclusive, e.g. if you select __info__, then this
 really means that all events with a level of at least __info__ will be
 logged, i.e. including events of __notice__, __error__ and __fatal__.
 
-So for example, in OpenBSC, to set the log level of the Mobility
+So for example, in OsmoBSC, to set the log level of the Mobility
 Management category to info, you can use the following command:
 	`log level mm info`.
 
@@ -117,10 +117,10 @@ subsystems.
 
 To configure a new log file, enter the following sequence of commands:
 ----
-OpenBSC> enable
-OpenBSC# configure terminal
-OpenBSC(config)# log file /path/to/my/file
-OpenBSC(config-log)#
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log file /path/to/my/file
+OsmoBSC(config-log)#
 ----
 
 This leaves you at the config-log prompt, from where you can set the
@@ -151,10 +151,10 @@ syslog log target.  You can configure syslog logging by issuing the
 following commands on the VTY:
 
 ----
-OpenBSC> enable
-OpenBSC# configure terminal
-OpenBSC(config)# log syslog daemon
-OpenBSC(config-log)#
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log syslog daemon
+OsmoBSC(config-log)#
 ----
 
 This leaves you at the config-log prompt, from where you can set the
@@ -177,8 +177,8 @@ the standard error file descriptor of the process.
 In order to configure logging to stderr, you can use the following
 commands:
 ----
-OpenBSC> enable
-OpenBSC# configure terminal
-OpenBSC(config)# log stderr
-OpenBSC(config-log)#
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log stderr
+OsmoBSC(config-log)#
 ----
