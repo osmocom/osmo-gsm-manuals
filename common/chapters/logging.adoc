@@ -127,6 +127,23 @@ therefore recommend to open a second VTY session in parallel, and use
 one only for logging, while the other is used for interacting with the
 system. Another option would be to use different log target.
 
+==== Logging to the ring buffer
+
+To avoid having separate VTY session just for logging output while still having immediate access to them,
+one can use `alarms` target. It lets you store the log messages inside the ring buffer of a given size which
+is available with `show alarms` command.
+
+It's configured as follows:
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log alarms 98
+OsmoBSC(config-log)#
+----
+
+In the example above 98 is the desired size of the ring buffer (number of messages). Once it's filled,
+the incoming log messages will push out the oldest messages available in the buffer.
+
 ==== Logging to a file
 
 As opposed to Logging to the VTY, logging to files is persistent and
