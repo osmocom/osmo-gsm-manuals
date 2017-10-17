@@ -83,7 +83,7 @@ ENABLE::
 
 CONFIG::
   The 'CONFIG' node is entered when you enter the `configure terminal`
-  command from the 'VIEW' node.  The config node is used to change the
+  command from the 'ENABLE' node.  The config node is used to change the
   run-time configuration parameters of teh system.  The prompt will
   indicate that you are in the config node by a `(config)#` prompt
   suffix.
