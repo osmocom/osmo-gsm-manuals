@@ -15,12 +15,12 @@ implement the Control interface commands as required for your use case.
 The interactive telnet VTY is used to
 
 * explore the current status of the system, including its configuration
-  parameters but also run-time state and statistics
-* review the currently active (running) configuration
+  parameters, but also to view run-time state and statistics,
+* review the currently active (running) configuration,
 * perform interactive changes to the configuration (for those items that do not
-  require a program restart)
-* store the current running configuration to the config file
-* enable or disable logging; to the VTY itself or to other targets
+  require a program restart),
+* store the current running configuration to the config file,
+* enable or disable logging; to the VTY itself or to other targets.
 
 The Virtual Tele Type (VTY) has the concept of __nodes__ and
 __commands__.  Each command has a name and arguments.  The name may
@@ -44,8 +44,9 @@ config with changes you may have made, you may use the `write file` command to
 *overwrite* your config file with the current configuration, after which you
 should be able to restart the program with all changes taking effect.
 
-This chapter explains the most common nodes nodes and the commands that
-are available within the node.
+This chapter explains most of the common nodes and commands. A more detailed
+list is available in various programs' VTY reference manuals, e.g. see
+<<vty-ref-osmomsc>>.
 
 There are common patterns for the parameters, these include IPv4
 addresses, number ranges, a word, a line of text and choice. The
@@ -88,14 +89,14 @@ operating system to restrict access to the Osmocom VTY ports further.
 The VTY by default has the following minimal nodes:
 
 VIEW::
-  The 'VIEW' node is the node you automatically enter when you connect to
-  a VTY.  As its name implies, it can only be used to view the system
+  When connecting to a telnet VTY, you will be on the 'VIEW' node.
+  As its name implies, it can only be used to view the system
   status, but it does not provide commands to alter the system
   state or configuration.  As long as you are in the non-privileged
   'VIEW' node, your prompt will end in a `>` character.
 
 ENABLE::
-  The 'ENABLE' node is entered as soon as you enter the `enable` command
+  The 'ENABLE' node is entered by the `enable` command,
   from the 'VIEW' node.  Changing into the 'ENABLE' node will unlock all
   kinds of commands that allow you to alter the system state or perform
   any other change to it.  The 'ENABLE' node and its children are
@@ -105,9 +106,9 @@ ENABLE::
   the `disable` command.
 
 CONFIG::
-  The 'CONFIG' node is entered when you enter the `configure terminal`
+  The 'CONFIG' node is entered by the `configure terminal`
   command from the 'ENABLE' node.  The config node is used to change the
-  run-time configuration parameters of teh system.  The prompt will
+  run-time configuration parameters of the system.  The prompt will
   indicate that you are in the config node by a `(config)#` prompt
   suffix.
   +
@@ -130,15 +131,15 @@ Other::
 The VTY features an interactive help system, designed to help you to
 efficiently navigate is commands.
 
-NOTE: The VTY is present on most Osmcoom GSM/GPRS software, thus this
-chapter is present in all the relevant manuals.  The detailed examples
+NOTE: The VTY is present on most Osmocom GSM/UMTS/GPRS software, thus this
+chapter is present in all the relevant manuals. The detailed examples
 below assume you are executing them on the OsmoNITB VTY. They will work
-in similar fashion on the other VTY, too - but of course the output will
-be different for each program.
+in similar fashion on the other VTY interfaces, while the node structure will
+differ in each program.
 
 ==== The question-mark (`?`) command
 
-If you type a single `?` at the prompt, the VTY will display you
+If you type a single `?` at the prompt, the VTY will display
 possible completions at the exact location of your currently entered
 command.
 
@@ -160,14 +161,13 @@ OpenBSC> <1>
   sms         SMS related commands
   subscriber  Operations on a Subscriber
 ----
-<1> press `?` here at the prompt, the character will not be printed
+<1> Type `?` here at the prompt, the `?` itself will not be printed.
 
 If you have already entered a partial command, `?` will help you to
-review possible options of how to continue your command.   Let's say you
-remember that `show` is used to investigate the system status.  But you
-don't know exactly what the object was called that you'd like to show:
-You simply press `?` after typing `show` and you will see the following
-choice:
+review possible options of how to continue the command.   Let's say you
+remember that `show` is used to investigate the system status, but you
+don't remember the exact name of the object. Hitting `?` after typing `show`
+will help out:
 
 .Example: Typing `?` after a partial command
 ----
@@ -193,10 +193,9 @@ OpenBSC> show <1>
   sms-queue     Display SMSqueue statistics
   smpp          SMPP Interface
 ----
-<1> press `?` after the `show` command, the character will not be printed
+<1> Type `?` after the `show` command, the `?` itself will not be printed.
 
-Now you decide you want to have a look at the `network` object, so
-you type network and press `?` again:
+You may pick the `network` object and type `?` again:
 
 .Example: Typing `?` after `show network`
 ----
@@ -204,25 +203,25 @@ OpenBSC> show network
   <cr>
 ----
 
-By presenting `<cr>` as the only option, the VTY tells you that your
-command is complete and does not support any additional arguments.
+By presenting `<cr>` as the only option, the VTY tells you that your command is
+complete without any remaining arguments being available, and that you should
+hit enter, a.k.a. "carriage return".
 
 ==== TAB completion
 
-The VTY supports tab (tabulator) completion.  Simply type any partial
-command and press `<tab>`, and it will either show you a choice of
-possible continuations, or complete the command if there's only one
-alternative.
+The VTY supports tab (tabulator) completion. Simply type any partial
+command and press `<tab>`, and it will either show you a list of
+possible expansions, or completes the command if there's only one
+choice.
 
 .Example: Use of `<tab>` pressed after typing only `s` as command
 ----
 OpenBSC> s<1>
 show       sms        subscriber
 ----
-<1> press `<tab>` here.
+<1> Type `<tab>` here.
 
-At this point you then have to decide how to continue typing your
-command.  Let's assume you choose `show`, and then press `<tab>` again:
+At this point, you may choose `show`, and then press `<tab>` again:
 
 .Example: Use of `<tab>` pressed after typing `show` command
 ----
@@ -232,13 +231,13 @@ timeslot   lchan      paging     paging-group logging    alarms
 stats      e1_driver  e1_line    e1_timeslot subscriber statistics
 sms-queue  smpp
 ----
-<1> press `<tab>` here.
+<1> Type `<tab>` here.
 
 
 ==== The `list` command
 
-The `list` command will give you a full list of all commands available
-at this node:
+The `list` command will give you a full list of all commands and their
+arguments available at the current node:
 
 .Example: Typing `list` at start of OsmoNITB 'VIEW' node prompt
 ----
@@ -294,9 +293,9 @@ OpenBSC> list
 ----
 
 TIP: Remember, the list of available commands will change significantly
-depending on the Osmocom program you are accessing, and the current node
-you're at.  Compare the above example of the OsmoNITB 'VIEW' node with
-the result from the OsmoNITB 'TRX' config node:
+depending on the Osmocom program you are accessing, its software version and
+the current node you're at. Compare the above example of the OsmoNITB 'VIEW'
+node with the list of the OsmoNITB 'TRX' config node:
 
 .Example: Typing `list` at start of OsmoNITB 'TRX' config node prompt
 ----
