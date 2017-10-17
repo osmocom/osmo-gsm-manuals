@@ -12,12 +12,13 @@ programs (besides using the dedicated protocols), it is strongly recommended to
 use the Control interface instead of the VTY, and to actively request /
 implement the Control interface commands as required for your use case.
 
-The Osmocom VTY is used to
+The interactive telnet VTY is used to
 
 * explore the current status of the system, including its configuration
   parameters but also run-time state and statistics
 * review the currently active (running) configuration
-* perform interactive changes to the configuration
+* perform interactive changes to the configuration (for those items that do not
+  require a program restart)
 * store the current running configuration to the config file
 * enable or disable logging; to the VTY itself or to other targets
 
@@ -28,6 +29,20 @@ The arguments can be a single word, a string, numbers, ranges or a list
 of options. The available commands depend on the current node.  there
 are various keyboard shortcuts to ease finding commands and the possible
 argument values.
+
+Configuration file parsing during program start is actually performed the VTY's
+CONFIG node, which is also available in the telnet VTY. Apart from that, the
+telnet VTY features various interactive commands to query and instruct a
+running Osmocom program. A main difference is that during config file parsing,
+consistent indenting of parent vs. child nodes is required, while the
+interactive VTY ignores indenting and relies on the 'exit' command to return to
+a parent node.
+
+NOTE: In the 'CONFIG' node, it is not well documented which commands take
+immediate effect without requiring a program restart. To save your current
+config with changes you may have made, you may use the `write file` command to
+*overwrite* your config file with the current configuration, after which you
+should be able to restart the program with all changes taking effect.
 
 This chapter explains the most common nodes nodes and the commands that
 are available within the node.
@@ -47,7 +62,7 @@ following will explain the commonly used syntactical patterns:
 |`<0-10>`|`5`|A number from a range
 |===============
 
-=== Accessing the VTY
+=== Accessing the telnet VTY
 
 The VTY of a given Osmocom program is implemented as a telnet server,
 listening to a specific TCP port.  For `osmo-nitb`, this port is `4242`.
