@@ -1,8 +1,16 @@
 [[vty]]
 == The Osmocom VTY Interface
 
-All interaction with Osmocom software is typically performed via an
+All human interaction with Osmocom software is typically performed via an
 interactive command-line interface called the _VTY_.
+
+NOTE: Integration of your programs and scripts should *not* be done via the
+telnet VTY interface, which is intended for human interaction only: the VTY
+responses may arbitrarily change in ways obvious to humans, while your scripts'
+parsing will likely break often. For external software to interact with Osmocom
+programs (besides using the dedicated protocols), it is strongly recommended to
+use the Control interface instead of the VTY, and to actively request /
+implement the Control interface commands as required for your use case.
 
 The Osmocom VTY is used to
 
