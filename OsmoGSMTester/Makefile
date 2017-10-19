@@ -1,12 +1,7 @@
-TOPDIR := ..
-ASCIIDOCS := osmo-gsm-tester-manual
+TOPDIR = ..
 
+ASCIIDOC = osmo-gsm-tester-manual.adoc
+ASCIIDOC_DEPS = chapters/*.adoc
 include $(TOPDIR)/build/Makefile.asciidoc.inc
-include $(TOPDIR)/build/Makefile.inc
 
-osmo-gsm-tester-manual.pdf: chapters/*.adoc
-
-clean:
-	-rm -rf $(cleanfiles)
-	-rm osmo-gsm-tester-manual__*.svg
-	-rm osmo-gsm-tester-manual__*.png
+include $(TOPDIR)/build/Makefile.common.inc
