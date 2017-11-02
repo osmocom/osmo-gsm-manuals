@@ -9,7 +9,7 @@ named 'jenkins' that belong to group 'osmo-gsm-tester'. The user configuration
 for manual test runs and/or a different user name is identical, simply replace
 the user name or group.
 
-=== Dependencies
+=== Osmo-gsm-tester Dependencies
 
 On a Debian/Ubuntu based system, these commands install the packages needed to
 run the osmo-gsm-tester.py code, i.e. install these on your main unit:
@@ -46,7 +46,7 @@ apt-get install libuhd-dev uhd-host
 ----
 
 [[jenkins_deps]]
-==== Jenkins Build Dependencies
+==== Osmocom Build Dependencies
 
 Each of the jenkins builds requires individual dependencies. This is generally
 the same as for building the software outside of osmo-gsm-tester and will not
@@ -57,8 +57,8 @@ osmo-bts-sysmo build needs the sysmoBTS SDK installed on the build slave, which
 should match the installed sysmoBTS firmware.
 
 
-[[configure_build_slave]]
-=== Jenkins Build Slave
+[[configure_jenkins_slave]]
+=== Jenkins Build and Run Slave
 
 ==== Create 'jenkins' User on Main Unit
 
@@ -140,8 +140,8 @@ ssh -i /usr/local/jenkins/keys/osmo-gsm-tester-rnd jenkins@$main_unit_ip
 exit
 ----
 
-[[install_add_build_slave]]
-==== Add Build Slave
+[[install_add_jenkins_slave]]
+==== Add Jenkins Slave
 
 In the jenkins web UI, add a new build slave for the osmo-gsm-tester:
 
@@ -253,10 +253,10 @@ with "osmo-bts-trx".
 
 ==== Add Run Job
 
-This is the build job that actually runs the tests on the GSM hardware:
+This is the jenkins job that runs the tests on the GSM hardware:
 
-* It sources the artifacts from the build jobs.
-* It runs on the osmo-gsm-tester main unit's build slave.
+* It sources the artifacts from jenkins' build jobs.
+* It runs on the osmo-gsm-tester main unit.
 
 Here is the configuration for the run job:
 
@@ -265,7 +265,7 @@ Here is the configuration for the run job:
   Configure this to taste, for example:
 ** 'Max # of build to keep': "20"
 * 'Restrict where this project can be run': "osmo-gsm-tester" +
-  (to match the 'Label' configured in <<install_add_build_slave>>).
+  (to match the 'Label' configured in <<install_add_jenkins_slave>>).
 * 'Source Code Management':
 ** 'Git'
 *** 'Repository URL': "git://git.osmocom.org/osmo-gsm-tester"
@@ -332,7 +332,7 @@ Details:
 
 === Install osmo-gsm-tester on Main Unit
 
-This assumes you have already created the jenkins user (see <<configure_build_slave>>).
+This assumes you have already created the jenkins user (see <<configure_jenkins_slave>>).
 
 ==== User Permissions
 
