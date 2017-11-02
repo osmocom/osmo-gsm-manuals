@@ -146,7 +146,7 @@ digraph G {
 	subgraph cluster_trial {
 		label = "Trial (binaries)"
 		sysmo [label="osmo-bts-sysmo.build-23.tgz\n(osmo-bts-sysmo\n+ deps\ncompiled for sysmoBTS)"]
-		trx [label="osmo-bts-trx.build-5.tgz\n(osmo-trx + osmo-bts-trx\n+ deps\ncompiled for main unit)"]
+		trx [label="osmo-bts.build-5.tgz\n(osmo-bts-octphy + osmo-bts-trx\n+ deps\ncompiled for main unit)"]
 		nitb [label="osmo-nitb.build-42.tgz\n(osmo-nitb\n+ deps\ncompiled for main unit)"]
 		checksums [label="checksums.md5"]
 
