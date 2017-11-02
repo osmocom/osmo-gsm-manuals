@@ -218,62 +218,89 @@ A global configuration of hardware may look like below; for details, see
 
 ----
 ip_address:
-- addr: 10.42.42.1
 - addr: 10.42.42.2
 - addr: 10.42.42.3
+- addr: 10.42.42.4
+- addr: 10.42.42.5
+- addr: 10.42.42.6
 
 bts:
 - label: sysmoBTS 1002
   type: osmo-bts-sysmo
+  ipa_unit_id: 1
   addr: 10.42.42.114
   band: GSM-1800
+  ciphers:
+  - a5_0
+  - a5_1
+  - a5_3
 
-- label: octBTS 3000
-  type: osmo-bts-octphy
-  addr: 10.42.42.115
-  band: GSM-1800
-  trx_list:
-  - hw_addr: 00:0c:90:32:b5:8a
-    net_device: eth0.2342
-
-- label: Ettus B210
+- label: Ettus B200
   type: osmo-bts-trx
-  addr: 10.42.42.116
+  ipa_unit_id: 6
+  addr: 10.42.42.50
   band: GSM-1800
+  launch_trx: true
+  ciphers:
+  - a5_0
+  - a5_1
 
-- label: nanoBTS 1900
-  type: nanobts
-  addr: 10.42.42.190
-  band: GSM-1900
+- label: sysmoCell 5000
+  type: osmo-bts-trx
+  ipa_unit_id: 7
+  addr: 10.42.42.51
+  band: GSM-1800
+  trx_remote_ip: 10.42.42.112
+  ciphers:
+  - a5_0
+  - a5_1
+
+- label: OCTBTS 3500
+  type: osmo-bts-octphy
+  ipa_unit_id: 8
+  addr: 10.42.42.52
+  band: GSM-1800
   trx_list:
-  - hw_addr: 00:02:95:00:41:b3
+  - hw_addr: 00:0c:90:2e:80:1e
+    net_device: eth1
+  - hw_addr: 00:0c:90:2e:87:52
+    net_device: eth1
 
 arfcn:
   - arfcn: 512
     band: GSM-1800
   - arfcn: 514
     band: GSM-1800
-
-  - arfcn: 540
+  - arfcn: 516
+    band: GSM-1800
+  - arfcn: 546
     band: GSM-1900
-  - arfcn: 542
+  - arfcn: 548
     band: GSM-1900
 
 modem:
-- label: m7801
-  path: '/wavecom_0'
-  imsi: 901700000007801
-  ki: D620F48487B1B782DA55DF6717F08FF9
+- label: sierra_1
+  path: '/sierra_1'
+  imsi: '901700000009031'
+  ki: '80A37E6FDEA931EAC92FFA5F671EFEAD'
+  auth_algo: 'xor'
+  ciphers:
+  - a5_0
+  - a5_1
+  features:
+  - 'sms'
+  - 'voice'
 
-- label: m7802
-  path: '/wavecom_1'
-  imsi: 901700000007802
-  ki: 47FDB2D55CE6A10A85ABDAD034A5B7B3
-
-- label: m7803
-  path: '/wavecom_2'
-  imsi: 901700000007803
-  ki: ABBED4C91417DF710F60675B6EE2C8D2
+- label: gobi_0
+  path: '/gobi_0'
+  imsi: '901700000009030'
+  ki: 'BB70807226393CDBAC8DD3439FF54252'
+  auth_algo: 'xor'
+  ciphers:
+  - a5_0
+  - a5_1
+  features:
+  - 'sms'
 ----
 
 === Typical 'suites/*/suite.conf'
