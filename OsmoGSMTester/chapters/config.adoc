@@ -58,6 +58,16 @@ If you would like to set up several separate configurations (not typical), note
 that the 'state_dir' is used to reserve resources, which only works when all
 configurations that share resources also use the same 'state_dir'.
 
+[[suites_dir]]
+==== 'suites_dir'
+
+Suites contain a set of tests which are designed to be run together to test a
+set of features given a specific set of resources. As a result, resources are
+allocated per suite and not per test.
+
+Tests for a given suite are located in the form of '.py' python scripts in the
+same directory where the 'suite.conf' lays.
+
 [[scenarios_dir]]
 ==== 'scenarios_dir'
 
