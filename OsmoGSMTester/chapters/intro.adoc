@@ -202,12 +202,12 @@ wait(ms_mt.sms_was_received, sms)
 
 === Resource Resolution
 
-- A global configuration defines which hardware is connected to the
+- A global configuration 'resources.conf' defines which hardware is connected to the
   osmo-gsm-tester main unit.
 - Each suite contains a number of test scripts. The amount of resources a test
   may use is defined by the test suite's 'suite.conf'.
 - Which specific modems, BTS models, NITB IP addresses etc. are made available
-  to a test run is typically determined by a combination of scenario
+  to a test run is typically determined by 'suite.conf' and a combination of scenario
   configurations -- or picked automatically if not.
 
 [[resources_conf_example]]
