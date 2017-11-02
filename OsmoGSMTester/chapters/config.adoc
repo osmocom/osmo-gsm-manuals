@@ -58,6 +58,61 @@ If you would like to set up several separate configurations (not typical), note
 that the 'state_dir' is used to reserve resources, which only works when all
 configurations that share resources also use the same 'state_dir'.
 
+[[scenarios_dir]]
+==== 'scenarios_dir'
+
+This dir contains scenario configuration files.
+
+Scenarios define constraints to serve the resource requests of a 'suite.conf',
+to select specific resources from the general resource pool specified in 'resources.conf'.
+
+All 'times' attributes are expanded before matching. For example, if a 'suite.conf'
+requests two BTS, we may enforce that both BTS should be of type 'osmo-bts-sysmo' in
+these ways:
+
+----
+resources:
+  bts:
+  - type: osmo-bts-sysmo
+  - type: osmo-bts-sysmo
+----
+
+or alternatively,
+
+----
+resources:
+  bts:
+  - times: 2
+    type: osmo-bts-sysmo
+----
+
+If only one resource is specified in the scenario, then the resource allocator
+assumes the restriction is to be applied to the first resource and that remaining
+resources have no restrictions to be taken into consideration.
+
+To apply restrictions only on the second resource, the first element can be left
+emtpy, like:
+
+----
+resources:
+  bts:
+  - {}
+  - type: osmo-bts-sysmo
+----
+
+On the 'osmo_gsm_tester.py' command line and the 'default_suites.conf', any number of
+such scenario configurations can be combined in the form:
+
+----
+<suite_name>:<scenario>[+<scenario>[+...]]
+----
+
+e.g.
+
+----
+my_suite:sysmo+tch_f+amr
+----
+
 [[resources_conf]]
 === 'resources.conf'
 
