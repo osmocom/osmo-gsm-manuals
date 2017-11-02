@@ -92,9 +92,11 @@ These kinds of resource are known:
 	- 'osmo-bts-trx'
 	- 'osmo-bts-octphy'
 	- 'ipa-nanobts'
+  'ipa_unit_id':::
+	ip.access unit id to be used by the BTS, written into BTS and BSC config.
   'addr':::
-	remote IP address of the BTS, used to start the BTS and tell it where
-	to find the OsmoNITB.
+	Remote IP address of the BTS for BTS like sysmoBTS, and local IP address
+	to bind to for locally run BTS such as osmo-bts-trx.
   'band':::
 	GSM band that this BTS shoud use (*TODO*: allow multiple bands). One of:
 	- 'GSM-1800'
@@ -109,8 +111,11 @@ These kinds of resource are known:
 	only used for osmo-bts-octphy.  (*TODO*: and nanobts??)
     'net_device'::::
 	Local network device to reach the TRX's 'hw_addr' at, only used for
-	osmo-bts-octphy.
-
+	osmo-bts-octphy. Example: 'eth0'.
+    'nominal_power'::::
+	Nominal power to be used by the TRX.
+    'max_power_red'::::
+	Max power reduction to apply to the nominal power of the TRX.
 'arfcn'::
 	List of ARFCNs to use for running BTSes, which defines the actual RF
 	frequency bands used.
@@ -118,24 +123,46 @@ These kinds of resource are known:
 	ARFCN number, see e.g.
 	https://en.wikipedia.org/wiki/Absolute_radio-frequency_channel_number
 	(note that the resource type 'arfcn' contains an item trait also named
-	'arfcn')
+	'arfcn').
   'band':::
 	GSM band name to use this ARFCN for, same as for 'bts:band' above.
 
 'modem'::
 	List of modems reachable via ofono and information on the inserted SIM
-	card. (Note: the MSISDN is allocated dynamically in test scripts)
+	card. (Note: the MSISDN is allocated dynamically in test scripts).
   'label':::
-	human readable label for your own reference
+	Human readable label for your own reference, which also appears in logs.
   'path':::
-	ofono's path for this modem, like '/modemkind_99'
+	Ofono's path for this modem, like '/modemkind_99'.
   'imsi':::
-	IMSI of the inserted SIM card, like '"123456789012345"'
+	IMSI of the inserted SIM card, like '"123456789012345"'.
   'ki':::
 	16 byte authentication/encryption KI of the inserted SIM card, in
 	hexadecimal notation (32 characters) like +
-	'"00112233445566778899aabbccddeeff"' (*TODO*: authentication algorithm,
-	currently always comp128v1)
+	'"00112233445566778899aabbccddeeff"'.
+  'auth_algo':::
+	Authentication algorithm to be used with the SIM card. One of:
+	- 'none'
+	- 'xor'
+	- 'comp128v1'
+  'ciphers':::
+	List of ciphers that this modem supports, used to match
+	requirements in suites or scenarios. Any combination of:
+	- 'a5_0'
+	- 'a5_1'
+	- 'a5_2'
+	- 'a5_3'
+	- 'a5_4'
+	- 'a5_5'
+	- 'a5_6'
+	- 'a5_7'
+  'features':::
+	List of features that this modem supports, used to match requirements in
+	suites or scenarios. Any combination of:
+	- 'sms'
+	- 'gprs'
+	- 'voice'
+	- 'ussd'
 
 Side note: at first sight it might make sense to the reader to rather structure
 e.g. the 'ip_address' or 'arfcn' configuration as +
