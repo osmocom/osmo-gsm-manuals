@@ -24,6 +24,9 @@ apt-get install \
   python3-mako \
   python3-gi \
   ofono \
+  patchelf \
+  sudo \
+  libcap2-bin \
   python3-pip
 pip3 install pydbus
 pip3 install git+git://github.com/podshumok/python-smpplib.git
