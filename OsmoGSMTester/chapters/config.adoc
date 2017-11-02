@@ -54,9 +54,31 @@ suites_dir: '/usr/local/src/osmo-gsm-tester/suites'
 scenarios_dir: './scenarios'
 ----
 
+[[state_dir]]
+==== 'state_dir'
+
+It contains global or system-wide state for osmo-gsm-tester. In a typical state
+dir you can find the following files:
+
+'last_used_msisdn.state'::
+	Contains last used msisdn number, which is automatically increased every
+	time osmo-gsm-tester needs to assign a new subscriber in a test.
+'lock'::
+	Lock file used to implement a mutual exclusion zone around the
+	'reserved_resources.state' file.
+'reserved_resources.state'::
+	File containing a set of reserved resources by any number of
+	osmo-gsm-tester instances. Each osmo-gsm-tester instance is responsible
+	to clear its resources from the list once it is done using them and are
+	no longer reserved.
+
 If you would like to set up several separate configurations (not typical), note
 that the 'state_dir' is used to reserve resources, which only works when all
 configurations that share resources also use the same 'state_dir'.
+
+This way, several concurrent users of osmo-gsm-tester (ie. several
+osmo-gsm-tester processes running in parallel) can run without interfering with
+each other (e.g. using same ARFCN, same IP or same ofono modem path).
 
 [[suites_dir]]
 ==== 'suites_dir'
