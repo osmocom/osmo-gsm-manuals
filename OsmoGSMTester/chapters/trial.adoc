@@ -18,5 +18,14 @@ will point at the most recently created run dir. This run dir will accumulate:
 
 * the rendered configuration files used to run the binaries
 * stdout and stderr outputs of the binaries
+* pcap files for processes doing relevant network communication
 * a test log
-* *TODO*: jenkins parsable XML reports
+* jenkins parsable XML (Junit) reports
+
+The script in 'contrib/jenkins-run.sh' takes care of related tasks such as
+
+* creating the dir structure,
+* generating md5 sums for the various tar.gz containing software builds to be tested,
+* cleaning up after the build,
+* saving extra logs such as journalctl output from ofonod,
+* generating a final .tar.gz file with all the logs and reports.
