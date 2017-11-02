@@ -444,8 +444,6 @@ packets may result in a feedback loop: SSH activity to send tcpdump's output to
 your terminal is in turn is picked up in the tcpdump trace, and so forth. When
 testing 'tcpdump' access, make sure to have proper filter expressions in place.
 
-TODO: allow skipping pcaps by configuration if access to tcpdump is not wanted
-
 ==== Allow Core Files
 
 In case a binary run for the test crashes, a core file of the crash should be
