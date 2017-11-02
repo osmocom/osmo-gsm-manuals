@@ -486,6 +486,36 @@ adding the jenkins user to the 'usrp' group:
 gpasswd -a jenkins usrp
 ----
 
+==== Allow CAP_NET_RAW capability
+
+Certain binaries require 'CAP_NET_RAW' to be set, like 'osmo-bts-octphy' as it
+uses a 'AF_PACKET' socket.
+
+To be able to set the following capability without being root, osmo-gsm-tester
+uses sudo to gain permissions to set the capability.
+
+This is the script that osmo-gsm-tester expects on the main unit:
+
+----
+echo /usr/local/bin/osmo-gsm-tester_setcap_net_raw.sh <<EOF
+#!/bin/bash
+/sbin/setcap cap_net_raw+ep $1
+EOF
+chmod +x /usr/local/bin/osmo-gsm-tester_setcap_net_raw.sh
+----
+
+Now, again on the main unit, we need to provide sudo access to this script for
+osmo-gsm-tester:
+
+----
+echo "%osmo-gsm-tester ALL=(root) NOPASSWD: /usr/local/bin/osmo-gsm-tester_setcap_net_raw.sh" > /etc/sudoers.d/osmo-gsm-tester_setcap_net_raw
+chmod 0440 /etc/sudoers.d/osmo-gsm-tester_setcap_net_raw
+----
+
+The script file name 'osmo-gsm-tester_setcap_net_raw.sh' is important, as
+osmo-gsm-tester expects to find a script with this name in '$PATH' at run time.
+
+
 ==== Log Rotation
 
 To avoid clogging up /var/log, it makes sense to choose a sane maximum log size:
