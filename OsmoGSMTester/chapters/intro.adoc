@@ -385,7 +385,11 @@ separate processes.
 
 Also, the binaries from a trial are never installed system-wide, but are run
 with a specific 'LD_LIBRARY_PATH' pointing at the trial's 'inst', so that
-several trials can run consecutively without conflicting binary versions.
+several trials can run consecutively without conflicting binary versions. For
+some specific binaries which require extra permissions (such as osmo-bts-octphy
+requiring 'CAP_NET_RAW'), 'patchelf' program is used to modify the binary
+'RPATH' field instead because the OS dynamic linker skips 'LD_LIBRARY_PATH' for
+binaries with special permissions.
 
 Once a test suite run is complete, all its reserved resources are torn down (if
 the test scripts have not done so already), and the reservations are released
