@@ -444,7 +444,7 @@ packets may result in a feedback loop: SSH activity to send tcpdump's output to
 your terminal is in turn is picked up in the tcpdump trace, and so forth. When
 testing 'tcpdump' access, make sure to have proper filter expressions in place.
 
-==== Allow Core Files
+===== Allow Core Files
 
 In case a binary run for the test crashes, a core file of the crash should be
 written. This requires a limit rule. Create a file with the required rule:
@@ -464,7 +464,7 @@ contains stdout and stderr for that process (because this dir is set as CWD).
 sysctl -w kernel.core_pattern=core
 ----
 
-==== Allow Realtime Priority
+===== Allow Realtime Priority
 
 Certain binaries should be run with real-time priority, like 'osmo-bts-trx'.
 Add this permission on the main unit:
@@ -477,7 +477,7 @@ echo "@osmo-gsm-tester - rtprio 99" > /etc/security/limits.d/osmo-gsm-tester_all
 Re-login the user to make these changes take effect.
 
 [[user_config_uhd]]
-==== UHD
+===== UHD
 
 Grant permission to use the UHD driver to run USRP devices for osmo-bts-trx, by
 adding the jenkins user to the 'usrp' group:
@@ -486,7 +486,7 @@ adding the jenkins user to the 'usrp' group:
 gpasswd -a jenkins usrp
 ----
 
-==== Allow CAP_NET_RAW capability
+===== Allow CAP_NET_RAW capability
 
 Certain binaries require 'CAP_NET_RAW' to be set, like 'osmo-bts-octphy' as it
 uses a 'AF_PACKET' socket.
