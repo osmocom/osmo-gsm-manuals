@@ -37,14 +37,14 @@ digraph G {
 
 		modem0 [shape=box label="Modems..."]
 		modem1 [shape=box label="Modems..."]
-		modem2 [shape=box label="Modems..."]
 		osmo_bts_sysmo [label="sysmocom sysmoBTS\nrunning osmo-bts-sysmo" shape=box]
 		B200 [label="Ettus B200" shape=box]
+		sysmoCell5K [label="sysmocom sysmoCell5000" shape=box]
 		octphy [label="Octasic octphy BTS" shape=box]
 		nanoBTS [label="ip.access nanoBTS" shape=box]
 		rf_distribution [label="RF distribution"]
 
-		{modem0 modem1 modem2 osmo_bts_sysmo B200 octphy nanoBTS}->rf_distribution [dir=both arrowhead="curve" arrowtail="curve"]
+		{modem0 modem1 osmo_bts_sysmo B200 octphy nanoBTS sysmoCell5K}->rf_distribution [dir=both arrowhead="curve" arrowtail="curve"]
 	}
 	subgraph cluster_main_unit {
 	  label = "Main Unit"
@@ -52,22 +52,24 @@ digraph G {
 	  subgraph {
 		rank=same
 		ofono [label="ofono daemon"]
-		OsmoNITB
-		osmo_bts_trx [label="osmo-bts-trx\n+ osmo-trx"]
+		osmo_trx [label="osmo-trx"]
+		osmo_bts_trx [label="osmo-bts-trx"]
 		osmo_bts_octphy [label="osmo-bts-octphy"]
+		OsmoNITB [label="BSC + Core Network\n(Osmo{NITB,MSC,BSC,HLR,...})"]
 	  }
 	}
 
 
 	jenkins->osmo_gsm_tester [label="trial\n(binaries)"]
 	osmo_gsm_tester->jenkins [label="results"]
-	ofono->{modem0 modem1 modem2} [label="USB"]
-	osmo_gsm_tester-> {OsmoNITB osmo_bts_trx osmo_bts_octphy}
-	osmo_gsm_tester-> osmo_bts_sysmo [taillabel="SSH"]
-	osmo_gsm_tester-> ofono [taillabel="DBus"]
-	osmo_bts_trx->B200 [label="USB"]
+	ofono->{modem0 modem1} [label="USB"]
+	osmo_gsm_tester->{OsmoNITB osmo_bts_trx osmo_bts_octphy}
+	osmo_gsm_tester->osmo_bts_sysmo [taillabel="SSH"]
+	osmo_gsm_tester->ofono [taillabel="DBus"]
+	osmo_trx->B200 [label="USB"]
+	osmo_bts_trx->{osmo_trx sysmoCell5K} [dir=both label="UDP"]
 	osmo_bts_octphy->octphy [label="raw eth"]
-	{osmo_bts_sysmo nanoBTS}->OsmoNITB [label="eth"]
+	{osmo_bts_sysmo nanoBTS}->OsmoNITB [label="IP"]
 	{B200 octphy}->OsmoNITB [label="eth" style=invis]
 	{osmo_bts_trx osmo_bts_octphy}->OsmoNITB
 }
