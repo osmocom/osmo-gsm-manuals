@@ -4,9 +4,10 @@ The main unit is a general purpose computer that orchestrates the tests. It
 runs the core network components, controls the modems and so on. This can be
 anything from a dedicated production rack unit to your laptop at home.
 
-This manual will assume that tests are run from a jenkins build slave, by a
-user named 'jenkins'. The user configuration for manual test runs and/or a
-different user name is identical, simply replace the user name.
+This manual will assume that tests are run from a jenkins build slave, by a user
+named 'jenkins' that belong to group 'osmo-gsm-tester'. The user configuration
+for manual test runs and/or a different user name is identical, simply replace
+the user name or group.
 
 === Dependencies
 
