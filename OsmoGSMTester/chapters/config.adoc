@@ -205,8 +205,6 @@ Example of a 'default-suites.conf' file:
 - voice:trx+dyn_ts
 ----
 
-*TODO*: voice is not actually implemented yet
-
 === 'defaults.conf' (optional)
 
 Each binary run by osmo-gsm-tester, e.g. 'osmo-nitb' or 'osmo-bts-sysmo',
