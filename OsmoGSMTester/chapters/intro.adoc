@@ -316,6 +316,8 @@ resources:
   - times: 1
   modem:
   - times: 2
+    features:
+    - sms
 ----
 
 It may also request e.g. specific BTS models, but this is typically left to
