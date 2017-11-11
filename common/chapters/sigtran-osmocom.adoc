@@ -107,6 +107,14 @@ with a corresponding routing key for a given point code.  As long as
 the SG doesn't already have a route to this requested point code, The
 SG will simply trust any ASP and set a corresponding route.
 
+To enable dynamic creation of ASPs within an AS from any source IP/port,
+the corresponding xUA Server (<<xua-server>>) must be configured with
+`accept-asp-connections dynamic-permitted`.
+
+To enable dynamic registration of routing keys via RKM, the
+corresponding SS7 Instance (<<ss7-instance>>) must be confgured with
+`xua rkm routing-key-allocation dynamic-permitted`.
+
 This is of course highly insecure and can only be used in trusted,
 internal networks.  However, it is quite elegant in reducing the
 amount of configuration complexity.  All that is needed, is that an
@@ -255,6 +263,7 @@ All you need to make sure is:
 * to configure the point code of the MSC in the HNBGWs
 * to configure the point code of the SGSN in the HNBGWs
 
+[[ss7-instance]]
 === Osmocom SS7 Instances
 
 The entire SS7 stack can be operated multiple times within one
@@ -278,6 +287,7 @@ Each SS7 Instance can have different point code formats / lengths.
 |Point Code Delimiter|(config-cs7)# point-code delimiter|Point Code Delimiter: . or -
 |====
 
+[[xua-server]]
 === Osmocom SS7 xUA Server
 
 A *xUA Server* is a server that binds + listens to a given SCTP
