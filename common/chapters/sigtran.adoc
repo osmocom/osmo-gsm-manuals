@@ -12,7 +12,7 @@ following interfaces:
 * _IuCS_ interface between RNC (or HNB-GW) and MSC
 * _IuPS_ interface between RNC (or HNB-GW) and SGSN
 
-NOTE:: This does not include the A-bis interface between BTS and BSC.
+NOTE: This does not include the A-bis interface between BTS and BSC.
 While Abis traditionally is spoken over the same physical TDM circuits
 as SS7, the protocol stack from L2 upwards is quite different (Abis
 uses LAPD, while SS7 uses MTP)!
@@ -300,14 +300,14 @@ SUA is specified in <<ietf-rfc3868>>.
 
 M2UA is specified in <<ietf-rfc3331>>.
 
-NOTE:: M2UA is not supported in Osmocom SIGTRAN up to this point.  Let
+NOTE: M2UA is not supported in Osmocom SIGTRAN up to this point.  Let
 us know if we can implement it for you!
 
 ===== MTP2-User Peer-to-Peer Adaptation (M2PA)
 
 M2PA is specified in <<ietf-rfc4165>>.
 
-NOTE:: M2PA is not supported in Osmocom SIGTRAN up to this point.  Let
+NOTE: M2PA is not supported in Osmocom SIGTRAN up to this point.  Let
 us know if we can implement it for you!
 
 

@@ -303,16 +303,18 @@ port.
 
 A SS7 User is part of a program that binds to a given MTP-Layer
 Service Indicator (SI).  The Osmocom SS7 stack offers an API to
-register SS7 Users, as well as the VTY command ``show cs7 instance
-<0-15> users'' to list the currently registered users.
+register SS7 Users, as well as the VTY command `show cs7 instance <0-15>
+users` to list the currently registered users.
 
 === Osmocom SS7 Links
 
-TBD.
+Conceptually, SS7 links are on the same level as SIGTRAN ASPs.  The
+details of SS7 Links in the Osmocom implementation are TBD.
 
 === Osmocom SS7 Linksets
 
-TBD.
+Conceptually, SS7 Linksets are on the same level as SIGTRAN ASs.  The
+details of SS7 Links in the Osmocom implementation are TBD.
 
 === Osmocom SS7 Application Servers
 
@@ -347,7 +349,7 @@ An AS has the following properties:
 An Application Server Process corresponds to a given SCTP (or TCP)
 connection.  From the STP/SG (Server) point-of-view, those are
 incoming connections from Application Servers such as the BSCs.  From
-the ASP (Client) Point of view, it has one ``osmo_ss7_asp'' object for
+the ASP (Client) Point of view, it has one `osmo_ss7_asp` object for
 each outbound SIGTARN connection.
 
 An ASP has the following properties:
@@ -398,7 +400,7 @@ this SSN.
 There is an API to bind a program to a SSN, which implicitly generates
 an SCCP User object.
 
-The ``show cs7 instance <0-15> sccp users'' command can be used on the
+The `show cs7 instance <0-15> sccp users` command can be used on the
 VTY to obtain a list of currently bound SCCP users, as well as their
 corresponding SSNs.
 
@@ -412,7 +414,7 @@ the A or Iu interfaces, this means that every dedicated radio channel
 that is currently active to any UE/MS has one SCCP connection to the
 MSC and/or SGSN.
 
-The ``show cs7 instance <0-15> sccp connections'' command can be used
+The `show cs7 instance <0-15> sccp connections` command can be used
 on the VTY to obtain a list of currently active SCCP connections, as
 well as their source/destination and current state.
 
@@ -421,12 +423,13 @@ well as their source/destination and current state.
 
 The Osmocom SCCP User SAP (Service Access Point) is the programming
 interface between the SCCP Provider (libosmo-sigtran) and the SCCP
-User.  It follows primitives as laid out in <<itu-t-q711>>, encapsulated
-in ``osmo_prim'' structures.
+User (such as osmo-bsc, osmo-msc, osmo-hnbgw, etc.).  It follows
+primitives as laid out in <<itu-t-q711>>, encapsulated in `osmo_prim`
+structures.
 
 === Osmocom MTP User SAP
 
 The Osmocom MTP User SAP (Service Access Point) is the programming
 interface between the MTP Provider and the MTP User (e.g. SCCP).  It
 follows primitives as laid out in <<itu-t-q711>>, encapsulated in
-``osmo_prim'' structures.
+`osmo_prim` structures.
