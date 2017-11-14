@@ -10,7 +10,7 @@ which protocol / interface.
 [options="header",cols="10%,10%,40%,40%"]
 |===============
 |L4 Protocol|Port Number|Purpose|Software
-|UDP|2427|MGCP GW|osmo-bsc_mgcp
+|UDP|2427|MGCP GW|osmo-bsc_mgcp, osmo-mgw
 |TCP|2775|SMPP (SMS interface for external programs)|osmo-nitb
 |TCP|3002|A-bis/IP OML|osmo-bts, osmo-bsc, osmo-nitb
 |TCP|3003|A-bis/IP RSL|osmo-bts, osmo-bsc, osmo-nitb
