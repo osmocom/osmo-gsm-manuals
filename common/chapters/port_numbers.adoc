@@ -18,7 +18,7 @@ which protocol / interface.
 |TCP|4240|telnet (VTY)|osmo-pcu
 |TCP|4241|telnet (VTY)|osmo-bts
 |TCP|4242|telnet (VTY)|osmo-nitb, osmo-bsc, cellmgr-ng
-|TCP|4243|telnet (VTY)|osmo-bsc_mgcp
+|TCP|4243|telnet (VTY)|osmo-bsc_mgcp, osmo-mgw
 |TCP|4244|telnet (VTY)|osmo-bsc_nat
 |TCP|4245|telnet (VTY)|osmo-sgsn
 |TCP|4246|telnet (VTY)|osmo-gbproxy
