@@ -161,7 +161,7 @@ A typical single test script (part of a suite) may look like this:
 
 ----
 #!/usr/bin/env python3
-from osmo_gsm_tester.test import *
+from osmo_gsm_tester.testenv import *
 
 hlr = suite.hlr()
 bts = suite.bts()
