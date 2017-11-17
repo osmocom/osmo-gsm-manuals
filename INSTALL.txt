@@ -3,12 +3,15 @@ Dependencies needed, by example of a debian system:
 apt-get install \
   make \
   asciidoc \
+  asciidoc-dblatex \
   xsltproc \
   dblatex \
   mscgen \
   graphviz \
   python-pychart \
   python-nwdiag
+
+(Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)
 
 Build PDFs, run:
   make
