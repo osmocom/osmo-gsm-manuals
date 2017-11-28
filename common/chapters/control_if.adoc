@@ -147,7 +147,8 @@ interface. They are described in the following table.
 |===
 |Name|Access|Value|Comment
 |counter.*|RO||Get counter value.
-|rate_ctr.*|RO||Get rate counter value.
+|rate_ctr.*|RO||Get list of rate counter groups.
+|rate_ctr.IN.GN.GI.name|RO||Get value for interval IN of rate counter name which belong to group named GN with index GI.
 |===
 
 Those read-only variables allow to get value of arbitrary
@@ -161,6 +162,8 @@ libosmocore functions.
 
 In the example above, "+bsc+" is the rate counter group name and "+0+" is its index. It is possible to
 obtain all the rate counters in a given group by requesting "+rate_ctr.per_sec.bsc.*+" variable.
+
+The list of available groups can be obtained by requesting "+rate_ctr.*+" variable.
 
 The rate counter group name have to be prefixed with interval
 specification which can be any of "*per_sec*", "*per_min*", "*per_hour*", "*per_day*"
