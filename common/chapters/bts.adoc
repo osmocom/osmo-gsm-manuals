@@ -277,8 +277,7 @@ bandwidth while no voice calls are active, which is dynamically scaled down as
 voice calls need to be served. This is a tremendous improvement in service over
 statically assigning a fixed number of timeslots for voice and data.
 
-Dynamic timeslots work both with OsmoNITB as well as with OsmoBSC driven by a
-third-party MSC. The causality is as follows: to establish a voice call, the
+The causality is as follows: to establish a voice call, the
 MSC requests a logical channel of a given TCH kind from the BSC. The BSC
 assigns such a channel from a BTS' TRX's timeslot of its choice. The knowledge
 that a given timeslot is dynamic exists only on the BSC level. When the MSC
