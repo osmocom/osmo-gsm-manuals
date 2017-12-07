@@ -317,9 +317,20 @@ messaging for `TCH/F_TCH/H_PDCH` timeslots is compatible with Ericsson RBS.
 
 BTS models supporting this timeslot kind are shown in <<dyn_ts_compat>>.
 
-NOTE: At the time of writing, OsmoNITB disables TCH/F on this timeslot type due
-to transcoding limitations. Operation of OsmoBSC with a third-party MSC is not
-affected by this limitation. See https://osmocom.org/issues/1778.
+In the lack of transcoding capabilities, this timeslot type may cause
+mismatching codecs to be selected for two parties of the same call, which would
+cause call routing to fail ("`Cannot patch through call with different channel
+types: local = TCH_F, remote = TCH_H`"). A workaround is to disable TCH/F on
+this timeslot type, i.e. to allow only TCH/H. To disable TCH/F on Osmocom
+style dynamic timeslots, use a configuration of
+
+----
+network
+ dyn_ts_allow_tch_f 0
+----
+
+In OsmoNITB, disabling TCH/F on Osmocom dynamic timeslots is the default. In
+OsmoBSC, the default is to allow both.
 
 ==== ip.access Style Dynamic Timeslots (TCH/F_PDCH)
 
