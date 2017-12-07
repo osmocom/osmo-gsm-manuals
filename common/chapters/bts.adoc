@@ -76,6 +76,7 @@ BTS 0, TRX 0, Timeslot 1, phys cfg SDCCH8, TSC 7
 In order to provision BTSs, you have to enter the BTS config node of the
 VTY.  In order to configure BTS 0, you can issue the following sequence
 of commands:
+
 ----
 OpenBSC> enable
 OpenBSC# configure terminal
