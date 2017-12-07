@@ -166,9 +166,9 @@ on missing topics, please do take the extra time and let us know.
 
 ==== Spectrum License
 
-As GSM operates in licensed spectrum, please always double-check that
-you have all required licenses and that you do not transmit on any ARFCN
-that is not explicitly allocated to you by the applicable regulatory
+As GSM and UMTS operate in licensed spectrum, please always double-check that
+you have all required licenses and that you do not transmit on any ARFCN or
+UARFCN that is not explicitly allocated to you by the applicable regulatory
 authority in your country.
 
 WARNING: Depending on your jurisdiction, operating a radio transmitter
