@@ -88,51 +88,51 @@ OpenBSC(config-net-bts)#
 At this point, you have a plethora of commands, in fact an entire
 hierarchy of commands to configure all aspects of the BTS, as well as
 each of its TRX and each timeslot within each TRX.  For a full
-reference, please consult the respective chapter in the VTY reference of
-OpenBSC.
+reference, please consult the telnet VTY integrated help or the respective
+chapter in the VTY reference.
 
 BTS configuration depends quite a bit on the specific BTS vendor and
 model.  The section below provides just one possible example for the
 case of a sysmoBTS.
 
+Note that from the `configure terminal` command onwards, the telnet VTY
+commands above are identical to configuration file settings, for details see
+<<vty>>.
+
+Starting with `network` as above, your complete sysmoBTS configuration may look
+like this:
 
 ----
-OpenBSC(config-net-bts)# type sysmobts
-OpenBSC(config-net-bts)# band DCS1800
-OpenBSC(config-net-bts)# description The new BTS in Baikonur
-OpenBSC(config-net-bts)# location_area_code 2342
-OpenBSC(config-net-bts)# cell_identity 5
-OpenBSC(config-net-bts)# base_station_id_code 63
-OpenBSC(config-net-bts)# ip.access unit_id 8888 0
-OpenBSC(config-net-bts)# ms max power 40
-OpenBSC(config-net-bts)# trx 0
-OpenBSC(config-net-bts-trx)# arfcn 871
-OpenBSC(config-net-bts-trx)# nominal power 23
-OpenBSC(config-net-bts-trx)# max_power_red 0
-OpenBSC(config-net-bts-trx)# timeslot 0
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config CCCH+SDCCH4
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 1
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 2
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 3
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 4
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 5
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 6
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config TCH/F
-OpenBSC(config-net-bts-trx-ts)# exit
-OpenBSC(config-net-bts-trx)# timeslot 7
-OpenBSC(config-net-bts-trx-ts)# phys_chan_config PDCH
-OpenBSC(config-net-bts-trx-ts)# exit
+network
+ bts 0
+  type sysmobts
+  band DCS1800
+  description The new BTS in Baikonur
+  location_area_code 2342
+  cell_identity 5
+  base_station_id_code 63
+  ip.access unit_id 8888 0
+  ms max power 40
+  trx 0
+   arfcn 871
+   nominal power 23
+   max_power_red 0
+   timeslot 0
+    phys_chan_config CCCH+SDCCH4
+   timeslot 1
+    phys_chan_config TCH/F
+   timeslot 2
+    phys_chan_config TCH/F
+   timeslot 3
+    phys_chan_config TCH/F
+   timeslot 4
+    phys_chan_config TCH/F
+   timeslot 5
+    phys_chan_config TCH/F
+   timeslot 6
+    phys_chan_config TCH/F
+   timeslot 7
+    phys_chan_config PDCH
 ----
 
 
