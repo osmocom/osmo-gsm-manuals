@@ -137,10 +137,11 @@ We're looking forward to receiving your contributions.
 
 === Osmocom and sysmocom
 
-Some of the founders of the Osmocom project have established sysmocom as
-a company to provide products and services related to Osmocom.
+Some of the founders of the Osmocom project have established 'sysmocom -
+systems for mobile communications GmbH' as a company to provide products and
+services related to Osmocom.
 
-sysmocom and its staff have by far contributed the largest part of development
+sysmocom and its staff have contributed by far the largest part of development
 and maintenance to the Osmocom mobile network infrastructure projects.
 
 As part of this work, sysmocom has also created the manual you are
