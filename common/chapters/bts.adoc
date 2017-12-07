@@ -3,7 +3,7 @@
 
 The main functionality of the BSC component is to manage BTSs.  As such,
 provisioning BTSs within the BSC is one of the most common tasks during
-BSC operation.   Just like about anything else in OpenBSC, they are
+BSC operation.   Just like about anything else in Osmocom, they are
 configured using the VTY.
 
 BTSs are internally numbered with integer numbers starting from "0" for
@@ -18,7 +18,7 @@ In order to view the status and properties of a BTS, you can issue the
 information about all provisioned BTS numbers.
 
 ----
-OpenBSC> show bts 0
+OsmoBSC> show bts 0
 BTS 0 is of nanobts type in band DCS1800, has CI 0 LAC 1, BSIC 63, TSC 7 and 1 TRX
 Description: (null)
 MS Max power: 15 dBm
@@ -78,11 +78,11 @@ VTY.  In order to configure BTS 0, you can issue the following sequence
 of commands:
 
 ----
-OpenBSC> enable
-OpenBSC# configure terminal
-OpenBSC(config)# network
-OpenBSC(config-net)# bts 0
-OpenBSC(config-net-bts)#
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# network
+OsmoBSC(config-net)# bts 0
+OsmoBSC(config-net-bts)#
 ----
 
 At this point, you have a plethora of commands, in fact an entire
