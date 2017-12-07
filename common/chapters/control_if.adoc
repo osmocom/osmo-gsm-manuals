@@ -173,7 +173,7 @@ The old-style counters available via "+counter.*+" variables are superceeded by 
 so its use is discouraged.
 There might still be some applications not yet converted to rate_ctr.
 
-=== Control Interface python example: `osmo_ctrl.py`
+=== Control Interface python examples
 
 In the `osmo-python-tests` repository, there is an example python script
 called `osmopy/osmo_ctrl.py` which implements the Osmocom
@@ -183,6 +183,36 @@ You can use this tool either stand-alone to perform control interface
 operations against an Osmocom program, or you can use it as a reference
 for developing your own python software talking to the control
 interface.
+
+Another implementation is in `osmopy/rate_ctr2csv.py` which will retrieve performance counters
+for a given Osmocom program and output it in csv format. This can be used to periodically (using systemd timer
+for example) retrieve data to build KPI and evaluate how it changes over time.
+
+Internally it uses "+rate_ctr.*+" variable described in <<ctrl_common_var>> to get the list of counter groups
+and than request all the counters in each group. Applications interested in individual metrics can request it
+directly using `rate_ctr2csv.py` as an example.
+
+==== Getting rate counters
+
+.Example: Use `rate_ctr2csv.py` to get rate counters from OsmoBSC
+----
+$ ./osmopy/rate_ctr2csv.py --header
+Connecting to localhost:4249...
+Getting rate counter groups info...
+"group","counter","absolute","second","minute","hour","day"
+"e1inp.0","hdlc:abort","0","0","0","0","0"
+"e1inp.0","hdlc:bad_fcs","0","0","0","0","0"
+"e1inp.0","hdlc:overrun","0","0","0","0","0"
+"e1inp.0","alarm","0","0","0","0","0"
+"e1inp.0","removed","0","0","0","0","0"
+"bsc.0","chreq:total","0","0","0","0","0"
+"bsc.0","chreq:no_channel","0","0","0","0","0"
+...
+"msc.0","call:active","0","0","0","0","0"
+"msc.0","call:complete","0","0","0","0","0"
+"msc.0","call:incomplete","0","0","0","0","0"
+Completed: 44 counters from 3 groups received.
+----
 
 ==== Setting a value
 
