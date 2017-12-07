@@ -300,7 +300,7 @@ configuration. Not all BTS models support dynamic channels.
 |sysmoBTS using _osmo-bts-sysmo_ |supported |supported
 |various SDR platforms using _osmo-bts-trx_ |supported |supported
 |Nutaq Litecell 1.5 using _osmo-bts-litecell15_ |supported |supported
-|Octasic OctBTS using _osmo-bts-octphy_ | -  | -
+|Octasic OctBTS using _osmo-bts-octphy_ | supported  | supported
 |===
 
 The _OsmoBTS Abis Protocol Specification_ <<osmobts-abis-spec>> describes the
