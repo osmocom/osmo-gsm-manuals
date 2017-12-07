@@ -348,7 +348,7 @@ timeslots to TCH, and no PDCH timeslots would be left for GPRS service.
 
 ==== Dynamic Timeslot Configuration Examples
 
-This is an extract of an _osmo-nitb_ or _openbsc_ config file. A timeslot
+This is an extract of an @osmo-bsc@ or @osmo-nitb@ config file. A timeslot
 configuration with five Osmocom style dynamic timeslots and one dedicated PDCH
 may look like this:
 
