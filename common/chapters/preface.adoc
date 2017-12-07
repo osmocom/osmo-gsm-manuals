@@ -22,12 +22,12 @@ The goal was to learn and to bring Free Software into a domain that
 despite its ubiquity had not yet seen and Free / Open Source software
 implementations.
 
-`bs11-abis` quickly turned into `bsc-hack`, then 'OpenBSC' and into
-what is today known as its 'OsmoNITB' variant:  A minimal implementation
+`bs11-abis` quickly turned into `bsc-hack`, then 'OpenBSC' and its
+'OsmoNITB' variant: A minimal implementation
 of all the required functionality of an entire GSM network, exposing
 A-bis towards the BTS.  The project attracted more interested
-developers, and surprisingly quick also commercial interest,
-contribution and adoption.   This added support for more BTS models
+developers, and surprisingly quickly also commercial interest,
+contribution and adoption. This allowed adding support for more BTS models.
 
 After having implemented the network-side GSM protocol stack in 2008 and
 2009, in 2010 the same group of people set out to create a
@@ -40,10 +40,17 @@ implemented, including TETRA professional mobile radio, DECT cordless
 telephony, GMR satellite telephony, some SDR hardware, a SIM card
 protocol tracer and many others.
 
-It has been a most exciting ride during the last seven years.  I
-wouldn't want to miss it under any circumstances.
+Increasing commercial interest particularly in the BSS and core network
+components has lead the way to 3G support in Osmocom, as well as the split
+of the minimal 'OsmoNITB' implementation into separate and fully featured
+network components: OsmoBSC, OsmoMSC, OsmoHLR, OsmoMGW and OsmoSTP (among
+others), which allow seamless scaling from a simple "Network In The Box" to a
+distributed installation for serious load.
 
--- Harald Welte, Osmocom.org and OpenBSC founder, January 2016.
+It has been a most exciting ride during the last eight-odd years.  I would not
+have wanted to miss it under any circumstances.
+
+-- Harald Welte, Osmocom.org and OpenBSC founder, December 2017.
 
 
 === Acknowledgements
