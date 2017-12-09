@@ -5,31 +5,30 @@
   <node id='8'><hide /></node>
 
 
-  <node id='1'>
-    <name>Show Node for introspection</name>
-    <description>This is the default node when connecting to the
+  <node id='view'>
+    <description>The view node is the default node when connecting to the
     VTY interface. This node does not require any additional
     permission and allows to introspect the application.</description>
   </node>
 
-  <node id='3'>
-    <name>Enable Node for admin commands</name>
-    <description>This is a privileged node allowing to make changes
-    to the configuration and allow to access more commands. Everything
-    available on the show node should be available here.</description>
+  <node id='enable'>
+    <description>The enable node is a privileged node, allowing to make changes
+    to the configuration and to access further commands like 'configure'.
+    All commands seen on the view node are also available here.</description>
   </node>
 
-  <node id='4'>
-    <name>Configuration Node for configuration</name>
-    <description>This is the base node for all configuration nodes. It
-    allows to enter BTS and logging node to configure them.</description>
+  <node id='config'>
+    <description>The config node is the root for all configuration commands,
+    which are identical to the config file format. Changes made on the telnet
+    VTY can be made persistent with the 'write file' command.</description>
   </node>
-  <node id='7'>
-    <child_of nodeid='4' />
-    <name>Logging Node for logging configuration</name>
-    <description>This is the node is a child of the configuration node and
-    is responsible for configuring the logging framework including the
-    log targets and log levels.</description>
+  <node id='config-log'>
+    <child_of nodeid='config' />
+    <description>The log node is commonly available in all Osmocom programs and
+    allows configuring logging to stderr and/or log files, including logging
+    category and level filtering as well as output formatting options.
+    Note that the 'logging enable' command is required to make logging commands
+    available on the telnet VTY.</description>
   </node>
   <node id='9'>
     <child_of nodeid='4' />
@@ -39,10 +38,21 @@
   </node>
 
   <common>
+    <command id='logging enable'>
+      <description>This command is required to make logging commands available
+      on the telnet VTY.</description>
+    </command>
     <command id='logging filter all (0|1)'>
-      <description>The logging framework has the concept of filters. This can
-      be used to only show log messages that apply to a given timeslot or
-      subscriber. The all filter allows all messages to pass unfiltered.
+      <description>Disable/enable general log output on a given target.
+      Typically, 'logging filter all 1' allows to see the usual log output on a
+      given target. Setting to '0' can be useful when logging to the telnet VTY
+      console: mute all log output to allow typing VTY commands on the telnet
+      prompt without interference from log output; 'logging filter all 1' then
+      re-enables logging in the same log output configuration as before.
+
+      Some applications provide more specific filters, e.g. to log a given IMSI
+      only. To employ such filters, set 'logging filter all 0' to disable
+      general logging, and then enable a more specific filter instead.
       </description>
     </command>
   </common>
