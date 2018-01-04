@@ -144,6 +144,31 @@ OsmoBSC(config-log)#
 In the example above 98 is the desired size of the ring buffer (number of messages). Once it's filled,
 the incoming log messages will push out the oldest messages available in the buffer.
 
+==== Logging via gsmtap
+
+When debugging complex issues it's handy to be able to reconstruct exact chain of events. This is enabled by using GSMTAP
+log output where frames sent/received over the air are intersperced with the log lines. It also simplifies the bug handling
+as users don't have to provide separate .pcap and .log files anymore - everything will be inside self-contained packet dump.
+
+It's configured as follows:
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log gsmtap 192.168.2.3
+OsmoBSC(config-log)#
+----
+
+The hostname/ip argument is optional: if omitted the default 127.0.0.1 will be used. The log strings inside GSMTAP are already
+supported by Wireshark. Capturing for `port 4729` on appropriate interface will reveal log messages including source file
+name and line number as well as application. This makes it easy to consolidate logs from several different network components
+alongside the air frames. You can also use Wireshark to quickly filter logs for a given subsystem, severity, file name etc.
+
+[[fig-wireshark-gsmtap-log]]
+.Wireshark with logs delivered over GSMTAP
+image::../common/images/wireshark-gsmtap-log.png[]
+
+Note: the logs are also duplicated to stderr when GSMTAP logging is configured.
+
 ==== Logging to a file
 
 As opposed to Logging to the VTY, logging to files is persistent and
