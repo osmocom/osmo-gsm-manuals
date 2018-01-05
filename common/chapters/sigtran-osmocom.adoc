@@ -280,7 +280,7 @@ Each SS7 Instance can have different point code formats / lengths.
 |Name|VTY Command|Description
 |ID|(config)# cs7 instance ID|The numeric identifier of this instance
 |Name|(config-cs7)# name NAME|A human-readable name for this instance
-|Description|(cnfig-cs7)# description DESC| More verbose description
+|Description|(config-cs7)# description DESC| More verbose description
 |Primary PC|(config-cs7)# point-code PC|Primary local point code
 |Network Indicator|(config-cs7)# network-indicator|Network Indicator used in MTP3 Routing Label
 |Point Code Format|(config-cs7)# point-code format|Point Code Format (Default: 3.8.3)
