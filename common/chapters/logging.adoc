@@ -174,7 +174,14 @@ alongside the air frames. You can also use Wireshark to quickly filter logs for 
 .Wireshark with logs delivered over GSMTAP
 image::../common/images/wireshark-gsmtap-log.png[]
 
-Note: the logs are also duplicated to stderr when GSMTAP logging is configured.
+Note: the logs are also duplicated to stderr when GSMTAP logging is configured because stderr is the default log target which is
+initialized automatically. To descrease stderr logging to absolute minimum, you can configure it as follows:
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# log stderr
+OsmoBSC(config-log)# logging level all fatal
+----
 
 ==== Logging to a file
 
