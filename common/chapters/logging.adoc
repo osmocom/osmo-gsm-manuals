@@ -127,6 +127,10 @@ therefore recommend to open a second VTY session in parallel, and use
 one only for logging, while the other is used for interacting with the
 system. Another option would be to use different log target.
 
+To review the current vty logging configuration, you
+can use:
+  	`show logging vty`
+
 ==== Logging to the ring buffer
 
 To avoid having separate VTY session just for logging output while still having immediate access to them,
