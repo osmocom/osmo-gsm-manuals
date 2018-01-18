@@ -81,7 +81,10 @@ your console before you have a chance to set a more restrictive filter.
 To request no filtering, i.e. see all messages, you may use:
   	`log filter all 1`
 
-As another example, to only see messages relating to a particular
+In addition to generic filtering, applications can implement special log filters using the same framework
+to filter on particular context.
+
+For example in OsmoBSC, to only see messages relating to a particular
 subscriber identified by his IMSI, you may use:
 	`log filter imsi 262020123456789`
 
