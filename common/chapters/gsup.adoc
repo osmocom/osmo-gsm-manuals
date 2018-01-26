@@ -1,21 +1,21 @@
 [[gsup]]
-== GPRS Subscriber Update Protocol
+== Generic Subscriber Update Protocol
 
 === General
 
-This chapter describes the remote protocol that is used by the SGSN to update
-and manage the local subscriber list.  Functionally, it resembles the
-interface between the SGSN on the one hand side, and HLR/AUC on the
+This chapter describes the remote protocol that is used by OsmoSGSN and OsmoMSC to update
+and manage the local subscriber list in OsmoHLR.  Functionally, it resembles the
+interface between the SGSN/VLR on the one hand side, and HLR/AUC on the
 other side.
 
 For more information, see the specification of the Gr interface (3GPP TS 03.60).
 
 Traditionally, the GSM MAP (Mobile Application Part) protocol is used
 for this purpose, running on top of a full telecom signalling protocol
-stck of MTP2/MTP3/SCCP/TCAP, or any of the SIGTRAN alternatvives.
+stack of MTP2/MTP3/SCCP/TCAP, or any of the SIGTRAN alternatives.
 
 In order to avoid many of the complexities of MAP, which are difficult
-to implement in the plain C language evnironment of the Osmocom
+to implement in the plain C language environment of the Osmocom
 cellular network elements like the SGSN, we introduce the GSUP
 protocol.
 
@@ -50,20 +50,20 @@ Abis/IP Specification'.
 
 ==== Authentication management
 
-The SGSN sends a SEND_AUTHENTICATION_INFO_REQ message containing the MS's IMSI
+The SGSN or VLR sends a SEND_AUTHENTICATION_INFO_REQ message containing the MS's IMSI
 to the peer.  On errors, especially if authentication info is not available for
 that IMSI, the peer returns a SEND_AUTHENTICATION_INFO_ERR message.  Otherwise
 the peer returns a SEND_AUTHENTICATION_INFO_RES message. If this message
-contains at least one authentication tuple, the SGSN replaces all tuples that
+contains at least one authentication tuple, the SGSN or VLR replaces all tuples that
 are assigned to the subscriber. If the message doesn't contain any tuple the
-SGSN may reject the Attach Request. (see 3GPP TS 09.02, 25.5.6)
+SGSN or VLR may reject the Attach Request. (see 3GPP TS 09.02, 25.5.6)
 
 .Send Authentication Info (Normal Case)
 ["mscgen"]
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="SEND AUTHENTICATION INFO REQUEST (IMSI)"];
   Peer => SGSN [label="SEND AUTHENTICATION INFO RESPONSE (Tuples)"];
@@ -75,7 +75,7 @@ msc {
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="SEND AUTHENTICATION INFO REQUEST (IMSI)"];
   Peer => SGSN [label="SEND AUTHENTICATION INFO ERROR (Cause)"];
@@ -84,7 +84,7 @@ msc {
 
 ==== Reporting of Authentication Failure
 
-Using this procedure, the SGSN reports authentication failures to the
+Using this procedure, the SGSN or VLR reports authentication failures to the
 HLR.
 
 .Authentication Failure Report (Normal Case)
@@ -92,7 +92,7 @@ HLR.
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="AUTHENTICATION FAILURE REPORT (IMSI)"];
 }
@@ -100,11 +100,11 @@ msc {
 
 ==== Location Updating
 
-The SGSN sends a UPDATE_LOCATION_REQ to the peer. If the request is denied by
-the network, the peer returns an UPDATE_LOCATION_ERR message to the SGSN.
+The SGSN or VLR sends a UPDATE_LOCATION_REQ to the peer. If the request is denied by
+the network, the peer returns an UPDATE_LOCATION_ERR message to the SGSN or VLR.
 Otherwise the peer returns an UPDATE_LOCATION_RES message containing all
 information fields that shall be inserted into the subscriber record. If
-the 'PDP info complete' information element is set in the message, the SGSN
+the 'PDP info complete' information element is set in the message, the SGSN or VLR
 clears existing PDP information fields in the subscriber record first.
 (see 3GPP TS 09.02, 19.1.1.8)
 
@@ -113,7 +113,7 @@ clears existing PDP information fields in the subscriber record first.
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="UPDATE LOCATION REQUEST (IMSI)"];
   Peer => SGSN [label="INSERT SUBSCRIBER DATA"];
@@ -127,7 +127,7 @@ msc {
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="UPDATE LOCATION REQUEST (IMSI)"];
   Peer => SGSN [label="UPDATE LOCATTION ERROR (Cause)"];
@@ -137,14 +137,14 @@ msc {
 ==== Location Cancellation
 
 Using the Location Cancellation procedure, the Network Peer (HLR) can
-request the SGSN to remove a subscriber record.
+request the SGSN or VLR to remove a subscriber record.
 
 .Cancel Location (Normal Case)
 ["mscgen"]
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   Peer => SGSN [label="CANCEL LOCATION REQUEST (IMSI)"];
   SGSN => Peer [label="CANCEL LOCATION RESULT"];
@@ -156,7 +156,7 @@ msc {
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   Peer => SGSN [label="CANCEL LOCATION REQUEST (IMSI)"];
   SGSN => Peer [label="CANCEL LOCATION ERROR (Cause)"];
@@ -165,8 +165,8 @@ msc {
 
 ==== Purge MS
 
-Using the Purge MS procedure, the SGSN can request purging of MS
-related state from a previous SGSN during an inter-SGSN location
+Using the Purge MS procedure, the SGSN or VLR can request purging of MS
+related state from a previous SGSN or VLR during an inter-SGSN / inter-MSC location
 update.
 
 .Purge MS (Normal Case)
@@ -174,7 +174,7 @@ update.
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   SGSN => Peer [label="PURGE MS REQUEST (IMSI)"];
   Peer => SGSN [label="PURGE MS RESULT"];
@@ -184,16 +184,16 @@ msc {
 ==== Delete Subscriber Data
 
 Using the Delete Subscriber Data procedure, the Peer (HLR) can remove
-some of the subscriber data from the SGSN.  This is used in case the
+some of the subscriber data from the SGSN or VLR.  This is used in case the
 subscription details (e.g. PDP Contexts / APNs) change while the
-subscriber is registred to that SGSN.
+subscriber is registered to that SGSN VLR.
 
 .Delete Subscriber Data (Normal Case)
 ["mscgen"]
 ----
 msc {
   hscale="1.5";
-  SGSN [label="SGSN"], Peer [label="Network Peer (HLR)"];
+  SGSN [label="SGSN/VLR"], Peer [label="Network Peer (HLR)"];
 
   Peer => SGSN [label="DELETE SUBSCRIBER DATA REQUEST (IMSI)"];
   SGSN => Peer [label="DELETE SUBSCRIBER DATA RESULT"];
@@ -221,7 +221,7 @@ ignored.
 
 ==== Send Authentication Info Request
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -239,7 +239,7 @@ both optional IEs are present, or none of them.
 
 ==== Send Authentication Info Error
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -251,7 +251,7 @@ Direction: Network peer => SGSN
 
 ==== Send Authentication Info Response
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -263,7 +263,7 @@ Direction: Network peer => SGSN
 
 ==== Authentication Failure Report
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -275,7 +275,7 @@ Direction: SGSN => Network peer
 
 ==== Update Location Request
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -287,7 +287,7 @@ Direction: SGSN => Network peer
 
 ==== Update Location Error
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -299,7 +299,7 @@ Direction: Network peer => SGSN
 
 ==== Update Location Result
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -316,7 +316,7 @@ If the PDP info complete IE is present, the old PDP info list shall be cleared.
 
 ==== Location Cancellation Request
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -329,7 +329,7 @@ Direction: Network peer => SGSN
 
 ==== Location Cancellation Result
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -341,7 +341,7 @@ Direction: SGSN => Network peer
 
 ==== Purge MS Request
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -354,7 +354,7 @@ Direction: SGSN => Network peer
 
 ==== Purge MS Error
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -366,7 +366,7 @@ Direction: Network peer => SGSN
 
 ==== Purge MS Result
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -378,7 +378,7 @@ Direction: Network peer => SGSN
 
 ==== Insert Subscriber Data Request
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -397,7 +397,7 @@ If the PDP info complete IE is present, the old PDP info list shall be cleared.
 
 ==== Insert Subscriber Data Error
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -409,7 +409,7 @@ Direction: SGSN => Network peer
 
 ==== Insert Subscriber Data Result
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -420,7 +420,7 @@ Direction: SGSN => Network peer
 
 ==== Delete Subscriber Data Request
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -433,7 +433,7 @@ Direction: Network peer => SGSN
 
 ==== Delete Subscriber Data Error
 
-Direction: SGSN => Network peer
+Direction: SGSN / VLR => HLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -445,7 +445,7 @@ Direction: SGSN => Network peer
 
 ==== Delete Subscriber Data Result
 
-Direction: Network peer => SGSN
+Direction: HLR => SGSN / VLR
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -754,7 +754,7 @@ Number digit N-1' (N even), where N is the number of digits.
 ==== ISDN-AddressString / MSISDN / Called Party BCD Number
 
 The MSISDN is encoded as an ISDN-AddressString in 3GPP TS 09.02 and Called Party
-BCD Number in 3GPP TS 04.08. It will be stored by the SGSN and then passed as is
+BCD Number in 3GPP TS 04.08. It will be stored by the SGSN or VLR and then passed as is
 to the GGSN during the activation of the primary PDP Context.
 
 [packetdiag]
@@ -812,7 +812,7 @@ Priority and the reset are encoded as octets 3-N of 24.008.
 This encodes the ChargingCharacteristics of 3GPP TS 32.215. A HLR may
 send this as part of the InsertSubscriberData or within a single PDP
 context definition. If the HLR supplies this information it must be
-used by the SGSN when activating a PDP context.
+used by the SGSN or VLR when activating a PDP context.
 
 [packetdiag]
 ----
@@ -830,7 +830,7 @@ used by the SGSN when activating a PDP context.
 ==== HLR Number encoded as 3GPP TS 09.02 ISDN-AddressString
 
 The HLR Number is encoded as an ISDN-AddressString in 3GPP TS 09.02. It
-will be stored by the SGSN can be used by the CDR module to keep a
+will be stored by the SGSN or VLR can be used by the CDR module to keep a
 record.
 
 [packetdiag]
