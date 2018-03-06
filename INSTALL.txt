@@ -18,23 +18,24 @@ Build PDFs, run:
 or for a parallel build using more CPU cores:
   make -j 5
 
-To update the VTY reference for a given program, use osmodumpdoc.py, available
-from git.osmocom.org/python/osmo-python-tests -- for example, for osmo-msc:
+To update the VTY reference for a given program, use 'osmo_interact_vty.py -X',
+available from git.osmocom.org/python/osmo-python-tests:
 
   cd ~/osmo-python-tests
-  ./setup.py install
+  python3 setup.py install
 
-  cd ~/osmo-msc
-  mkdir build
-  cd build
-  ../configure --enable-smpp
-  make
-  osmodumpdoc.py -p ~/osmo-msc
+  osmo_interact_vty.py -X -p $VTY_PORT > vty/*_vty_reference.xml
 
-  cp doc/msc_vty_reference.xml ~/osmo-gsm-manuals/OsmoMSC/vty/
-  cd ~/osmo-gsm-manuals/OsmoMSC
-  git status
-  git diff
-  make
-  git commit -a -m "OsmoMSC: update VTY reference"
-  git push origin HEAD:refs/for/master/msc_vty
+Find the VTY port number at
+https://osmocom.org/projects/cellular-infrastructure/wiki/Port_Numbers
+
+For example, for osmo-msc, which has VTY port 4254:
+
+a) with an osmo-msc already running:
+
+  osmo_interact_vty.py -X -p 4254 > OsmoMSC/vty/msc_vty_reference.xml
+
+b) launching an osmo-msc along:
+
+  osmo_interact_vty.py -r "osmo-msc -c ~/src/osmo-msc/doc/examples/osmo-msc/osmo-msc.cfg" \
+    -X -p 4254 > OsmoMSC/vty/msc_vty_reference.xml
