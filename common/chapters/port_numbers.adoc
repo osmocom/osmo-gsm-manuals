@@ -14,6 +14,9 @@ which protocol / interface.
 |TCP|2775|SMPP (SMS interface for external programs)|osmo-nitb
 |TCP|3002|A-bis/IP OML|osmo-bts, osmo-bsc, osmo-nitb
 |TCP|3003|A-bis/IP RSL|osmo-bts, osmo-bsc, osmo-nitb
+|TCP|4236|Control Interface|osmo-trx
+|TCP|4237|telnet (VTY)|osmo-trx
+|TCP|4238|Control Interface|osmo-bts
 |TCP|4239|telnet (VTY)|osmo-stp
 |TCP|4240|telnet (VTY)|osmo-pcu
 |TCP|4241|telnet (VTY)|osmo-bts
