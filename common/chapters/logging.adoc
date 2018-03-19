@@ -209,10 +209,9 @@ TIP: Don't forget to use the `copy running-config startup-config` (or
 its short-hand `write file`) command to make your logging configuration
 persistent across application re-start.
 
-NOTE: libosmocore currently does not provide file close-and-reopen
-support by SIGHUP, as used by popular log file rotating solutions.
-Please contact the Osmocom developers if you require this feature to be
-implemented.
+NOTE: libosmocore provides file close-and-reopen support by SIGHUP, as used by
+popular log file rotating solutions such as https://github.com/logrotate/logrotate
+found in most GNU/Linux distributions.
 
 
 ==== Logging to syslog
