@@ -1,0 +1,71 @@
+msc {
+	hscale="3";
+	ms [label="MS"], bsc [label="BSC"], mgw [label="MGW@MSC"], omsc [label="OsmoMSC"], osc [label="OsmoSIPcon"], sip [label="External SIP World"];
+	|||;
+	...		[label="Mobile Terminated call handled via osmo-sip-conector, OsmoMSC, OsmoMGW"];
+	|||;
+
+	sip box sip	[label="Somebody in SIP world dials a\nGSM subscriber"];
+	osc <- sip	[label="SIP INVITE (from, to, SDP)"];
+	osc box osc	[label="SDP -> bearer_capabilities"];
+	omsc <- osc	[label="MNCC_SETUP_REQ (calling, called, bearer_cap)"];
+	osc -> sip	[label="SIP 100 Trying"];
+	bsc <- omsc	[label="BSSMAP PAGING"];
+	ms <- bsc	[label="RR PAGING"];
+	ms <-> bsc	[label="RR Establishment"];
+	ms <-> omsc	[label="MM Procedures (Auth/Ciph/...)"];
+	...;
+	ms <- omsc	[label="CC SETUP (calling, bearer_cap)"];
+	ms -> omsc	[label="CC CALL CONFIRMED (bearer_cap)"];
+	omsc box omsc	[label="generate BSSMAP codec list from\nMS-negotiated bearer_cap"];
+	bsc <- omsc	[label="BSSMAP ASSIGNMENT REQ"];
+	ms <-> bsc	[label="RR ASSIGNMENT or RR MODE MODIFY"];
+	bsc -> omsc	[label="BSSMAP ASSIGNMENT COMPL"];
+	omsc box omsc	[label="determine chosen codec from\nBSSMAP Assignment"];
+	mgw <- omsc	[label="MGCP CRCX (RAN-side, chosen codec)"];
+	mgw -> omsc	[label="MGCP CRCX OK (RAN-side)"];
+	omsc -> osc	[label="MNCC_CALL_CONF_IND"];
+
+	omsc <- osc	[label="MNCC_RTP_CREATE.req"];
+	mgw <- omsc	[label="MGCP CRCX (EXT-side)"];
+	mgw box mgw	[label="If there is a common codec between RAN and CN, use that\nElse: Configure Transcoding in MGW"];
+	mgw -> omsc	[label="MGCP CRCX OK (EXT-side)"];
+	omsc -> osc	[label="MNCC_RTP_CREATE.resp (CN side IP/Port)"];
+	...;
+	ms box ms	[label="MS starts ringing"];
+	ms -> omsc	[label="CC ALERTING"];
+	omsc -> osc	[label="MNCC_ALERT_IND"];
+	osc -> sip	[label="SIP 180 Ringing (SDP w/chosen codec?)"];
+	...;
+	...;
+	ms box ms	[label="MT user accepts call"];
+	ms -> omsc	[label="CC CONNECT"];
+	omsc -> osc	[label="MNCC_SETUP_CNF"];
+	osc -> sip	[label="SIP 200 OK (SDP w/chossen codec)"];
+	osc <- sip	[label="SIP ACK"];
+	omsc <- osc	[label="MNCC_RTP_CONNECT"];
+	mgw <- omsc	[label="MGCP MDCX (MNCC-side, sendrecv)"];
+	mgw -> omsc	[label="MGCP MDCX OK"];
+	omsc <- osc	[label="MNCC_SETUP_COMPL_REQ"];
+	ms <- omsc	[label="CC CONNECT ACK"];
+	mgw <- omsc	[label="MGCP MDCX (RAN-side, sendrecv)"];
+	mgw -> omsc	[label="MGCP MDCX OK"];
+	...;
+	ms box ms	[label="MT user releases call"];
+	ms -> omsc	[label="CC DISCONNECT"];
+	omsc -> osc	[label="MNCC_DISC_IND"];
+	osc -> sip	[label="SIP BYE"];
+	osc <- sip	[label="SIP 200 OK"];
+	omsc <- osc	[label="MNCC_REL_REQ"];
+	ms <- omsc	[label="CC RELEASE COMMAND"];
+	ms -> omsc	[label="CC REELASE COMPLETE"];
+	omsc -> osc	[label="MNCC_REL_CNF"];
+	mgw <- omsc	[label="MGCP DLCX (all connections on EP)"];
+	mgw -> omsc	[label="MGCP DLCX OK"];
+	bsc <- omsc	[label="BSSMAP CLEAR CMD"];
+	ms <-> bsc	[label="RR Disconnect"];
+	bsc -> omsc	[label="BSSMAP CLEAR CMPL"];
+
+}
+
+
