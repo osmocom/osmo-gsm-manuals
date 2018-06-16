@@ -454,6 +454,56 @@ Direction: HLR => SGSN / VLR
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
 |===
 
+==== Process Supplementary Service Request
+
+Direction: bidirectional
+
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|M|TLV|3
+|35|Supplementary Service Info|<<gsup-ie-ss-info>>|O|TLV|2-...
+|===
+
+This message is used in both directions in case of USSD, because
+it is not known is it request or response without parsing
+the GSM 04.80 payload.
+
+==== Process Supplementary Service Error
+
+Direction: HLR => SGSN / VLR
+
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|M|TLV|3
+|02|Cause|<<gsup-ie-cause>>|M|TLV|3
+|===
+
+==== Process Supplementary Service Response
+
+Direction: HLR => SGSN / VLR
+
+[options="header",cols="5%,20%,45%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|M|TLV|3
+|35|Supplementary Service Info|<<gsup-ie-ss-info>>|O|TLV|2-...
+|===
+
+The purpose of this message is not clear yet. Probably, it
+can be used to notify the MSC that a structured supplementary
+service is successfully activated or deactivated, etc.
+
 === Information Elements
 
 [[gsup-ie-msgtype]]
@@ -481,6 +531,9 @@ Direction: HLR => SGSN / VLR
 |0x1c|Location Cancellation Request
 |0x1d|Location Cancellation Error
 |0x1e|Location Cancellation Result
+|0x20|Supplementary Service Request
+|0x21|Supplementary Service Error
+|0x22|Supplementary Service Result
 |===
 
 [[gsup-ie-ipaddr]]
@@ -704,6 +757,9 @@ IEI that shall be used for the encoding.
 |0x26|AUTS|<<gsup-ie-auts>>
 |0x27|RES|<<gsup-ie-res>>
 |0x28|CN Domain|<<gsup-ie-cndomain>>
+|0x30|Session ID|<<gsup-ie-session-id>>
+|0x31|Session State|<<gsup-ie-session-state>>
+|0x35|Supplementary Service Info|<<gsup-ie-ss-info>>
 |===
 
 [[gsup-ie-empty]]
@@ -857,3 +913,42 @@ record.
 
 This IE shall be encoded according to the 'GMM Cause' as described in
 Chapter 10.5.5.14 of 3GPP TS 04.08.
+
+[[gsup-ie-ss-info]]
+==== Supplementary Service Info
+
+This IE shall be used together with both <<gsup-ie-session-state>>
+and <<gsup-ie-session-id>> IEs. It is used to carry the payload
+of Supplementary Services encoded according to GSM TS 04.80.
+
+=== Session (transaction) management
+
+Unlike TCAP/MAP, GSUP is just a transport layer without the
+dialogue/context. All communication is usually happening over
+a single connection. In order to fill this gap, there is a few
+optional IEs, which allow both communication sides to establish
+and terminate TCAP-like transactions over GSUP.
+
+[[gsup-ie-session-id]]
+==== Session ID
+
+This auxiliary IE shall be used together with <<gsup-ie-session-state>>.
+The purpose of this IE is to identify a particular transaction using
+the 4-byte unique identifier.
+
+[[gsup-ie-session-state]]
+==== Session State
+
+This auxiliary IE shall be used together with <<gsup-ie-session-id>>.
+The purpose of this IE is to indicate a state of a particular
+transacrion, i.e. initiate, continue or terminate it.
+
+.Session state
+[options="header",cols="15%,35%,50%"]
+|===
+|State|TCAP alternative|Description
+|0x00|Undefined|Used when session management is not required
+|0x01|BEGIN|Used to initiate a new session
+|0x02|CONTINUE|Used to continue an existing session
+|0x03|END|Used to terminate an existing session
+|===
