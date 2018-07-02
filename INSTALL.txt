@@ -6,6 +6,7 @@ apt-get install \
   asciidoc-dblatex \
   xsltproc \
   dblatex \
+  docbook5-xml \
   mscgen \
   graphviz \
   python-pychart \
@@ -39,3 +40,7 @@ b) launching an osmo-msc along:
 
   osmo_interact_vty.py -r "osmo-msc -c ~/src/osmo-msc/doc/examples/osmo-msc/osmo-msc.cfg" \
     -X -p 4254 > OsmoMSC/vty/msc_vty_reference.xml
+
+Note that docbook.org since recently are providing DTDs only on HTTPS URLs,
+while xmllint is incapable of SSL. Hence it is necessary to locally install the
+docbook DTDs. (On Debian, these are included in the docbook5-xml package.)
