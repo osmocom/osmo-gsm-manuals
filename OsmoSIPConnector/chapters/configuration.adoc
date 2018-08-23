@@ -11,6 +11,10 @@ the same path that OsmoMSC is also using. This means that OsmoMSC and
 OsmoSIPConnector need to be running on the same machine or have a shared
 directory that supports UNIX domain sockets.
 
+Note that you need to start `osmo-msc` with the `--mncc-sock` option and point
+to the same file that osmo-sip-connector is configured to use. See the OsmoMSC
+manual for more information.
+
 The example config below assumes that OsmoMSC was started with the command
 line `osmo-msc -M /tmp/msc_mncc`.
 
