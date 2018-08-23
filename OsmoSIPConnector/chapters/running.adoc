@@ -1,0 +1,58 @@
+== Running OsmoSIPConnectoer
+
+The OsmoSIPConnector executable (`osmo-sip-connector`) offers the following
+command-line arguments:
+
+=== SYNOPSIS
+
+*osmo-sip-connector* [-h] [-c 'CONFIGFILE']
+
+=== OPTIONS
+
+*-h, --help*::
+	Print a short help message about the supported options
+*-c, --config-file 'CONFIGFILE'*::
+	Specify the file and path name of the configuration file to be
+	used. If none is specified, use `osmo-sip-connector.cfg` in the
+	current working directory.
+
+=== Colocation with OsmoMSC
+
+Since the MNCC interface used to communicate between OsmoMSC and
+OsmoSIPConnector is a UNIX domain socket both processes must run on the same
+machine or have a shared directory that supports sharing UNIX domain sockets.
+
+=== Multiple instances
+
+Running multiple instances of `osmo-sip-connector` on the same computer is
+possible if all interfaces (VTY, CTRL) are separated using the appropriate
+configuration options. The IP based interfaces are binding to local host by
+default. In order to separate the processes, the user has to bind those
+services to specific but different IP addresses and/or ports.
+
+The VTY and the Control interface can be bound to IP addresses from the
+loopback address range, for example:
+
+----
+line vty
+ bind 127.0.0.2
+ctrl
+ bind 127.0.0.2
+----
+
+For the SIP client a different IP/port combination also needs to be used, for
+example:
+
+----
+sip
+ local 0.0.0.0 5061
+----
+
+The socket path for the MNCC interface also needs to change, which can be done
+with the following configuration snippet:
+
+----
+mncc
+ socket-path /tmp/msc2_mncc
+----
+
