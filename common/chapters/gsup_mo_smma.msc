@@ -1,0 +1,24 @@
+msc {
+	hscale="3";
+	ms [label="MS"], omsc [label="MSC/VLR"], hlr [label="HLR"];
+
+	ms <-> omsc [label="Establishment, Auth, Ciph, ..."];
+	...;
+	ms -> omsc [label="CP-DATA(RP-SMMA)"];
+	ms <- omsc [label="CP-ACK"];
+	omsc -> hlr [label="GSUP ReadyForSM-Req (MR, Alert Reason)"];
+
+	|||;
+	... [label="Successful delivery"];
+	|||;
+	omsc <- hlr [label="GSUP ReadyForSM-Res (MR)"];
+	ms <- omsc [label="CP-DATA(RP-ACK)"];
+	ms -> omsc [label="CP-ACK"];
+
+	|||;
+	... [label="Failed delivery"];
+	|||;
+	omsc <- hlr [label="GSUP ReadyForSM-Err (MR, Cause)"];
+	ms <- omsc [label="CP-DATA(RP-ERROR)"];
+	ms -> omsc [label="CP-ACK"];
+}

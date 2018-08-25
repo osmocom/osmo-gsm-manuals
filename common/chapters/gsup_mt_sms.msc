@@ -1,0 +1,36 @@
+msc {
+	hscale="4";
+	ms [label="MS"], omsc [label="MSC/VLR"], hlr [label="HLR"], smsc [label="SMSC"];
+
+	hlr <- smsc [label="GSUP MT-ForwardSM-Req (MR=0xFF, DA=IMSI/MSISDN, OA=SMSC, UI, MMS)"];
+	hlr box hlr [label="Route based on IMSI/MSISDN"];
+	omsc <- hlr [label="GSUP MT-ForwardSM-Req (MR=0xFF, DA=IMSI/MSISDN, OA=SMSC, UI, MMS)"];
+
+	|||;
+	... [label="Connection establishment failure"];
+	|||;
+	omsc -> hlr [label="GSUP MT-ForwardSM-Err (MR, Cause)"];
+	hlr -> smsc [label="GSUP MT-ForwardSM-Err (MR, Cause)"];
+
+	|||;
+	... [label="Failed delivery"];
+	|||;
+	ms <-> omsc [label="Establishment, Auth, Ciph, ..."];
+	ms <- omsc [label="CP-DATA(RP-DATA(SMS-DELIVER))"];
+	ms -> omsc [label="CP-ACK"];
+	ms -> omsc [label="CP-DATA(RP-ERROR)"];
+	omsc -> hlr [label="GSUP MT-ForwardSM-Err (MR, Cause)"];
+	ms <- omsc [label="CP-ACK"];
+	hlr -> smsc [label="GSUP MT-ForwardSM-Err (MR, Cause)"];
+
+	|||;
+	... [label="Successful delivery"];
+	|||;
+	ms <-> omsc [label="Establishment, Auth, Ciph, ..."];
+	ms <- omsc [label="CP-DATA(RP-DATA(SMS-DELIVER))"];
+	ms -> omsc [label="CP-ACK"];
+	ms -> omsc [label="CP-DATA(RP-ACK)"];
+	omsc -> hlr [label="GSUP MT-ForwardSM-Res (MR)"];
+	ms <- omsc [label="CP-ACK"];
+	hlr -> smsc [label="GSUP MT-ForwardSM-Res (MR)"];
+}

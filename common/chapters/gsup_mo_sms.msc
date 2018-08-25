@@ -1,0 +1,28 @@
+msc {
+	hscale="3";
+	ms [label="MS"], omsc [label="MSC/VLR"], hlr [label="HLR"], smsc [label="SMSC"];
+
+	ms <-> omsc [label="Establishment, Auth, Ciph, ..."];
+	...;
+	ms -> omsc [label="CP-DATA(RP-DATA(SMS-SUBMIT))"];
+	ms <- omsc [label="CP-ACK"];
+	omsc -> hlr [label="GSUP MO-ForwardSM-Req (MR, DA=SMSC, OA=MSISDN, UI)"];
+	hlr box hlr [label="Route based on DA\n(SMSC address)"];
+	hlr -> smsc [label="GSUP MO-ForwardSM-Req (MR, DA=SMSC, OA=MSISDN, UI)"];
+
+	|||;
+	... [label="Successful delivery"];
+	|||;
+	hlr <- smsc [label="GSUP MO-ForwardSM-Res (MR)"];
+	omsc <- hlr [label="GSUP MO-ForwardSM-Res (MR)"];
+	ms <- omsc [label="CP-DATA(RP-ACK)"];
+	ms -> omsc [label="CP-ACK"];
+
+	|||;
+	... [label="Failed delivery"];
+	|||;
+	hlr <- smsc [label="GSUP MO-ForwardSM-Err (MR, Cause)"];
+	omsc <- hlr [label="GSUP MO-ForwardSM-Err (MR, Cause)"];
+	ms <- omsc [label="CP-DATA(RP-ERROR)"];
+	ms -> omsc [label="CP-ACK"];
+}
