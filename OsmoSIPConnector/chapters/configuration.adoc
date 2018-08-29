@@ -16,8 +16,8 @@ line `osmo-msc -M /tmp/msc_mncc`.
 
 .Example: MNCC configuration
 ----
-OsmoMGW(config)# mncc
-OsmoMGW(config-mncc)# socket-path /tmp/msc_mncc
+OsmoSIPcon(config)# mncc
+OsmoSIPcon(config-mncc)# socket-path /tmp/msc_mncc
 ----
 
 === Configuring SIP
@@ -27,9 +27,9 @@ can be set for the connection to the PBX.
 
 .Example: SIP configuration
 ----
-OsmoMGW(config)# sip 
-OsmoMGW(config-sip)# local 10.0.0.1 5060 <1>
-OsmoMGW(config-sip)# remote 10.0.0.2 5060 <2>
+OsmoSIPcon(config)# sip
+OsmoSIPcon(config-sip)# local 10.0.0.1 5060 <1>
+OsmoSIPcon(config-sip)# remote 10.0.0.2 5060 <2>
 ----
 <1> The local IP/port to use
 <2> The remote SIP IP/port that the PBX uses
@@ -39,8 +39,8 @@ MO- and as called (destination) address for MT-calls.
 
 .Example: Use IMSI instead of MSISDN
 ----
-OsmoMGW(config)# app
-OsmoMGW(config-app)# use-imsi <1>
+OsmoSIPcon(config)# app
+OsmoSIPcon(config-app)# use-imsi <1>
 ----
 <1> Use the IMSI for MO calling and MT called address
 
