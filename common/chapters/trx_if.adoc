@@ -11,6 +11,7 @@ is on an odd numbered port P=B+2N+2. The corresponding core-side interface for
 every socket is at P+100. For any given build, the number of ARFCN interfaces
 can be fixed.
 
+[[trx_if_clock_ind]]
 === Indications on the Master Clock Interface
 
 The master clock interface is output only (from the radio).
@@ -24,6 +25,7 @@ setting the the core should use to give better packet arrival times.
 IND CLOCK <totalFrames>
 ----
 
+[[trx_if_control]]
 === Commands on the Per-ARFCN Control Interface
 
 The per-ARFCN control interface uses a command-reponse protocol. Commands are
