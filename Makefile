@@ -12,6 +12,7 @@ all: check-deps
 	cd OsmoGSMTester; $(MAKE)
 	cd OsmoMSC; $(MAKE)
 	cd OsmoHLR; $(MAKE)
+	cd OsmoSIPConnector; $(MAKE)
 	cd OsmoSTP; $(MAKE)
 	cd OsmocomBB; $(MAKE)
 	cd OsmoMGW; $(MAKE)
@@ -29,6 +30,7 @@ clean:
 	cd OsmoGSMTester; $(MAKE) clean
 	cd OsmoMSC; $(MAKE) clean
 	cd OsmoHLR; $(MAKE) clean
+	cd OsmoSIPConnector; $(MAKE) clean
 	cd OsmoSTP; $(MAKE) clean
 	cd OsmocomBB; $(MAKE) clean
 	cd OsmoMGW; $(MAKE) clean
@@ -46,6 +48,7 @@ upload:
 	cd OsmoGSMTester; $(MAKE) upload
 	cd OsmoMSC; $(MAKE) upload
 	cd OsmoHLR; $(MAKE) upload
+	cd OsmoSIPConnector; $(MAKE) upload
 	cd OsmoSTP; $(MAKE) upload
 	cd OsmocomBB; $(MAKE) upload
 	cd OsmoMGW; $(MAKE) upload
@@ -66,6 +69,7 @@ check:
 	cd OsmoGSMTester; $(MAKE) check
 	cd OsmoMSC; $(MAKE) check
 	cd OsmoHLR; $(MAKE) check
+	cd OsmoSIPConnector; $(MAKE) check
 	cd OsmoSTP; $(MAKE) check
 	cd OsmocomBB; $(MAKE) check
 	cd OsmoTRX; $(MAKE) check
