@@ -220,3 +220,33 @@ Direction: {program-name} -> Handler
 
 Indicate that no valid voice frame, but a 'bad frame' was received over
 the radio link from the MS.
+
+==== MNCC_START_DTMF_IND
+
+Direction: {program-name} -> Handler
+
+Indicate the beginning of a DTMF tone playback.
+
+==== MNCC_START_DTMF_RSP
+
+Direction: Handler -> {program-name}
+
+Acknowledge that the DTMF tone playback has been started.
+
+==== MNCC_START_DTMF_REJ
+
+Direction: both
+
+Indicate that starting a DTMF tone playback was not possible.
+
+==== MNCC_STOP_DTMF_IND
+
+Direction: {program-name} -> Handler
+
+Indicate the ending of a DTMF tone playback.
+
+==== MNCC_STOP_DTMF_RSP
+
+Direction: Handler -> {program-name}
+
+Acknowledge that the DTMF tone playback has been stopped.
