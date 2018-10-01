@@ -60,6 +60,32 @@ MNCC interface compatible with the Osmocom MNCC socket is `lcr`, the Linux Call
 Router. More widespread integration of external call routing is available via
 the OsmoSIPConnector.
 
+
+=== DTMF considerations
+
+In mobile networks, the signaling of DTMF tones is implemented differently,
+depending on the signaling direction. A mobile originated DTMF tone is
+signaled using START/STOP DTMF messages which are hauled through various
+protocols upwards into the core network.
+
+Contrary to that, a mobile terminated DTMF tone is not transfered as an out of
+band message. Instead, in-band signaling is used, which means a tone is injected
+early inside a PBX or MGW.
+
+When using {program-name} with its built in MNCC functionality a mobile
+originated DTMF message will not be translated into an in-band tone. Therefore,
+sending DTMF will not work when internal MNCC is used.
+
+For external MNCC, the network integrator must make sure that the back-end
+components are configured properly in order to handle the two different
+signaling schemes depending on the signaling direction.
+
+NOTE: osmo-sip-connector will translate MNCC DTMF signaling into sip-info
+messages. DTMF signaling in the opposite direction is not possible.
+osmo-sip-connector will reject sip-info messages that attempt to signal
+a DTMF tone.
+
+
 === MNCC protocol description
 
 The protocol follows the primitives specified in 3GPP TS 04.07 Chapter 7.1.
