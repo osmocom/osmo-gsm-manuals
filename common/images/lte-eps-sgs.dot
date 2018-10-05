@@ -1,0 +1,28 @@
+digraph G {
+	rankdir=LR;
+
+	HSS [label="HSS/HLR"];
+
+	{ rank=same; MME; MSC; }
+
+	SGW [label="S-GW"];
+	PGW [label="P-GW"];
+
+	UE -> eNodeB [label="Radio"];
+	eNodeB -> MME [label="S1-MME\nControl Plane"];
+	eNodeB -> SGW [label="S1-U\nUser Plane"];
+	MME -> HSS [label="S6a\nDIAMETER"];
+	MME -> SGW [label="S11"];
+	SGW -> PGW [label="S5/S8\nGTP"];
+	PGW -> Internet [label="SGi"];
+
+	UE -> GERAN [label="Um"];
+	UE -> UTRAN [label="Uu"];
+	GERAN-> MSC [label="A"];
+	UTRAN-> MSC [label="IuCS"];
+
+	MME -> MSC [label="SGs"];
+
+	MSC -> HSS [label="MAP"];
+	MSC -> SMSC [label="MAP"];
+}
