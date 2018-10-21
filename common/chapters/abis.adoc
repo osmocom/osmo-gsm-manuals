@@ -29,8 +29,11 @@ Protocol Specification_ <<osmobts-abis-spec>> for more information.
 === Locate Abis/IP based BTS
 
 We can use a tool called abisip-find to be able to find BTS which is
-connected in the network. This tool is located under:
-'./openbsc/openbsc/src/ipaccess'
+connected in the network. This tool is located in the OsmoBSC project
+repository under:
+'./src/ipaccess'
+
+
 
 ==== abisip-find
 
@@ -79,8 +82,8 @@ A tool called ipaccess-config can be used to configure a new ip.access nanoBTS.
 ==== ipaccess-config
 
 This program is very helpful tool which is used to configure Unit ID and
-Primarly OML IP. You can find this tool under:
-'./openbsc/openbsc/src/ipaccess'
+Primarly OML IP. You can find this tool in the OsmoBSC repository under:
+'./src/ipaccess'
 
 
 .Example: using ipaccess-config to configure Unit ID and Primarly OML IP of
