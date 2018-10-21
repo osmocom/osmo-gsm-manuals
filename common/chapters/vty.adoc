@@ -66,7 +66,7 @@ following will explain the commonly used syntactical patterns:
 === Accessing the telnet VTY
 
 The VTY of a given Osmocom program is implemented as a telnet server,
-listening to a specific TCP port.  For `osmo-nitb`, this port is `4242`.
+listening to a specific TCP port.
 
 Please see <<port-numbers>> to check for the default TCP port number of
 the VTY interface of the specific Osmocom software you would like to
