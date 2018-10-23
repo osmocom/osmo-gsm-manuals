@@ -1,20 +1,20 @@
 [[bts]]
 == Reviewing and Provisioning BTS configuration
 
-The main functionality of the BSC component is to manage BTSs.  As such,
+The main functionality of the BSC component is to manage BTSs. As such,
 provisioning BTSs within the BSC is one of the most common tasks during
-BSC operation.   Just like about anything else in OsmoBSC, they are
+BSC operation. Just like about anything else in OsmoBSC, they are
 configured using the VTY.
 
 BTSs are internally numbered with integer numbers starting from "0" for
-the first BTS.  BTS numbers have to be contiguous, so you cannot
+the first BTS. BTS numbers have to be contiguous, so you cannot
 configure 0,1,2 and then 5.
 
 
 === Reviewing current BTS status and configuration
 
 In order to view the status and properties of a BTS, you can issue the
-`show bts` command.  If used without any BTS number, it will display
+`show bts` command. If used without any BTS number, it will display
 information about all provisioned BTS numbers.
 
 ----
@@ -55,9 +55,9 @@ The output can be restricted to the TRXs of one specified BTS number
 specified BTS (`show trx 0 0`).
 
 Furthermore, information on the individual timeslots can be shown by
-means of `show timeslot`.  The output can be restricted to the
+means of `show timeslot`. The output can be restricted to the
 timeslots of a single BTS (`show timeslot 0`) or that of a single
-TRX (`show timeslot 0 0`).  Finally, you can restrict the output to
+TRX (`show timeslot 0 0`). Finally, you can restrict the output to
 a single timeslot by specifying the BTS, TRX and TS numbers (`show
 timeslot 0 0 4`).
 
@@ -74,7 +74,7 @@ BTS 0, TRX 0, Timeslot 1, phys cfg SDCCH8, TSC 7
 === Provisioning a new BTS
 
 In order to provision BTSs, you have to enter the BTS config node of the
-VTY.  In order to configure BTS 0, you can issue the following sequence
+VTY. In order to configure BTS 0, you can issue the following sequence
 of commands:
 
 ----
@@ -87,12 +87,12 @@ OpenBSC(config-net-bts)#
 
 At this point, you have a plethora of commands, in fact an entire
 hierarchy of commands to configure all aspects of the BTS, as well as
-each of its TRX and each timeslot within each TRX.  For a full
+each of its TRX and each timeslot within each TRX. For a full
 reference, please consult the telnet VTY integrated help or the respective
 chapter in the VTY reference.
 
 BTS configuration depends quite a bit on the specific BTS vendor and
-model.  The section below provides just one possible example for the
+model. The section below provides just one possible example for the
 case of a sysmoBTS.
 
 Note that from the `configure terminal` command onwards, the telnet VTY
@@ -140,7 +140,7 @@ network
 
 A GSM BTS periodically transmits a series of 'SYSTEM INFORMATION'
 messages to mobile stations, both via the BCCH in idle mode, was well as
-via the SACCH in dedicated mode.  There are many different types of such
+via the SACCH in dedicated mode. There are many different types of such
 messages. For their detailed contents and encoding, please see _3GPP TS
 24.008_ <<3gpp-ts-24-008>>.
 
@@ -161,7 +161,7 @@ further information, particularly on the following commands:
 === Neighbor List configuration
 
 Every BTS sends a list of ARFCNs of neighbor cells
-. within its 'SYSTEM INFORMATION 2' (and 2bis/2ter)  messages on the BCCH
+. within its 'SYSTEM INFORMATION 2' (and 2bis/2ter) messages on the BCCH
 . within its 'SYSTEM INFORMATION 5' messages on SACCH in dedicated mode
 
 For every BTS config node in the VTY, you can specify the behavior of
@@ -184,17 +184,17 @@ means of `si5 neighbor-list (add|del) arfcn <0-1023>` for SACCH (SI5).
 === Configuring GPRS PCU parameters of a BTS
 
 In the case of BTS models using Abis/IP (IPA), the GPRS PCU is located
-inside the BTS.  The BTS then establishes a Gb connection to the SGSN.
+inside the BTS. The BTS then establishes a Gb connection to the SGSN.
 
 All the BTS-internal PCU configuration is performed via A-bis OML by
 means of configuring the 'CELL', 'NSVC' (NS Virtual Connection and 'NSE'
 (NS Entity).
 
 There is one 'CELL' node and one 'NSE' node, but there are two 'NSVC'
-nodes.  At the time of this writing, only the NSVC 0 is supported by
+nodes. At the time of this writing, only the NSVC 0 is supported by
 OsmoBTS, while both NSVC are supported by the ip.access nanoBTS.
 
-The respective VTY configuration parameters are described below.  They
+The respective VTY configuration parameters are described below. They
 all exist beneath each BTS VTY config node.
 
 But let's first start with a small example
@@ -224,29 +224,29 @@ this cell at all.
 
 ==== `gprs cell bvci <2-65535>`
 
-Configures the 'BSSGP Virtual Circuit Identifier'.  It must be unique
+Configures the 'BSSGP Virtual Circuit Identifier'. It must be unique
 between all BGSGP connections to one SGSN.
 
 NOTE: It is up to the system administrator to ensure all PCUs are
-allocated an unique bvci.  OsmoBSC will not ensure this policy.
+allocated an unique bvci. OsmoBSC will not ensure this policy.
 
 
 ==== `gprs nsei <0-65535>`
 
-Configures the 'NS Entity Identifier'.  It must be unique between all NS
+Configures the 'NS Entity Identifier'. It must be unique between all NS
 connections to one SGSN.
 
 NOTE: It is up to the system administrator to ensure all PCUs are
-allocated an unique bvci.  OsmoBSC will not ensure this policy.
+allocated an unique bvci. OsmoBSC will not ensure this policy.
 
 
 ==== `gprs nsvc <0-1> nsvci <0-65535>`
 
-Configures the 'NS Virtual Connection Identifier'.  It must be unique
+Configures the 'NS Virtual Connection Identifier'. It must be unique
 between all NS virtual connections to one SGSN.
 
 NOTE: It is up to the system administrator to ensure all PCUs are
-allocated an unique nsvci.  OsmoBSC will not ensure this policy.
+allocated an unique nsvci. OsmoBSC will not ensure this policy.
 
 
 ==== `gprs nsvc <0-1> local udp port <0-65535>`
@@ -266,7 +266,7 @@ Configures the remote (SGSN side) UDP port for the NS-over-UDP link.
 
 ==== `gprs ns timer (tns-block|tns-block-retries|tns-reset|tns-reset-retries|tns-test|tns-alive|tns-alive-retries)` <0-255>
 
-Configures the various GPRS NS related timers.  Please check the GPRS NS
+Configures the various GPRS NS related timers. Please check the GPRS NS
 specification for the detailed meaning of those timers.
 
 
