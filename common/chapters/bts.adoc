@@ -3,7 +3,7 @@
 
 The main functionality of the BSC component is to manage BTSs.  As such,
 provisioning BTSs within the BSC is one of the most common tasks during
-BSC operation.   Just like about anything else in OpenBSC, they are
+BSC operation.   Just like about anything else in OsmoBSC, they are
 configured using the VTY.
 
 BTSs are internally numbered with integer numbers starting from "0" for
