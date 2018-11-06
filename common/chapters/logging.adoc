@@ -70,6 +70,53 @@ So for example, in OsmoBSC, to set the log level of the Mobility
 Management category to info, you can use the following command:
 	`log level mm info`.
 
+There is also a special command to set all categories as a one-off to a desired
+log level. For example, to silence all messages but those logged as notice and
+above issue the command: `log level set-all notice`
+
+Afterwards you can adjust specific categories as usual.
+
+A similar command is `log level force-all <level>` which causes all categories
+to behave as if set to log level <level> until the command is reverted with
+`no log level force-all` after which the individually-configured log levels will
+again take effect. The difference between `set-all` and `force-all` is that
+`set-all` actually changes the individual category settings while `force-all`
+is a (temporary) override of those settings and does not change them.
+
+[[log_options]]
+=== Log printing options
+
+The logging system has various options to change the information
+displayed in the log message.
+
+log color 1::
+	With this option each log message will log with the color of its
+	category. The color is hard-coded and can not be changed. As with
+	other options a '0' disables this functionality.
+
+log timestamp 1::
+	Includes the current time in the log message. When logging to syslog
+	this option should not be needed, but may come in handy when debugging
+	an issue while logging to file.
+
+log print extended-timestamp 1::
+	In order to debug time-critical issues this option will print a
+	timestamp with millisecond granularity.
+
+log print category 1::
+	Prefix each log message	with the category name.
+
+log print category-hex 1::
+	Prefix each log message	with the category number in hex ('<000b>').
+
+log print level 1::
+	Prefix each log message with the name of the log level.
+
+log print file 1::
+	Prefix each log message with the source file and line number. Append
+	the keyword `last` to append the file information instead of prefixing
+	it.
+
 [[log_filters]]
 === Log filters
 
