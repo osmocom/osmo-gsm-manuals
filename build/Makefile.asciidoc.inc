@@ -57,7 +57,8 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
 	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
 	  || true
-	a2x $(A2X_OPTS) $< || asciidoc -v $(ASCIIDOC_OPTS) $<
+	a2x $(A2X_OPTS) $< || (echo "ERROR: a2x failed! Running asciidoc to get verbose errors..."; \
+		asciidoc -v $(ASCIIDOC_OPTS) $<; exit 1)
 
 check: $(ASCIIDOC_CHECKS)
 
