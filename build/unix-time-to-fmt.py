@@ -11,6 +11,10 @@ Default is '%Y-%b-%d' --> 2016-Jan-01
 
 import sys, time
 
+if len(sys.argv) == 1:
+    print("unknown")
+    exit(0)
+
 fmt = '%Y-%b-%d'
 if len(sys.argv) > 2:
   fmt = sys.argv[2]
