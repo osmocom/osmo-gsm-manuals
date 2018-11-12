@@ -1,5 +1,3 @@
-LIBOSMO_DIR ?= ~/source/gsm/libosmocore
-
 all: check-deps
 	cd OsmoBTS; $(MAKE)
 	cd OsmoNITB; $(MAKE)
@@ -80,9 +78,6 @@ endef
 define check_dep_python2_module
     @echo "import $(1)" | python2 - >/dev/null 2>&1 || { echo >&2 "Failed to import '$(1)' module, please install $(2)."; exit 1; }
 endef
-define check_dep_dir
-	@test -d $(1) || { echo >&2 "Directory '$(1)' not found, please set $(2) to the path of your libosmocom source tree: make LIBOSMO_DIR=/path/to/libosmocore"; exit 1; }
-endef
 
 check-deps:
 	$(call check_dep_bin,mscgen,mscgen)
@@ -95,4 +90,3 @@ check-deps:
 	$(call check_dep_bin,dot,graphviz)
 	$(call check_dep_bin,python2,python2)
 	$(call check_dep_python2_module,pychart,python2-pychart)
-	$(call check_dep_dir,$(LIBOSMO_DIR),LIBOSMO_DIR)

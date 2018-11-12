@@ -25,8 +25,7 @@ DOCBOOKS = $(VTY_REFERENCE)
 DOCBOOKS_DEPS = generated/docbook_vty.xml
 include $(TOPDIR)/build/Makefile.docbook.inc
 
-LIBOSMO_DIR ?= ~/source/gsm/libosmocore
-MERGE_DOC = $(shell realpath $(LIBOSMO_DIR)/doc/vty/merge_doc.xsl)
+MERGE_DOC = $(shell realpath $(TOPDIR)/merge_doc.xsl)
 
 CLEAN_FILES += generated
 
