@@ -31,7 +31,7 @@ ASCIIDOC_CHECKS = $(ASCIIDOC_NAME:%=%.check)
 ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex.sty
 
 CLEAN_FILES += $(ASCIIDOC_NAME:%=%__*.png) $(ASCIIDOC_NAME:%=%__*.svg) $(ASCIIDOC_CHECKS)
-CLEAN_FILES += $(ASCIIDOC_PDF)
+CLEAN_FILES += $(ASCIIDOC_PDF) $(ASCIIDOC_NAME:%=%.html)
 UPLOAD_FILES += $(ASCIIDOC_PDF)
 
 ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf
