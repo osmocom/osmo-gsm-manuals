@@ -9,3 +9,4 @@
 *__*.svg
 *.check
 generated/
+tests/test-usermanual.adoc

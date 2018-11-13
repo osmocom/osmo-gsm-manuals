@@ -17,6 +17,7 @@ all: check-deps
 	cd OsmoTRX; $(MAKE)
 
 clean:
+	cd tests; $(MAKE) clean
 	cd OsmoBTS; $(MAKE) clean
 	cd OsmoNITB; $(MAKE) clean
 	cd OsmoBSC; $(MAKE) clean
@@ -53,6 +54,7 @@ upload:
 	cd OsmoTRX; $(MAKE) upload
 
 check:
+	cd tests; $(MAKE)
 	cd OsmoBTS; $(MAKE) check
 	cd OsmoNITB; $(MAKE) check
 	cd OsmoBSC; $(MAKE) check
