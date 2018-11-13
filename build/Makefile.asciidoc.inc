@@ -62,7 +62,7 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 
 check: $(ASCIIDOC_CHECKS)
 
-$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc chapters/*.adoc
+$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc $(ASCIIDOC_DEPS)
 	asciidoc -v $(ASCIIDOC_OPTS) $< > $@ 2>&1
 	# Make absolutely sure that the %.check target is updated.
 	touch $@
