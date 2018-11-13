@@ -54,7 +54,8 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(ASCIIDOC_DEPS) \
 		$(ASCIIDOCSTYLE) \
 		$(OSMO_GSM_MANUALS_DIR)/common/*/*.adoc \
-		$(OSMO_GSM_MANUALS_DIR)/common/images/*
+		$(OSMO_GSM_MANUALS_DIR)/common/images/* \
+		build common
 	@test -n "$(BUILD_RELEASE)" && echo -e "\n\n\
 	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
 	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
@@ -64,7 +65,11 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 
 check: $(ASCIIDOC_CHECKS)
 
-$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc $(ASCIIDOC_DEPS)
+$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml \
+		$(ASCIIDOCSTYLE) \
+		$(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc \
+		$(ASCIIDOC_DEPS) \
+		build common
 	asciidoc -v $(ASCIIDOC_OPTS) $< > $@ 2>&1
 	# Make absolutely sure that the %.check target is updated.
 	touch $@

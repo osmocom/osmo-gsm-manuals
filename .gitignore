@@ -34,3 +34,7 @@ m4/*.m4
 *.pc
 Makefile.in
 Makefile
+
+# symlinks to shared dirs (needed for out-of-tree builds)
+*/common
+*/build

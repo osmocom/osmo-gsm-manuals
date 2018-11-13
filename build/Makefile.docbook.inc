@@ -32,6 +32,6 @@ all: $(DOCBOOKS_PDF)
 	xmllint --xinclude --postvalid --noout $<
 
 # Create a PDF file and lint it before
-%.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS)
+%.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS) build common
 	dblatex $(dblatex_quiet) -P draft.mode=no $<
 
