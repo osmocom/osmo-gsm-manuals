@@ -5,6 +5,7 @@
 #
 # Include this file at the end to have the common targets (upload, clean etc.).
 
+SSH_COMMAND = ssh -o 'UserKnownHostsFile=$(OSMO_GSM_MANUALS_DIR)/build/known_hosts' -p 48
 UPLOAD_PATH ?= generic@sysmocom-downloads:documents
 SYMLINKS = common build
 CLEAN_FILES += $(SYMLINKS)
@@ -19,3 +20,8 @@ clean:
 	-rm -rf $(CLEAN_FILES)
 
 distclean: clean
+
+publish: all check
+	mkdir -p out
+	cp *.pdf out
+	rsync -avz -e "$(SSH_COMMAND)" ./out/ docs@rita.osmocom.org:web-files/latest/

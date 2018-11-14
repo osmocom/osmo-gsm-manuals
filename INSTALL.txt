@@ -14,13 +14,26 @@ apt-get install \
 
 (Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)
 
-Build PDFs, run:
+Prepare your build dir:
   autoreconf -fi
   ./configure
-  make
 
-or for a parallel build using more CPU cores, replace make with:
-  make -j 5
+Optionally test building all shared content (use -j for parallel building):
+  make        # generate test PDFs
+  make check  # test for asciidoc errors
+
+Install osmo-gsm-manuals:
+  make install
+
+Build the manuals of a specific Osmocom project:
+  cd ../osmo-msc        # enter the project dir, clone first if needed
+  ./configure --enable-manuals
+  make
+  ls doc/manuals/*.pdf  # find the PDFs here
+
+Publish PDFs to the Osmocom server:
+  cd ../osmo-msc  # enter the project dir
+  make -C doc/manuals publish
 
 To update the VTY reference for a given program, use 'osmo_interact_vty.py -X',
 available from git.osmocom.org/python/osmo-python-tests:
