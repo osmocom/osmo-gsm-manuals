@@ -12,3 +12,5 @@ upload: $(UPLOAD_FILES)
 
 clean:
 	-rm -rf $(CLEAN_FILES)
+
+distclean: clean

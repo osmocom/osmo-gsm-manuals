@@ -6,6 +6,8 @@ publish="$1"
 
 osmo-clean-workspace.sh
 
+autoreconf -fi
+./configure
 $MAKE $PARALLEL_MAKE
 $MAKE $PARALLEL_MAKE check
 

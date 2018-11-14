@@ -14,3 +14,23 @@ tests/test-usermanual.adoc
 # git-version-gen
 .tarball-version
 .version
+
+# autotools
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+config.guess
+config.sub
+configure
+compile
+depcomp
+install-sh
+missing
+stamp-h1
+libtool
+ltmain.sh
+m4/*.m4
+*.pc
+Makefile.in
+Makefile

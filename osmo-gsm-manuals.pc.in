@@ -1,0 +1,6 @@
+prefix=@prefix@
+osmogsmmanualsdir=@prefix@/share/osmo-gsm-manuals
+
+Name: Osmocom GSM Manuals Development Files
+Description: Common files for building manuals of Osmocom programs
+Version: @VERSION@

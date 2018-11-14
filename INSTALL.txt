@@ -15,8 +15,11 @@ apt-get install \
 (Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)
 
 Build PDFs, run:
+  autoreconf -fi
+  ./configure
   make
-or for a parallel build using more CPU cores:
+
+or for a parallel build using more CPU cores, replace make with:
   make -j 5
 
 To update the VTY reference for a given program, use 'osmo_interact_vty.py -X',
