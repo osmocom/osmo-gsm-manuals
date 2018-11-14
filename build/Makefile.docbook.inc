@@ -32,6 +32,8 @@ all: $(DOCBOOKS_PDF)
 	xmllint --xinclude --postvalid --noout $<
 
 # Create a PDF file and lint it before
+# xslt path: find includes in both $(OSMO_GSM_MANUALS_DIR)/common/chapters and $(builddir)/generated
 %.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS) build common
-	dblatex $(dblatex_quiet) -P draft.mode=no $<
+	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$$PWD/generated" \
+		$(dblatex_quiet) -P draft.mode=no -o $(notdir $@) $<
 

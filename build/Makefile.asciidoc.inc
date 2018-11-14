@@ -56,12 +56,24 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(OSMO_GSM_MANUALS_DIR)/common/*/*.adoc \
 		$(OSMO_GSM_MANUALS_DIR)/common/images/* \
 		build common
+
+	# a2x can't use a different output file. To support out-of-tree builds,
+	# we create a symlink at $(builddir)/srcfile.adoc pointing at
+	# $(srcdir)/srcfile.adoc. $< is the $(srcdir)/srcfile.adoc,
+	# $(notdir) is like basename from coreutils, and $(builddir) is $PWD.
+	if ! [ -f $(notdir $<) ]; then \
+		ln -s $< $(notdir $<); \
+	fi
+
+	# TEXINPUTS: find LaTeX includes like \includegraphics{./common/images/sysmocom.pdf}
+	# in $(OSMO_GSM_MANUALS_DIR).
 	@test -n "$(BUILD_RELEASE)" && echo -e "\n\n\
 	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
 	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
 	  || true
-	a2x $(A2X_OPTS) $< || (echo "ERROR: a2x failed! Running asciidoc to get verbose errors..."; \
-		asciidoc -v $(ASCIIDOC_OPTS) $<; exit 1)
+	TEXINPUTS="$(OSMO_GSM_MANUALS_DIR)" \
+		a2x $(A2X_OPTS) $(notdir $<) || (echo "ERROR: a2x failed! Running asciidoc to get verbose errors..."; \
+			asciidoc -v $(ASCIIDOC_OPTS) $(notdir $<); exit 1)
 
 check: $(ASCIIDOC_CHECKS)
 
@@ -70,9 +82,18 @@ $(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml \
 		$(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc \
 		$(ASCIIDOC_DEPS) \
 		build common
-	asciidoc -v $(ASCIIDOC_OPTS) $< > $@ 2>&1
+
+	# out-of-tree building: use a symlink to the output file like done in
+	# the non-check build above, so the relative include paths work the
+	# same.
+	if ! [ -f $(notdir $<) ]; then \
+		ln -s $< $(notdir $<); \
+	fi
+
+	asciidoc -v $(ASCIIDOC_OPTS) $(notdir $<) > $(notdir $@) 2>&1
+
 	# Make absolutely sure that the %.check target is updated.
-	touch $@
+	touch $(notdir $@)
 	# Do print the WARNING output but return error if any was found
 	# (grep -v would omit the WARNING output from the log).
-	@grep WARNING $@ && exit 1 || exit 0
+	@grep WARNING $(notdir $@) && exit 1 || exit 0

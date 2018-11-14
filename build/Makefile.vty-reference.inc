@@ -32,13 +32,13 @@ MERGE_DOC = $(shell realpath $(OSMO_GSM_MANUALS_DIR)/merge_doc.xsl)
 CLEAN_FILES += generated
 
 generated/docbook_vty.xml: \
-			   vty/*xml \
+			   $(srcdir)/vty/*xml \
 			   $(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
 			   $(OSMO_GSM_MANUALS_DIR)/common/chapters/vty.xml \
 			   $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
 		$(srcdir)/vty/*reference.xml \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
-		vty/*additions*.xml
+		$(srcdir)/vty/*additions*.xml
 	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl generated/combined.xml \
 		> generated/docbook_vty.xml
