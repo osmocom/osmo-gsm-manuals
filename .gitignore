@@ -10,3 +10,7 @@
 *.check
 generated/
 tests/test-usermanual.adoc
+
+# git-version-gen
+.tarball-version
+.version
