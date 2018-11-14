@@ -1,7 +1,7 @@
-TOPDIR = ..
+OSMO_GSM_MANUALS_DIR = ..
 
 ASCIIDOC = osmocombb-usermanual.adoc
 ASCIIDOC_DEPS = chapters/*.adoc
-include $(TOPDIR)/build/Makefile.asciidoc.inc
+include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 
-include $(TOPDIR)/build/Makefile.common.inc
+include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.common.inc

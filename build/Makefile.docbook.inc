@@ -1,6 +1,6 @@
 # USAGE:
 #
-# - define 'TOPDIR' to point at the git root,
+# - define 'OSMO_GSM_MANUALS_DIR' to point at the git root,
 # - define in 'DOCBOOKS' all root .xml files,
 # - optionally define in 'DOCBOOKS_DEPS' all dependencies common to all .xmls,
 # - include this file,
@@ -8,10 +8,10 @@
 #
 # e.g.
 #
-#     TOPDIR = ..
+#     OSMO_GSM_MANUALS_DIR = ..
 #     DOCBOOKS = osmo_yada.xml osmo_moo.xml
 #     ASCIIDOC_DEPS = for_all/*.xml
-#     include $(TOPDIR)/build/Makefile.docbook.inc
+#     include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.docbook.inc
 #     osmo_yada.pdf: yada/*.xml
 #
 # XSL stylesheets downloaded from http://docbook.sourceforge.net/release/xsl/current/html/

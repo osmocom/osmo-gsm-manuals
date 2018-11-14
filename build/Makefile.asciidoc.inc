@@ -1,6 +1,6 @@
 # USAGE:
 #
-# - define 'TOPDIR' to point at the git root,
+# - define 'OSMO_GSM_MANUALS_DIR' to point at the git root,
 # - define in 'ASCIIDOC' all root .adoc files,
 # - optionally define in 'ASCIIDOC_DEPS' all dependencies common to all .adocs,
 # - include this file,
@@ -8,16 +8,16 @@
 #
 # e.g.
 #
-#     TOPDIR = ..
+#     OSMO_GSM_MANUALS_DIR = ..
 #     ASCIIDOC = osmo_yada.adoc osmo_moo.adoc
 #     ASCIIDOC_DEPS = for_all/*.adoc
-#     include $(TOPDIR)/build/Makefile.asciidoc.inc
+#     include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 #     osmo_yada.pdf: yada/*.adoc yada/*.msc
 
-BUILDDIR = $(TOPDIR)/build
+BUILDDIR = $(OSMO_GSM_MANUALS_DIR)/build
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
-GIT_DATE := $(shell $(TOPDIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
+GIT_DATE := $(shell $(OSMO_GSM_MANUALS_DIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
 
 # prepend the document name with the version numbe suffix
 #DOCS_VER = $(foreach P, $(ASCIIDOC_NAME), $(P)-v$(shell xmllint --recover --xpath "//revnumber[position()=last()]/text()" $(P)-docinfo.xml 2>/dev/null))
@@ -51,8 +51,8 @@ all: $(ASCIIDOC_PDF)
 $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(ASCIIDOC_DEPS) \
 		$(ASCIIDOCSTYLE) \
-		$(TOPDIR)/common/*/*.adoc \
-		$(TOPDIR)/common/images/*
+		$(OSMO_GSM_MANUALS_DIR)/common/*/*.adoc \
+		$(OSMO_GSM_MANUALS_DIR)/common/images/*
 	@test -n "$(BUILD_RELEASE)" && echo -e "\n\n\
 	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
 	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
@@ -62,7 +62,7 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 
 check: $(ASCIIDOC_CHECKS)
 
-$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(TOPDIR)/common/chapters/*.adoc $(ASCIIDOC_DEPS)
+$(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml $(ASCIIDOCSTYLE) $(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc $(ASCIIDOC_DEPS)
 	asciidoc -v $(ASCIIDOC_OPTS) $< > $@ 2>&1
 	# Make absolutely sure that the %.check target is updated.
 	touch $@
