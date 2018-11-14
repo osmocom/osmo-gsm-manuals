@@ -1,4 +1,4 @@
-OSMO_GSM_MANUALS_DIR = ..
+OSMO_GSM_MANUALS_DIR = $(top_srcdir)
 
 # Generate adoc file that includes all chapters
 ASCIIDOC = test-usermanual.adoc

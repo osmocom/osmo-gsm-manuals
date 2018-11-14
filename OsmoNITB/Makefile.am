@@ -1,7 +1,7 @@
-OSMO_GSM_MANUALS_DIR = ..
+OSMO_GSM_MANUALS_DIR = $(top_srcdir)
 
 ASCIIDOC = osmonitb-usermanual.adoc
-ASCIIDOC_DEPS = chapters/*.adoc
+ASCIIDOC_DEPS = $(srcdir)/chapters/*.adoc
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 
 VTY_REFERENCE = osmonitb-vty-reference.xml

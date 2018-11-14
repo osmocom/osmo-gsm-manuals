@@ -1,7 +1,7 @@
-OSMO_GSM_MANUALS_DIR = ..
+OSMO_GSM_MANUALS_DIR = $(top_srcdir)
 
 ASCIIDOC = osmohlr-usermanual.adoc
-ASCIIDOC_DEPS = chapters/*.adoc *.vty *.ctrl
+ASCIIDOC_DEPS = $(srcdir)/chapters/*.adoc $(srcdir)/*.vty $(srcdir)/*.ctrl
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 
 VTY_REFERENCE = osmohlr-vty-reference.xml

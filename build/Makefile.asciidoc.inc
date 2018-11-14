@@ -12,7 +12,7 @@
 #
 #     OSMO_GSM_MANUALS_DIR = ..
 #     ASCIIDOC = osmo_yada.adoc osmo_moo.adoc
-#     ASCIIDOC_DEPS = for_all/*.adoc
+#     ASCIIDOC_DEPS = $(srcdir)/for_all/*.adoc
 #     include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 #     osmo_yada.pdf: yada/*.adoc yada/*.msc
 

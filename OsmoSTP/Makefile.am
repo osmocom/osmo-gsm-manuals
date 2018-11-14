@@ -1,9 +1,9 @@
-OSMO_GSM_MANUALS_DIR = ..
+OSMO_GSM_MANUALS_DIR = $(top_srcdir)
 
 ASCIIDOC = osmostp-usermanual.adoc
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
-osmostp-usermanual.pdf: chapters/*.adoc
-aoip-mgw-options.pdf: aoip-mgw-options.adoc mgw/*.msc
+osmostp-usermanual.pdf: $(srcdir)/chapters/*.adoc
+aoip-mgw-options.pdf: $(srcdir)/aoip-mgw-options.adoc $(srcdir)/mgw/*.msc
 
 VTY_REFERENCE = osmostp-vty-reference.xml
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.vty-reference.inc
