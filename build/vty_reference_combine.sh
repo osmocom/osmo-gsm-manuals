@@ -1,15 +1,19 @@
 #!/bin/sh
+# usage: vty_reference_combine.sh path/to/merge_doc.xsl path/to/*reference.xml [paths to additional xmls]
+# see Makefile.vty-reference.inc
 set -e
 
-# the first argument should point at libosmocore/doc/vty/merge_doc.xsl
+# first argument: merge_doc.xsl
 MERGE_DOC="$1"
+shift
+
+# second argument: *reference.xml
+reference="$1"
+test "$(ls -1 $reference | wc -l)" = "1"
 shift
 
 combined="generated/combined.xml"
 combine_src="generated/combine_src.xml"
-
-reference="vty/*reference.xml"
-test "$(ls -1 $reference | wc -l)" = "1"
 
 set -x
 mkdir -p generated

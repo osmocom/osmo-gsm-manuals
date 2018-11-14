@@ -37,6 +37,7 @@ generated/docbook_vty.xml: \
 			   $(OSMO_GSM_MANUALS_DIR)/common/chapters/vty.xml \
 			   $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
+		$(srcdir)/vty/*reference.xml \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
 		vty/*additions*.xml
 	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl generated/combined.xml \
