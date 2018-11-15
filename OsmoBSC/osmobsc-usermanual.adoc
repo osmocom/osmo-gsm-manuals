@@ -7,15 +7,15 @@ Harald Welte <hwelte@sysmocom.de>
 
 include::./common/chapters/preface.adoc[]
 
-include::chapters/overview.adoc[]
+include::{srcdir}/chapters/overview.adoc[]
 
-include::chapters/running.adoc[]
+include::{srcdir}/chapters/running.adoc[]
 
-include::chapters/control.adoc[]
+include::{srcdir}/chapters/control.adoc[]
 
-include::chapters/counters.adoc[]
+include::{srcdir}/chapters/counters.adoc[]
 
-include::chapters/handover.adoc[]
+include::{srcdir}/chapters/handover.adoc[]
 
 include::./common/chapters/vty.adoc[]
 

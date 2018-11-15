@@ -5,7 +5,7 @@ Holger Hans Peter Freyther <holger@moiji-mobile.com>
 
 include::./common/chapters/preface.adoc[]
 
-include::chapters/scripting.adoc[]
+include::{srcdir}/chapters/scripting.adoc[]
 
 include::./common/chapters/vty.adoc[]
 

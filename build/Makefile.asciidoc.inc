@@ -36,7 +36,7 @@ CLEAN_FILES += $(ASCIIDOC_NAME:%=%__*.png) $(ASCIIDOC_NAME:%=%__*.svg) $(ASCIIDO
 CLEAN_FILES += $(ASCIIDOC_PDF) $(ASCIIDOC_NAME:%=%.html)
 UPLOAD_FILES += $(ASCIIDOC_PDF)
 
-ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf
+ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf -a srcdir='$(srcdir)'
 DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
 
 ifeq (,$(BUILD_RELEASE))

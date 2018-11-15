@@ -6,25 +6,25 @@ Harald Welte <hwelte@sysmocom.de>
 
 include::./common/chapters/preface.adoc[]
 
-include::chapters/overview.adoc[]
+include::{srcdir}/chapters/overview.adoc[]
 
 include::./common/chapters/abis.adoc[]
 
-include::chapters/interfaces.adoc[]
+include::{srcdir}/chapters/interfaces.adoc[]
 
-include::chapters/control.adoc[]
+include::{srcdir}/chapters/control.adoc[]
 
 include::./common/chapters/vty.adoc[]
 
 include::./common/chapters/logging.adoc[]
 
-include::chapters/configuration.adoc[]
+include::{srcdir}/chapters/configuration.adoc[]
 
-include::chapters/dynamic-timeslots.adoc[]
+include::{srcdir}/chapters/dynamic-timeslots.adoc[]
 
-include::chapters/bts-models.adoc[]
+include::{srcdir}/chapters/bts-models.adoc[]
 
-include::chapters/architecture.adoc[]
+include::{srcdir}/chapters/architecture.adoc[]
 
 include::./common/chapters/trx_if.adoc[]
 
