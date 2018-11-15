@@ -88,8 +88,8 @@ include::gb/ns.adoc[]
 
 include::gb/bssgp.adoc[]
 
-include::../common/chapters/port_numbers.adoc[]
+include::./common/chapters/port_numbers.adoc[]
 
-include::../common/chapters/glossary.adoc[]
+include::./common/chapters/glossary.adoc[]
 
-include::../common/chapters/gfdl.adoc[]
+include::./common/chapters/gfdl.adoc[]

@@ -85,8 +85,8 @@ include::abis/rsl.adoc[]
 
 include::abis/rtp.adoc[]
 
-include::../common/chapters/port_numbers.adoc[]
+include::./common/chapters/port_numbers.adoc[]
 
-include::../common/chapters/glossary.adoc[]
+include::./common/chapters/glossary.adoc[]
 
-include::../common/chapters/gfdl.adoc[]
+include::./common/chapters/gfdl.adoc[]
