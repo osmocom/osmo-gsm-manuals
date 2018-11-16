@@ -1,6 +1,8 @@
 # USAGE:
 #
-# - define 'OSMO_GSM_MANUALS_DIR' to point at the git root,
+# - define 'OSMO_GSM_MANUALS_DIR' to point at the osmo-gsm-manuals shared files
+#   installation path as returned by "pkg-config osmo-gsm-manuals --variable=osmogsmmanualsdir"
+#   (project specific repos set this with configure.ac),
 # - define in 'DOCBOOKS' all root .xml files,
 # - optionally define in 'DOCBOOKS_DEPS' all dependencies common to all .xmls,
 # - include this file,

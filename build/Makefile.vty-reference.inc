@@ -7,8 +7,10 @@
 # - vty/*_reference.xml
 #   Export from VTY 'show online-help', exactly one file.
 #
-# In your Makefile,
-# - define 'OSMO_GSM_MANUALS_DIR' to point at the git root,
+# In your Makefile.am,
+# - define 'OSMO_GSM_MANUALS_DIR' to point at the osmo-gsm-manuals shared files
+#   installation path as returned by "pkg-config osmo-gsm-manuals --variable=osmogsmmanualsdir"
+#   (project specific repos set this with configure.ac),
 # - define the (single) name of the vty-reference source in VTY_REFERENCE,
 # - include this file.
 #
