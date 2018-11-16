@@ -13,7 +13,6 @@ SUBDIRS = tests \
 	OsmoHLR \
 	OsmoMGCP \
 	OsmoMGW \
-	OsmoMSC \
 	OsmoNAT \
 	OsmoNITB \
 	OsmoPCU \
