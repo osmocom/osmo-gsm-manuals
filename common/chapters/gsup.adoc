@@ -611,6 +611,58 @@ This message is used to indicate a successful result of an earlier
 MT short message delivery. The corresponding MAP service is
 MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
 
+==== READY-FOR-SM Request
+
+Direction: MSC / SGSN => SMSC (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|46|SM Alert Reason|<<gsup-ie-sm-alert-rsn>>|M|TLV|1-...
+|===
+
+This message is used between the MSC / SGSN and an SMSC when a subscriber
+indicates memory available situation (see TS GSM 04.11, section 7.3.2).
+The corresponding MAP service is MAP-READY-FOR-SM,
+see 3GPP TS 29.002, section 12.4.
+
+==== READY-FOR-SM Error
+
+Direction: SMSC (via HLR) => MSC / SGSN
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|44|SM-RP-Cause (Cause value)|<<gsup-ie-sm-rp-cause>>|M|TLV|1
+|43|SM-RP-UI (diagnostic field)|<<gsup-ie-sm-rp-ui>>|O|TLV|1-...
+|===
+
+This message is used to indicate a negative result of an earlier
+MO SMMA (Memory Available) indication. The corresponding MAP
+service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
+
+==== READY-FOR-SM Result
+
+Direction: SMSC (via HLR) => MSC / SGSN
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|===
+
+This message is used to indicate a successful result of an earlier
+MO SMMA (Memory Available) indication. The corresponding MAP
+service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
+
 === Information Elements
 
 [[gsup-ie-msgtype]]
@@ -647,6 +699,9 @@ MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
 |0x28|MT-forwardSM Request
 |0x29|MT-forwardSM Error
 |0x2a|MT-forwardSM Result
+|0x2c|READY-FOR-SM Request
+|0x2d|READY-FOR-SM Error
+|0x2e|READY-FOR-SM Result
 |===
 
 [[gsup-ie-ipaddr]]
@@ -879,6 +934,7 @@ IEI that shall be used for the encoding.
 |0x43|SM-RP-UI (SM TPDU)|<<gsup-ie-sm-rp-ui>>
 |0x44|SM-RP-Cause (RP Cause value)|<<gsup-ie-sm-rp-cause>>
 |0x45|SM-RP-MMS (More Messages to Send)|<<gsup-ie-sm-rp-mms>>
+|0x46|SM Alert Reason|<<gsup-ie-sm-alert-rsn>>
 |===
 
 [[gsup-ie-empty]]
@@ -1165,3 +1221,20 @@ and it is not required for other applications (other than SMS), a special
 This is an optional IE of MT-ForwardSM-Req message, that is used by SMSC
 to indicate that there are more MT SMS messages to be sent, so the network
 should keep the RAN connection open. See 3GPP TS 29.002, section 7.6.8.7.
+
+[[gsup-ie-sm-alert-rsn]]
+==== SM Alert Reason
+
+According to 3GPP TS 29.002, section 7.6.8.8, Alert Reason is used to
+indicate the reason why the service centre is alerted, e.g. the MS has
+got some memory to store previously rejected incoming SMS.
+
+It can take one of the following values:
+
+.SM Alert Reason values
+[options="header",cols="15%,85%"]
+|===
+|Type|Description
+|0x01|MS present
+|0x02|Memory Available
+|===
