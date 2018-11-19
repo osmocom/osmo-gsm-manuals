@@ -35,6 +35,10 @@ m4/*.m4
 Makefile.in
 Makefile
 
+# make distcheck
+osmo-gsm-manuals-*/
+osmo-gsm-manuals-*.tar.*
+
 # symlinks to shared dirs (needed for out-of-tree builds)
 */common
 */build
