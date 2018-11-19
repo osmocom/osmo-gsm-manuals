@@ -504,6 +504,113 @@ The purpose of this message is not clear yet. Probably, it
 can be used to notify the MSC that a structured supplementary
 service is successfully activated or deactivated, etc.
 
+==== MO-forwardSM Request
+
+Direction: MSC / SGSN => SMSC (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|41|SM-RP-DA (Destination Address)|<<gsup-ie-sm-rp-da>>|M|TLV|2-...
+|42|SM-RP-OA (Originating Address)|<<gsup-ie-sm-rp-oa>>|M|TLV|2-...
+|43|SM-RP-UI (SM TPDU)|<<gsup-ie-sm-rp-ui>>|M|TLV|1-...
+|===
+
+This message is used to forward MO short messages from MSC / SGSN to an SMSC.
+The corresponding MAP service is MAP-MO-FORWARD-SHORT-MESSAGE,
+see 3GPP TS 29.002, section 12.2.
+
+==== MO-forwardSM Error
+
+Direction: SMSC (via HLR) => MSC / SGSN
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|44|SM-RP-Cause (Cause value)|<<gsup-ie-sm-rp-cause>>|M|TLV|1
+|43|SM-RP-UI (diagnostic field)|<<gsup-ie-sm-rp-ui>>|O|TLV|1-...
+|===
+
+This message is used to indicate a negative result of an earlier
+MO short message delivery. The corresponding MAP service is
+MAP-MO-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.2.
+
+==== MO-forwardSM Result
+
+Direction: SMSC (via HLR) => MSC / SGSN
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|===
+
+This message is used to indicate a successful result of an earlier
+MO short message delivery. The corresponding MAP service is
+MAP-MO-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.2.
+
+==== MT-forwardSM Request
+
+Direction: SMSC (via HLR) => MSC / SGSN
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|41|SM-RP-DA (Destination Address)|<<gsup-ie-sm-rp-da>>|M|TLV|2-...
+|42|SM-RP-OA (Originating Address)|<<gsup-ie-sm-rp-oa>>|M|TLV|2-...
+|43|SM-RP-UI (SM TPDU)|<<gsup-ie-sm-rp-ui>>|M|TLV|1-...
+|45|SM-RP-MMS (More Messages to Send)|<<gsup-ie-sm-rp-mms>>|O|TLV|1
+|===
+
+This message is used to forward MT short messages from an SMSC to MSC / SGSN.
+The corresponding MAP service is MAP-MT-FORWARD-SHORT-MESSAGE,
+see 3GPP TS 29.002, section 12.9.
+
+==== MT-forwardSM Error
+
+Direction: MSC / SGSN => SMSC (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|44|SM-RP-Cause (Cause value)|<<gsup-ie-sm-rp-cause>>|M|TLV|1
+|43|SM-RP-UI (diagnostic field)|<<gsup-ie-sm-rp-ui>>|O|TLV|1-...
+|===
+
+This message is used to indicate a negative result of an earlier
+MT short message delivery. The corresponding MAP service is
+MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
+
+==== MT-forwardSM Result
+
+Direction: MSC / SGSN => SMSC (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>|M|TLV|1
+|===
+
+This message is used to indicate a successful result of an earlier
+MT short message delivery. The corresponding MAP service is
+MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
+
 === Information Elements
 
 [[gsup-ie-msgtype]]
@@ -534,6 +641,12 @@ service is successfully activated or deactivated, etc.
 |0x20|Supplementary Service Request
 |0x21|Supplementary Service Error
 |0x22|Supplementary Service Result
+|0x24|MO-forwardSM Request
+|0x25|MO-forwardSM Error
+|0x26|MO-forwardSM Result
+|0x28|MT-forwardSM Request
+|0x29|MT-forwardSM Error
+|0x2a|MT-forwardSM Result
 |===
 
 [[gsup-ie-ipaddr]]
@@ -760,6 +873,12 @@ IEI that shall be used for the encoding.
 |0x30|Session ID|<<gsup-ie-session-id>>
 |0x31|Session State|<<gsup-ie-session-state>>
 |0x35|Supplementary Service Info|<<gsup-ie-ss-info>>
+|0x40|SM-RP-MR (Message Reference)|<<gsup-ie-sm-rp-mr>>
+|0x41|SM-RP-DA (Destination Address)|<<gsup-ie-sm-rp-da>>
+|0x42|SM-RP-OA (Originating Address)|<<gsup-ie-sm-rp-oa>>
+|0x43|SM-RP-UI (SM TPDU)|<<gsup-ie-sm-rp-ui>>
+|0x44|SM-RP-Cause (RP Cause value)|<<gsup-ie-sm-rp-cause>>
+|0x45|SM-RP-MMS (More Messages to Send)|<<gsup-ie-sm-rp-mms>>
 |===
 
 [[gsup-ie-empty]]
@@ -952,3 +1071,97 @@ transacrion, i.e. initiate, continue or terminate it.
 |0x02|CONTINUE|Used to continue an existing session
 |0x03|END|Used to terminate an existing session
 |===
+
+[[gsup-ie-sm-rp-mr]]
+==== SM-RP-MR (Message Reference)
+
+According to TS GSM 04.11, section 8.2.3, every single message on the
+SM-RL (SM Relay Layer) has a unique _message reference_, that is
+used to link an _RP-ACK_ or _RP-ERROR_ message to the associated
+(preceding) _RP-DATA_ or _RP-SMMA_ message transfer attempt.
+
+In case of TCAP/MAP, this message reference is being mapped to the
+_Invoke ID_. But since GSUP has no _Invoke ID IE_, and it is not
+required for other applications (other than SMS), a special
+<<gsup-ie-sm-rp-mr>> is used to carry the message reference
+value \'as-is' (i.e. in range 0 through 255).
+
+[[gsup-ie-sm-rp-da]]
+==== SM-RP-DA (Destination Address)
+
+This IE represents the destination address used by the short message service
+relay sub-layer protocol. It can be one of the following:
+
+* IMSI (see 3GPP TS 29.002, clause 7.6.2.1);
+* MSISDN (see 3GPP TS 29.002, clause 7.6.2.17);
+* service centre address (see 3GPP TS 29.002, clause 7.6.2.27).
+
+Coding of this IE is described in <<gsup-sm-rp-oda>>.
+See 3GPP TS 29.002, section 7.6.8.1 for details.
+
+[[gsup-ie-sm-rp-oa]]
+==== SM-RP-OA (Originating Address)
+
+This IE represents the originating address used by the short message service
+relay sub-layer protocol. It can be either of the following:
+
+* MSISDN (see 3GPP TS 29.002, clause 7.6.2.17);
+* service centre address (see 3GPP TS 29.002, clause 7.6.2.27).
+
+Coding of this IE is described in <<gsup-sm-rp-oda>>.
+See 3GPP TS 29.002, section 7.6.8.2 for details.
+
+[[gsup-sm-rp-oda]]
+==== Coding of SM-RP-DA / SM-RP-OA IEs
+
+Basically, both <<gsup-ie-sm-rp-da>> / <<gsup-ie-sm-rp-oa>> IEs
+contain a single TV of the following format:
+
+.Coding of SM-RP-DA / SM-RP-OA IEs
+[options="header",cols="5%,5%,10%,80%"]
+|===
+|Field|Presence|Length|Description
+|T|M|1|Identity type
+|V|O|...|Encoded identity itself
+|===
+
+where the identity type can be one of the following:
+
+.Identity types of SM-RP-DA / SM-RP-OA IEs
+[options="header",cols="15%,85%"]
+|===
+|Type|Description
+|0x01|IMSI (see 3GPP TS 29.002, clause 7.6.2.1)
+|0x02|MSISDN (see 3GPP TS 29.002, clause 7.6.2.17)
+|0x03|Service centre address (see 3GPP TS 29.002, clause 7.6.2.27)
+|0xff|Omit value for noSM-RP-DA and noSM-RP-OA
+|===
+
+[[gsup-ie-sm-rp-ui]]
+==== SM-RP-UI (SM TPDU)
+
+This IE represents the user data field carried by the short message service
+relay sub-layer (i.e. SM-TL (Transfer Layer)) protocol. In case of errors
+(i.e. MO-/MT-forwardSM Error messages), this IE may contain optional
+diagnostic field payload from _RP-ERROR_ message.
+
+See 3GPP TS 29.002, section 7.6.8.4 for details.
+
+[[gsup-ie-sm-rp-cause]]
+==== SM-RP-Cause (RP Cause value)
+
+According to TS GSM 04.11, _RP-Cause_ is a variable length element always
+included in the _RP-ERROR_ message, conveying a negative result of an
+_RP-DATA_ message transfer attempt or _RP-SMMA_ notification attempt.
+
+The mapping between error causes in TS GSM 04.11 and TS GSM 09.02 (MAP)
+is specified in TS GSM 03.40. But since GSUP has no generic _User Error IE_,
+and it is not required for other applications (other than SMS), a special
+<<gsup-ie-sm-rp-cause>> is used to carry the cause value \'as-is'.
+
+[[gsup-ie-sm-rp-mms]]
+==== SM-RP-MMS (More Messages to Send)
+
+This is an optional IE of MT-ForwardSM-Req message, that is used by SMSC
+to indicate that there are more MT SMS messages to be sent, so the network
+should keep the RAN connection open. See 3GPP TS 29.002, section 7.6.8.7.
