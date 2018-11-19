@@ -22,6 +22,14 @@ cp $reference "$combined"
 while [ -n "$1" ]; do
 	addition="$(realpath "$1")"
 	shift
+
+	# Fix permissions: xsltproc sets the output permissions the same as the
+	# input file, which means during "make distcheck" our output file will
+	# become read-only.
+	if [ -f "$combine_src" ]; then
+		chmod 644 "$combine_src"
+	fi
+
 	mv "$combined" "$combine_src"
 	xsltproc -o "$combined" \
 		--stringparam with "$addition" \
