@@ -10,6 +10,7 @@ autoreconf -fi
 ./configure
 $MAKE $PARALLEL_MAKE
 $MAKE $PARALLEL_MAKE check
+$MAKE $PARALLEL_MAKE distcheck
 
 if [ "x$publish" = "x--publish" ]; then
   mkdir out/
