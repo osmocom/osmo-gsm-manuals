@@ -1,4 +1,7 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = test-usermanual-docinfo.xml \
+	test-vty-reference.xml \
+	vty
 
 # Generate adoc file that includes all chapters
 ASCIIDOC = test-usermanual.adoc

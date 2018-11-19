@@ -1,4 +1,12 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = example_subscriber_add_update_delete.vty \
+	example_subscriber_cs_ps_enabled.ctrl \
+	example_subscriber_info.ctrl \
+	osmohlr-usermanual.adoc \
+	osmohlr-usermanual-docinfo.xml \
+	osmohlr-vty-reference.xml \
+	chapters \
+	vty
 
 ASCIIDOC = osmohlr-usermanual.adoc
 ASCIIDOC_DEPS = $(srcdir)/chapters/*.adoc $(srcdir)/*.vty $(srcdir)/*.ctrl

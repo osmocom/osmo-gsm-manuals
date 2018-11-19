@@ -1,4 +1,9 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = osmotrx-usermanual.adoc \
+	osmotrx-usermanual-docinfo.xml \
+	osmotrx-vty-reference.xml \
+	chapters \
+	vty
 
 ASCIIDOC = osmotrx-usermanual.adoc
 ASCIIDOC_DEPS = $(srcdir)/chapters/*.adoc

@@ -1,4 +1,12 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = osmopcu-gb.adoc \
+	osmopcu-gb-docinfo.xml \
+	osmopcu-usermanual.adoc \
+	osmopcu-usermanual-docinfo.xml \
+	osmopcu-vty-reference.xml \
+	chapters \
+	gb \
+	vty
 
 ASCIIDOC = osmopcu-usermanual.adoc osmopcu-gb.adoc
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc

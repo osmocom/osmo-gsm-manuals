@@ -1,4 +1,9 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = osmosipconnector-usermanual.adoc \
+	osmosipconnector-usermanual-docinfo.xml \
+	osmosipconnector-vty-reference.xml \
+	chapters \
+	vty
 
 ASCIIDOC = osmosipconnector-usermanual.adoc
 ASCIIDOC_DEPS = $(srcdir)/chapters/*.adoc

@@ -1,4 +1,9 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
+EXTRA_DIST = osmostp-usermanual.adoc \
+	osmostp-usermanual-docinfo.xml \
+	osmostp-vty-reference.xml \
+	chapters \
+	vty
 
 ASCIIDOC = osmostp-usermanual.adoc
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
