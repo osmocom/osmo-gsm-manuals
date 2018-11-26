@@ -55,7 +55,7 @@ The fields specified below follow the following meaning:
 
 <id>::
 	A numeric identifier, uniquely identifying this particular
-	operation.  `0` is not allowed.  It will be echoed back in any
+	operation. Value `0` is not allowed unless it's a TRAP message. It will be echoed back in any
 	response to a particular request.
 <var>::
 	The name of the variable / field affected by the GET / SET /
