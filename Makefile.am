@@ -8,7 +8,6 @@ EXTRA_DIST = git-version-gen .version check-depends.sh $(share_files)
 SUBDIRS = tests \
 	OsmoGSMTester \
 	OsmoMGCP \
-	OsmoMGW \
 	OsmoNAT \
 	OsmoNITB \
 	OsmoPCU \

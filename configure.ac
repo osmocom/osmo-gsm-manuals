@@ -30,7 +30,6 @@ AC_OUTPUT(
     tests/Makefile
     OsmoGSMTester/Makefile
     OsmoMGCP/Makefile
-    OsmoMGW/Makefile
     OsmoNAT/Makefile
     OsmoNITB/Makefile
     OsmoPCU/Makefile
