@@ -10,7 +10,6 @@ SUBDIRS = tests \
 	OsmoMGCP \
 	OsmoNAT \
 	OsmoNITB \
-	OsmoTRX \
 	OsmocomBB
 
 $(top_srcdir)/.version:

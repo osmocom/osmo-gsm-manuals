@@ -32,5 +32,4 @@ AC_OUTPUT(
     OsmoMGCP/Makefile
     OsmoNAT/Makefile
     OsmoNITB/Makefile
-    OsmoTRX/Makefile
     OsmocomBB/Makefile)
