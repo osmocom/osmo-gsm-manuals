@@ -7,7 +7,6 @@ BUILT_SOURCES = $(top_srcdir)/.version
 EXTRA_DIST = git-version-gen .version check-depends.sh $(share_files)
 SUBDIRS = tests \
 	OsmoGSMTester \
-	OsmoHLR \
 	OsmoMGCP \
 	OsmoMGW \
 	OsmoNAT \

@@ -29,7 +29,6 @@ AC_OUTPUT(
     Makefile
     tests/Makefile
     OsmoGSMTester/Makefile
-    OsmoHLR/Makefile
     OsmoMGCP/Makefile
     OsmoMGW/Makefile
     OsmoNAT/Makefile
