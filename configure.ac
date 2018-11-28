@@ -32,7 +32,6 @@ AC_OUTPUT(
     OsmoMGCP/Makefile
     OsmoNAT/Makefile
     OsmoNITB/Makefile
-    OsmoPCU/Makefile
     OsmoSGSN/Makefile
     OsmoSIPConnector/Makefile
     OsmoSTP/Makefile
