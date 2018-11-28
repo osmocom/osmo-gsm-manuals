@@ -10,7 +10,6 @@ SUBDIRS = tests \
 	OsmoMGCP \
 	OsmoNAT \
 	OsmoNITB \
-	OsmoSIPConnector \
 	OsmoSTP \
 	OsmoTRX \
 	OsmocomBB
