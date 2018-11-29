@@ -5,9 +5,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = osmo-gsm-manuals.pc
 BUILT_SOURCES = $(top_srcdir)/.version
 EXTRA_DIST = git-version-gen .version check-depends.sh $(share_files)
-SUBDIRS = tests \
-	OsmoMGCP \
-	OsmoNAT
+SUBDIRS = tests
 
 $(top_srcdir)/.version:
 	echo $(VERSION) > $@-t && mv $@-t $@
