@@ -1,4 +1,0 @@
-== Test API
-
-*TODO* (in the meantime, look at src/osmo_gsm_tester/test.py, as well as
-suite.py, which calls the test's setup() function to get an idea)

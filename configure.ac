@@ -28,7 +28,6 @@ AC_OUTPUT(
     osmo-gsm-manuals.pc
     Makefile
     tests/Makefile
-    OsmoGSMTester/Makefile
     OsmoMGCP/Makefile
     OsmoNAT/Makefile
     OsmoNITB/Makefile
