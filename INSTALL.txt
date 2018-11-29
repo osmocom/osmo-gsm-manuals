@@ -14,6 +14,10 @@ apt-get install \
 
 (Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)
 
+Dependencies for "make check":
+
+apt-get install libxml2-utils
+
 Prepare your build dir:
   autoreconf -fi
   ./configure
