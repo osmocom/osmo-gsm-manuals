@@ -28,8 +28,3 @@ install-data-hook:
 
 uninstall-local:
 	rm -rv "$(share_path)" "$(DESTDIR)$(prefix)/bin/osmo-gsm-manuals-check-depends"
-
-upload:
-	for i in Osmo*; do \
-		$(MAKE) -C "$$i" upload || exit 1; \
-	done
