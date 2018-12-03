@@ -474,7 +474,7 @@ the GSM 04.80 payload.
 
 ==== Process Supplementary Service Error
 
-Direction: HLR => SGSN / VLR
+Direction: EUSE / HLR => MSC
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
@@ -488,7 +488,7 @@ Direction: HLR => SGSN / VLR
 
 ==== Process Supplementary Service Response
 
-Direction: HLR => SGSN / VLR
+Direction: EUSE / HLR => MSC
 
 [options="header",cols="5%,20%,45%,10%,10%,10%"]
 |===
