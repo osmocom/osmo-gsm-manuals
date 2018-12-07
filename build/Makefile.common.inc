@@ -21,7 +21,7 @@ clean:
 
 distclean: clean
 
-publish: all check
+publish: all
 	mkdir -p out
 	cp *.pdf out
 	rsync -avz -e "$(SSH_COMMAND)" ./out/ docs@rita.osmocom.org:web-files/latest/
