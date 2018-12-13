@@ -85,6 +85,9 @@ EDGE::
   GPRS; introduces 8PSK
 EGPRS::
   Enhanced GPRS; the part of EDGE relating to GPRS services
+EIR::
+  Equipment Identity Register; core network element that stores and manages
+  IMEI numbers
 ESME::
   External SMS Entity; an external application interfacing with a SMSC
   over SMPP
@@ -128,7 +131,11 @@ HPLMN::
 IE::
   Information Element
 IMEI::
-  International Mobile Equipment Identity; unique identifier for the mobile phone
+  International Mobile Equipment Identity; unique 14-digit decimal number to
+  globally identify a mobile device, optionally with a 15th checksum digit
+IMEISV::
+  IMEI software version; unique 14-digit decimal number to globally identify a
+  mobile device (same as IMEI) plus two software version digits (total digits: 16)
 IMSI::
   International Mobile Subscriber Identity; 15-digit unique identifier
   for the subscriber/SIM; starts with MCC/MNC of issuing operator
@@ -147,6 +154,9 @@ LLC::
   44.064_ <<3gpp-ts-44-064>>)
 Location Area::
   Location Area; a geographic area containing multiple BTS
+LU::
+  Location Updating; can be of type IMSI-Attach or Periodic. Procedure that
+  indicates a subscriber's physical presence in a given radio cell.
 M2PA::
   MTP2 Peer-to-Peer Adaptation; a SIGTRAN Variant (_RFC 4165_ <<ietf-rfc4165>>)
 M2UA::
@@ -284,6 +294,10 @@ SMSC::
   Short Message Service Center; store-and-forward relay for short messages
 SS7::
   Signaling System No. 7; Classic digital telephony signaling system
+SS::
+  Supplementary Services; query and set various service parameters between
+  subscriber and core network (e.g. USSD, 3rd-party calls, hold/retrieve,
+  advice-of-charge, call deflection)
 SSH::
   Secure Shell; _IETF RFC 4250_ <<ietf-rfc4251>> to 4254
 SSN::
@@ -306,6 +320,8 @@ TFTP::
   Trivial File Transfer Protocol; (_IETF RFC 1350_ <<ietf-rfc1350>>)
 TRX::
   Transceiver; element of a BTS serving a single carrier
+TS::
+  Technical Specification
 u-Boot::
   Boot loader used in various embedded systems
 UBI::
@@ -324,10 +340,16 @@ uplink::
 USIM::
   Universal Subscriber Identity Module; application running on a UICC
   to provide subscriber identity for UMTS and GSM networks
+USSD::
+  Unstructured Supplementary Service Data; textual dialog between subscriber
+  and core network, e.g. '*#100#' -> 'Your extension is 1234'
 VCTCXO::
   Voltage Controlled, Temperature Compensated Crystal Oscillator;  a
   precision oscillator, superior to a classic crystal oscillator, but
   inferior to an OCXO
+VLR::
+  Visitor Location Register; volatile storage of attached subscribers in
+  the MSC
 VPLMN::
   Visited PLMN; the network in which the subscriber is currently
   registered; may differ from HPLMN when on roaming
