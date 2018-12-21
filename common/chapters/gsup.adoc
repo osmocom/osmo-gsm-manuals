@@ -200,6 +200,25 @@ msc {
 }
 ----
 
+==== Check IMEI
+
+The VLR asks the EIR to check if a new ME's IMEI is acceptable or not. The EIR
+may implement a blacklist or whitelist and reject the IMEI based on that.
+Against the original purpose of the Check IMEI Procedure, this could also be
+used to save the IMEI in the HLR DB.
+
+.Check IMEI (Normal Case)
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  VLR [label="VLR"], EIR [label="EIR (via HLR)"];
+
+  VLR => EIR [label="CHECK IMEI REQUEST (IMEI)"];
+  EIR => VLR [label="CHECK IMEI RESULT (ACK)"];
+}
+----
+
 === Message Format
 
 ==== General
@@ -667,6 +686,42 @@ This message is used to indicate a successful result of an earlier
 MO SMMA (Memory Available) indication. The corresponding MAP
 service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
 
+==== CHECK-IMEI Request
+
+Direction: VLR => EIR (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|50|IMEI|<<gsup-ie-imei>>|M|TLV|11
+|===
+
+==== CHECK-IMEI Error
+
+Direction: EIR (via HLR) => VLR
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|02|Cause|<<gsup-ie-cause>>|M|TLV|3
+|===
+
+==== CHECK-IMEI Result
+
+Direction: EIR (via HLR) => VLR
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|51|IMEI Check Result|<<gsup-ie-imei-result>>|M|TLV|3
+|===
+
 === Information Elements
 
 [[gsup-ie-msgtype]]
@@ -706,6 +761,9 @@ service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
 |0x2c|READY-FOR-SM Request
 |0x2d|READY-FOR-SM Error
 |0x2e|READY-FOR-SM Result
+|0x30|CHECK-IMEI Request
+|0x31|CHECK-IMEI Error
+|0x32|CHECK-IMEI Result
 |===
 
 [[gsup-ie-ipaddr]]
@@ -939,6 +997,8 @@ IEI that shall be used for the encoding.
 |0x44|SM-RP-Cause (RP Cause value)|<<gsup-ie-sm-rp-cause>>
 |0x45|SM-RP-MMS (More Messages to Send)|<<gsup-ie-sm-rp-mms>>
 |0x46|SM Alert Reason|<<gsup-ie-sm-alert-rsn>>
+|0x50|IMEI|<<gsup-ie-imei>>
+|0x51|IMEI Check Result|<<gsup-ie-imei-result>>
 |===
 
 [[gsup-ie-empty]]
@@ -1241,4 +1301,23 @@ It can take one of the following values:
 |Type|Description
 |0x01|MS present
 |0x02|Memory Available
+|===
+
+[[gsup-ie-imei]]
+==== IMEI
+
+The IMEI encoded as Called Party BCD Number in 3GPP TS 04.08.
+
+[[gsup-ie-imei-result]]
+==== IMEI Check Result
+
+Result of the Check IMEI request. A NACK could be sent in theory, if the ME is
+not permitted on the network (e.g. because it is on a blacklist).
+
+.IMEI Check Result
+[options="header",cols="10%,90%"]
+|===
+|Type|Description
+|0x01|ACK
+|0x02|NACK
 |===
