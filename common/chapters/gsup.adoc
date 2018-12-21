@@ -219,6 +219,10 @@ shall be sent in the given order. Nevertheless after the generic part the
 receiver shall be able to received them in any order. Unknown IE shall be
 ignored.
 
+Besides a numeric range, the 'presence' column may have 'M' (Mandatory), 'O'
+(Optional) or 'C' (Conditional). The 'format' column holds either 'V' (Value)
+or 'TLV' (Tag Length Value).
+
 ==== Send Authentication Info Request
 
 Direction: SGSN / VLR => HLR
