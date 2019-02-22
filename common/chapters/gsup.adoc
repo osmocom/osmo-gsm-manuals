@@ -1173,6 +1173,25 @@ This IE shall be used together with both <<gsup-ie-session-state>>
 and <<gsup-ie-session-id>> IEs. It is used to carry the payload
 of Supplementary Services encoded according to GSM TS 04.80.
 
+[[gsup-ie-imei]]
+==== IMEI
+
+The IMEI encoded as Called Party BCD Number in 3GPP TS 04.08.
+
+[[gsup-ie-imei-result]]
+==== IMEI Check Result
+
+Result of the Check IMEI request. A NACK could be sent in theory, if the ME is
+not permitted on the network (e.g. because it is on a blacklist).
+
+.IMEI Check Result
+[options="header",cols="10%,90%"]
+|===
+|Type|Description
+|0x01|ACK
+|0x02|NACK
+|===
+
 === Session (transaction) management
 
 Unlike TCAP/MAP, GSUP is just a transport layer without the
@@ -1316,21 +1335,7 @@ It can take one of the following values:
 |0x02|Memory Available
 |===
 
-[[gsup-ie-imei]]
-==== IMEI
-
-The IMEI encoded as Called Party BCD Number in 3GPP TS 04.08.
-
-[[gsup-ie-imei-result]]
-==== IMEI Check Result
-
-Result of the Check IMEI request. A NACK could be sent in theory, if the ME is
-not permitted on the network (e.g. because it is on a blacklist).
-
-.IMEI Check Result
-[options="header",cols="10%,90%"]
-|===
-|Type|Description
-|0x01|ACK
-|0x02|NACK
-|===
+////
+End of "Session (transaction) management" IEs chapter. Remember to place
+unrelated IEs at the end of the "Information Elements" chapter, not here!
+////
