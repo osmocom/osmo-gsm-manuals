@@ -221,7 +221,7 @@ on top of IP: SCTP (Stream Control Transmission Protocol).
 Despite first being specified in October 2000 as IETF RFC 2960, it
 took a long time until solid implementations of SCTP ended up in
 general-purpose operating systems.  SCTP is not used much outside the
-context of SIGTAN, which means implementations often suffer from bugs,
+context of SIGTRAN, which means implementations often suffer from bugs,
 and many parts of the public Internet do not carry SCTP traffic due to
 restrictive firewalls and/or ignorant network administrators.
 
