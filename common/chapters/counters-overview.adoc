@@ -1,0 +1,50 @@
+[[common-counters]]
+== Osmocom Counters
+
+The following gives an overview of all the types of counters available:
+
+=== Osmo Counters
+
+Osmo counters are the oldest type of counters added to Osmocom projects.
+They are not grouped.
+
+* Printed as part of VTY show stats
+* Increment, Decrement
+* Accessible through the control interface: counter.<counter_name>
+
+=== Rate Counters
+
+Rate counters count rates of events.
+
+* Printed as part of VTY show stats
+* Intervals: per second, minute, hour, day or absolute value
+* Increment only
+* Accessible through the control interface
+* Rate counters are grouped and different instances per group can exist
+
+The control interface command to get a counter (group) is:
+
+rate_ctr.per_{sec,min,hour,day,abs}.<group_name>.<idx>.[counter_name]
+
+It is possible to get all counters from a group by omitting the counter name
+
+=== Stat Item
+
+Stat items are a grouped replacement for osmo counters, but not many stat
+items are available yet.
+
+* Printed as part of VTY show stats
+* Replacement for osmo counters
+* Not yet available through the control interface
+* Grouped and indexed like rate counters
+* Items have a unit
+* Keeps a list of the last values measured, so could return an average, min,
+  max, std. deviation
+
+=== Stats Reporter
+
+Statsd stats reporter can send osmo counter, rate counter and stats item values to statsd
+
+See the stats reporter command of the VTY reference for details on how to
+setup the connection to statsd.
+
