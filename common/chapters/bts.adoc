@@ -18,7 +18,7 @@ In order to view the status and properties of a BTS, you can issue the
 information about all provisioned BTS numbers.
 
 ----
-OpenBSC> show bts 0
+OsmoBSC> show bts 0
 BTS 0 is of nanobts type in band DCS1800, has CI 0 LAC 1, BSIC 63, TSC 7 and 1 TRX
 Description: (null)
 MS Max power: 15 dBm
@@ -41,7 +41,7 @@ You can also review the status of the TRXs configured within the BTSs of
 this BSC by using `show trx`:
 
 ----
-OpenBSC> show trx 0 0
+OsmoBSC> show trx 0 0
 TRX 0 of BTS 0 is on ARFCN 871
 Description: (null)
   RF Nominal Power: 23 dBm, reduced by 0 dB, resulting BS power: 23 dBm
@@ -62,10 +62,10 @@ a single timeslot by specifying the BTS, TRX and TS numbers (`show
 timeslot 0 0 4`).
 
 ----
-OpenBSC> show timeslot 0 0 0
+OsmoBSC> show timeslot 0 0 0
 BTS 0, TRX 0, Timeslot 0, phys cfg CCCH, TSC 7
   NM State: Oper 'Enabled', Admin 2, Avail 'OK'
-OpenBSC> show timeslot 0 0 1
+OsmoBSC> show timeslot 0 0 1
 BTS 0, TRX 0, Timeslot 1, phys cfg SDCCH8, TSC 7
   NM State: Oper 'Enabled', Admin 2, Avail 'OK'
 ----
@@ -78,11 +78,11 @@ VTY. In order to configure BTS 0, you can issue the following sequence
 of commands:
 
 ----
-OpenBSC> enable
-OpenBSC# configure terminal
-OpenBSC(config)# network
-OpenBSC(config-net)# bts 0
-OpenBSC(config-net-bts)#
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# network
+OsmoBSC(config-net)# bts 0
+OsmoBSC(config-net-bts)#
 ----
 
 At this point, you have a plethora of commands, in fact an entire
@@ -201,14 +201,14 @@ But let's first start with a small example
 
 .Example configuration of GPRS PCU parameters at VTY BTS node
 ----
-OpenBSC(config-net-bts)# gprs mode gprs
-OpenBSC(config-net-bts)# gprs routing area 1
-OpenBSC(config-net-bts)# gprs cell bvci 1234
-OpenBSC(config-net-bts)# gprs nsei 1234
-OpenBSC(config-net-bts)# gprs nsvc 0 nsvci 1234
-OpenBSC(config-net-bts)# gprs nsvc 0 local udp port 23000
-OpenBSC(config-net-bts)# gprs nsvc 0 remote udp port 23000
-OpenBSC(config-net-bts)# gprs nsvc 0 remote ip 192.168.100.239
+OsmoBSC(config-net-bts)# gprs mode gprs
+OsmoBSC(config-net-bts)# gprs routing area 1
+OsmoBSC(config-net-bts)# gprs cell bvci 1234
+OsmoBSC(config-net-bts)# gprs nsei 1234
+OsmoBSC(config-net-bts)# gprs nsvc 0 nsvci 1234
+OsmoBSC(config-net-bts)# gprs nsvc 0 local udp port 23000
+OsmoBSC(config-net-bts)# gprs nsvc 0 remote udp port 23000
+OsmoBSC(config-net-bts)# gprs nsvc 0 remote ip 192.168.100.239
 ----
 
 
