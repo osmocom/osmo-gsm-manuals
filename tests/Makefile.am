@@ -3,6 +3,9 @@ EXTRA_DIST = test-usermanual-docinfo.xml \
 	test-vty-reference.xml \
 	vty
 
+# Do not install any of the test pdfs
+OSMO_GSM_MANUALS_NO_INSTALL = 1
+
 # Generate adoc file that includes all chapters
 ASCIIDOC = test-usermanual.adoc
 ASCIIDOC_DEPS =
