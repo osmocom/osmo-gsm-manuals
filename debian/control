@@ -1,0 +1,36 @@
+Source: osmo-gsm-manuals-dev
+Section: devel
+Priority: optional
+Maintainer: Oliver Smith <osmith@sysmocom.de>
+Build-Depends: autotools-dev,
+               debhelper (>= 9),
+               pkg-config,
+# All below also need to be in Depends
+               asciidoc,
+               asciidoc-dblatex,
+               dblatex,
+               docbook5-xml,
+               graphviz,
+               mscgen,
+               python,
+               python-nwdiag,
+               python-pychart,
+               xsltproc
+Standards-Version: 3.9.8
+Homepage: https://git.osmocom.org/osmo-gsm-manuals/
+
+Package: osmo-gsm-manuals-dev
+Architecture: all
+Depends: ${misc:Depends},
+         asciidoc,
+         asciidoc-dblatex,
+         dblatex,
+         docbook5-xml,
+         graphviz,
+         mscgen,
+         python,
+         python-nwdiag,
+         python-pychart,
+         xsltproc
+Description: Osmocom manuals shared code
+ All Osomocom repositories require this package to build their manuals.
