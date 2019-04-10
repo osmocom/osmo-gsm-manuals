@@ -1,8 +1,8 @@
 share_files = $(srcdir)/build $(srcdir)/common $(srcdir)/*.xsl
 share_path = "$(DESTDIR)$(prefix)/share/osmo-gsm-manuals"
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = osmo-gsm-manuals.pc
+noarch_pkgconfigdir = $(prefix)/lib/pkgconfig
+noarch_pkgconfig_DATA = osmo-gsm-manuals.pc
 BUILT_SOURCES = $(top_srcdir)/.version
 EXTRA_DIST = git-version-gen .version check-depends.sh $(share_files)
 SUBDIRS = tests
