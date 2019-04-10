@@ -18,7 +18,6 @@ check_dep_python2_module() {
 
 check_dep_bin mscgen mscgen
 check_dep_bin xsltproc libxslt
-check_dep_bin git git
 check_dep_bin a2x asciidoc
 check_dep_bin asciidoc asciidoc
 check_dep_bin dblatex dblatex
