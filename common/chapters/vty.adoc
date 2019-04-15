@@ -133,7 +133,7 @@ efficiently navigate is commands.
 
 NOTE: The VTY is present on most Osmocom GSM/UMTS/GPRS software, thus this
 chapter is present in all the relevant manuals. The detailed examples
-below assume you are executing them on the OsmoNITB VTY. They will work
+below assume you are executing them on the OsmoMSC VTY. They will work
 in similar fashion on the other VTY interfaces, while the node structure will
 differ in each program.
 
@@ -147,9 +147,9 @@ If you type `?` at an otherwise empty command (without having entered
 even only a partial command), you will get a list of the first word of
 all possible commands available at this node:
 
-.Example: Typing `?` at start of OsmoNITB prompt
+.Example: Typing `?` at start of OsmoMSC prompt
 ----
-OpenBSC> <1>
+OsmoMSC> <1>
   show        Show running system information
   list        Print command list
   exit        Exit current mode and down to previous mode
@@ -157,7 +157,8 @@ OpenBSC> <1>
   enable      Turn on privileged mode command
   terminal    Set terminal line parameters
   who         Display who is on vty
-  logging     Configure log message to this terminal
+  logging     Configure logging
+  no          Negate a command or set its defaults
   sms         SMS related commands
   subscriber  Operations on a Subscriber
 ----
@@ -171,35 +172,35 @@ will help out:
 
 .Example: Typing `?` after a partial command
 ----
-OpenBSC> show <1>
-  version       Displays program version
-  online-help   Online help
-  history       Display the session command history
-  network       Display information about a GSM NETWORK
-  bts           Display information about a BTS
-  trx           Display information about a TRX
-  timeslot      Display information about a TS
-  lchan         Display information about a logical channel
-  paging        Display information about paging requests of a BTS
-  paging-group  Display the paging group
-  logging       Show current logging configuration
-  alarms        Show current logging configuration
-  stats         Show statistical values
-  e1_driver     Display information about available E1 drivers
-  e1_line       Display information about a E1 line
-  e1_timeslot   Display information about a E1 timeslot
-  subscriber    Operations on a Subscriber
-  statistics    Display network statistics
-  sms-queue     Display SMSqueue statistics
+OsmoMSC> show <1>
+  version          Displays program version
+  online-help      Online help
+  history          Display the session command history
+  cs7              ITU-T Signaling System 7
+  logging          Show current logging configuration
+  alarms           Show current logging configuration
+  talloc-context   Show talloc memory hierarchy
+  stats            Show statistical values
+  asciidoc         Asciidoc generation
+  rate-counters    Show all rate counters
+  fsm              Show information about finite state machines
+  fsm-instances    Show information about finite state machine instances
+  sgs-connections  Show SGs interface connections / MMEs
+  subscriber       Operations on a Subscriber
+  bsc              BSC
+  connection       Subscriber Connections
+  transaction      Transactions
+  statistics       Display network statistics
+  sms-queue        Display SMSqueue statistics
   smpp          SMPP Interface
 ----
 <1> Type `?` after the `show` command, the `?` itself will not be printed.
 
-You may pick the `network` object and type `?` again:
+You may pick the `bsc` object and type `?` again:
 
-.Example: Typing `?` after `show network`
+.Example: Typing `?` after `show bsc`
 ----
-OpenBSC> show network
+OsmoMSC> show bsc
   <cr>
 ----
 
@@ -216,7 +217,7 @@ choice.
 
 .Example: Use of `<tab>` pressed after typing only `s` as command
 ----
-OpenBSC> s<1>
+OsmoMSC> s<1>
 show       sms        subscriber
 ----
 <1> Type `<tab>` here.
@@ -225,11 +226,11 @@ At this point, you may choose `show`, and then press `<tab>` again:
 
 .Example: Use of `<tab>` pressed after typing `show` command
 ----
-OpenBSC> show <1>
-version    online-help history    network    bts        trx
-timeslot   lchan      paging     paging-group logging    alarms
-stats      e1_driver  e1_line    e1_timeslot subscriber statistics
-sms-queue  smpp
+OsmoMSC> show <1>
+version    online-help history    cs7        logging    alarms
+talloc-context stats      asciidoc   rate-counters fsm        fsm-instances
+sgs-connections subscriber bsc        connection transaction statistics
+sms-queue smpp
 ----
 <1> Type `<tab>` here.
 
@@ -239,9 +240,9 @@ sms-queue  smpp
 The `list` command will give you a full list of all commands and their
 arguments available at the current node:
 
-.Example: Typing `list` at start of OsmoNITB 'VIEW' node prompt
+.Example: Typing `list` at start of OsmoMSC 'VIEW' node prompt
 ----
-OpenBSC> list
+OsmoMSC> list
   show version
   show online-help
   list
@@ -252,14 +253,15 @@ OpenBSC> list
   terminal no length
   who
   show history
-  show network
-  show bts [<0-255>]
-  show trx [<0-255>] [<0-255>]
-  show timeslot [<0-255>] [<0-255>] [<0-7>]
-  show lchan [<0-255>] [<0-255>] [<0-7>] [lchan_nr]
-  show lchan summary [<0-255>] [<0-255>] [<0-7>] [lchan_nr]
-  show paging [<0-255>]
-  show paging-group <0-255> IMSI
+  show cs7 instance <0-15> users
+  show cs7 (sua|m3ua|ipa) [<0-65534>]
+  show cs7 instance <0-15> asp
+  show cs7 instance <0-15> as (active|all|m3ua|sua)
+  show cs7 instance <0-15> sccp addressbook
+  show cs7 instance <0-15> sccp users
+  show cs7 instance <0-15> sccp ssn <0-65535>
+  show cs7 instance <0-15> sccp connections
+  show cs7 instance <0-15> sccp timers
   logging enable
   logging disable
   logging filter all (0|1)
@@ -267,25 +269,44 @@ OpenBSC> list
   logging timestamp (0|1)
   logging print extended-timestamp (0|1)
   logging print category (0|1)
+  logging print category-hex (0|1)
+  logging print level (0|1)
+  logging print file (0|1|basename) [last]
   logging set-log-mask MASK
-  logging level (all|rll|cc|mm|rr|rsl|nm|mncc|pag|meas|sccp|msc|mgcp|ho|db|ref|gprs|ns|bssgp|llc|sndcp|nat|ctrl|smpp|filter|lglobal|llapd|linp|lmux|lmi|lmib|lsms|lctrl|lgtp|lstats) (debug|info|notice|error|fatal)
+  logging level (rll|cc|mm|rr|mncc|pag|msc|mgcp|ho|db|ref|ctrl|smpp|ranap|vlr|iucs|bssap|sgs|lglobal|llapd|linp|lmux|lmi|lmib|lsms|lctrl|lgtp|lstats|lgsup|loap|lss7|lsccp|lsua|lm3ua|lmgcp|ljibuf|lrspro) (debug|info|notice|error|fatal)
+  logging level set-all (debug|info|notice|error|fatal)
+  logging level force-all (debug|info|notice|error|fatal)
+  no logging level force-all
   show logging vty
   show alarms
+  show talloc-context (application|all) (full|brief|DEPTH)
+  show talloc-context (application|all) (full|brief|DEPTH) tree ADDRESS
+  show talloc-context (application|all) (full|brief|DEPTH) filter REGEXP
   show stats
   show stats level (global|peer|subscriber)
-  show e1_driver
-  show e1_line [line_nr] [stats]
-  show e1_timeslot [line_nr] [ts_nr]
-  show subscriber (extension|imsi|tmsi|id) ID
+  show asciidoc counters
+  show rate-counters
+  show fsm NAME
+  show fsm all
+  show fsm-instances NAME
+  show fsm-instances all
+  show sgs-connections
+  show subscriber (msisdn|extension|imsi|tmsi|id) ID
   show subscriber cache
+  show bsc
+  show connection
+  show transaction
   sms send pending
+  sms delete expired
   subscriber create imsi ID
-  subscriber (extension|imsi|tmsi|id) ID sms sender (extension|imsi|tmsi|id) SENDER_ID send .LINE
-  subscriber (extension|imsi|tmsi|id) ID silent-sms sender (extension|imsi|tmsi|id) SENDER_ID send .LINE
-  subscriber (extension|imsi|tmsi|id) ID silent-call start (any|tch/f|tch/any|sdcch)
-  subscriber (extension|imsi|tmsi|id) ID silent-call stop
-  subscriber (extension|imsi|tmsi|id) ID ussd-notify (0|1|2) .TEXT
-  subscriber (extension|imsi|tmsi|id) ID update
+  subscriber (msisdn|extension|imsi|tmsi|id) ID sms sender (msisdn|extension|imsi|tmsi|id) SENDER_ID send .LINE
+  subscriber (msisdn|extension|imsi|tmsi|id) ID silent-sms sender (msisdn|extension|imsi|tmsi|id) SENDER_ID send .LINE
+  subscriber (msisdn|extension|imsi|tmsi|id) ID silent-call start (any|tch/f|tch/any|sdcch)
+  subscriber (msisdn|extension|imsi|tmsi|id) ID silent-call stop
+  subscriber (msisdn|extension|imsi|tmsi|id) ID ussd-notify (0|1|2) .TEXT
+  subscriber (msisdn|extension|imsi|tmsi|id) ID ms-test close-loop (a|b|c|d|e|f|i)
+  subscriber (msisdn|extension|imsi|tmsi|id) ID ms-test open-loop
+  subscriber (msisdn|extension|imsi|tmsi|id) ID paging
   show statistics
   show sms-queue
   logging filter imsi IMSI
@@ -294,12 +315,12 @@ OpenBSC> list
 
 TIP: Remember, the list of available commands will change significantly
 depending on the Osmocom program you are accessing, its software version and
-the current node you're at. Compare the above example of the OsmoNITB 'VIEW'
-node with the list of the OsmoNITB 'TRX' config node:
+the current node you're at. Compare the above example of the OsmoMSC 'VIEW'
+node with the list of the OsmoMSC 'NETWORK' config node:
 
-.Example: Typing `list` at start of OsmoNITB 'TRX' config node prompt
+.Example: Typing `list` at start of OsmoMSC 'NETWORK' config node prompt
 ----
-OpenBSC(config-net-bts-trx)# list
+OsmoMSC(config-net)# list
   help
   list
   write terminal
@@ -309,13 +330,17 @@ OpenBSC(config-net-bts-trx)# list
   show running-config
   exit
   end
-  arfcn <0-1023>
-  description .TEXT
-  no description
-  nominal power <0-100>
-  max_power_red <0-100>
-  rsl e1 line E1_LINE timeslot <1-31> sub-slot (0|1|2|3|full)
-  rsl e1 tei <0-63>
-  rf_locked (0|1)
-  timeslot <0-7>
+  network country code <1-999>
+  mobile network code <0-999>
+  short name NAME
+  long name NAME
+  encryption a5 <0-3> [<0-3>] [<0-3>] [<0-3>]
+  authentication (optional|required)
+  rrlp mode (none|ms-based|ms-preferred|ass-preferred)
+  mm info (0|1)
+  timezone <-19-19> (0|15|30|45)
+  timezone <-19-19> (0|15|30|45) <0-2>
+  no timezone
+  periodic location update <6-1530>
+  no periodic location update
 ----
