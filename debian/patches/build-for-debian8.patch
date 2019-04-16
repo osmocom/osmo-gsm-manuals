@@ -1,0 +1,18 @@
+--- a/debian/control
++++ b/debian/control
+@@ -7,7 +7,6 @@ Build-Depends: autotools-dev,
+                pkg-config,
+ # All below also need to be in Depends
+                asciidoc,
+-               asciidoc-dblatex,
+                dblatex,
+                docbook5-xml,
+                graphviz,
+@@ -23,7 +22,6 @@ Package: osmo-gsm-manuals-dev
+ Architecture: all
+ Depends: ${misc:Depends},
+          asciidoc,
+-         asciidoc-dblatex,
+          dblatex,
+          docbook5-xml,
+          graphviz,
