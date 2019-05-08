@@ -41,6 +41,8 @@ which protocol / interface.
 |TCP|4261|telnet (VTY)|osmo-hnbgw
 |TCP|4262|Control Interface|osmo-hnbgw
 |TCP|4263|Control Interface|osmo-gbproxy
+|TCP|4264|telnet (VTY)|osmo-cbc
+|TCP|4265|Control Interface|osmo-cbc
 |UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
 |UDP|2427|GSMTAP|osmo-pcu, osmo-bts
