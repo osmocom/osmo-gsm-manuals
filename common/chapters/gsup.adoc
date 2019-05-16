@@ -219,6 +219,112 @@ msc {
 }
 ----
 
+=== Procedures (E Interface)
+
+The E interface connects two MSCs in the traditional GSM MAP world. It is used
+for the inter-MSC handover. In GSUP, we don't need that extra connection, as we
+route the messages over the GSUP server (OsmoHLR) instead.
+
+Whenever MSC-A is sending to MSC-B, and vice-versa, the message needs to pass
+through the GSUP server. In order to make the following message sequence charts
+easier to read, this step has been omitted.
+
+==== E Handover
+
+MSC-A has an active RAN connection and hands it over to MSC-B.
+
+.E Handover (Normal Case)
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  A [label="MSC-A"], B [label="MSC-B"];
+
+  A => B [label="E Prepare Handover Request\n\n(AN-APDU: Handover Request)"];
+  |||;
+  A <= B [label="E Prepare Handover Result\n\n(AN-APDU: Handover Request Ack)"];
+  |||;
+  A <= B [label="E Process Access Signalling Request\n\n(AN-APDU: Handover Detect)"];
+  |||;
+  A <= B [label="E Send End Signal Request\n\n(AN-APDU: Handover Complete)"];
+}
+----
+
+==== E Subsequent Handover
+
+MSC-B has an active RAN connection, and asks MSC-A to hand it over to MSC-B'.
+
+.E Subsequent Handover (Normal Case)
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  A [label="MSC-A"], B [label="MSC-B"], B_ [label="MSC-B'"];
+
+  B => A  [label="E Prepare Subsequent Handover Request\n\n(AN-APDU: Handover Required)"];
+  |||;
+  A => B_ [label="E Prepare Handover Request\n\n(AN-APDU: Handover Request)"];
+  |||;
+  B_ => A [label="E Prepare Handover Response\n\n(AN-APDU: Handover Request Ack)"];
+  |||;
+  A => B  [label="E Prepare Subsequent Handover Response\n\n(AN-APDU: Handover Request Ack)"];
+  |||;
+  B_ => A [label="E Process Access Signalling Request\n\n(AN-APDU: Handover Detect)"];
+  |||;
+  B_ => A [label="E Process Access Signalling Request\n\n(AN-APDU: Handover Complete)"];
+  |||;
+  A => B  [label="E Close"];
+}
+----
+
+==== E Forward and Process Access Signalling
+
+MSC-A is forwarding a message from its BSS (Base Station Subsystem) to MSC-B.
+MSC-B forwards the message to its BSS, and answers to MSC-A with a Process
+Access Signalling Request.
+
+.E Process and Forward Access Signalling (Normal Case)
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  A [label="MSC-A"], B [label="MSC-B"];
+
+  A => B [label="E Forward Access Signalling Request\n\n(AN-APDU: DTAP, e.g. CC, SMS, ...)"];
+  |||;
+  B => A [label="E Process Access Signalling Request\n\n(AN-APDU: DTAP, e.g. CC, SMS, ...)"];
+}
+----
+
+==== E Routing Error
+
+The GSUP server can not route any of the requests above, and responds with an
+E Routing Error. Possible reasons for not being able to route the message are
+missing routing IEs, a mismatching source name IE (<<gsup-ie-source-name>>),
+the destination not being connected to the GSUP server or a failed attempt to
+send the message from the GSUP sever to the destination. To figure out, what
+went wrong in detail, refer to the GSUP server's logs.
+
+In the traditional GSM MAP world, the participants of an E procedure are
+directly connected, hence this routing error message does not exist in MAP.
+
+.E Routing Error example
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  A [label="MSC-A"], HLR [label="GSUP Server (OsmoHLR)"], B [label="MSC-B"];
+
+  A => HLR [label="E Prepare Handover Request"];
+  HLR => A [label="E Routing Error"];
+}
+----
+
+////
+End of "Procedures (E Interface)" chapter. Remember to place unrelated
+procedures at the end of the "Procedures" chapter, not here!
+////
+
 === Message Format
 
 ==== General
@@ -722,6 +828,207 @@ Direction: EIR (via HLR) => VLR
 |51|IMEI Check Result|<<gsup-ie-imei-result>>|M|TLV|3
 |===
 
+==== E Prepare Handover Request
+
+Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Prepare Handover Error
+
+Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Prepare Handover Result
+
+Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Prepare Subsequent Handover Request
+
+Direction: MSC-B=MSC-I => MSC-A (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Prepare Subsequent Handover Error
+
+Direction: MSC-A => MSC-B=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Prepare Subsequent Handover Result
+
+Direction: MSC-A => MSC-B=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Send End Signal Request
+
+Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Send End Signal Error
+
+Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Send End Signal Result
+
+Direction: MSC-A => MSC-B=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Process Access Signalling Request
+
+Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Forward Access Signalling Request
+
+Direction: MSC-A => MSC-B=MSC-I (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
+|===
+
+==== E Close
+
+Direction: MSC-A => MSC-B (via HLR)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|===
+
+==== E Abort
+
+This message was added to GSUP for the inter-MSC handover. But so far it is not
+used yet.
+
+==== E Routing Error
+
+Direction: GSUP Server (HLR) => GSUP Client (MSC)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
+|61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
+|30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|M|TLV|3
+|===
+
+
 === Information Elements
 
 [[gsup-ie-msgtype]]
@@ -986,6 +1293,7 @@ IEI that shall be used for the encoding.
 |0x07|Freeze P-TMSI|<<gsup-ie-empty>>
 |0x08|MSISDN|ISDN-AddressString/octet, <<gsup-ie-msisdn>>
 |0x09|HLR Number|<<gsup-ie-hlr>>
+|0x0a|Message Class| <<gsup-ie-message-class>>
 |0x10|PDP Context ID|<<gsup-ie-pdpctxid>>
 |0x11|PDP Type|<<gsup-ie-pdptype>>
 |0x12|Access Point Name|<<gsup-ie-apn>>
@@ -1012,6 +1320,12 @@ IEI that shall be used for the encoding.
 |0x46|SM Alert Reason|<<gsup-ie-sm-alert-rsn>>
 |0x50|IMEI|<<gsup-ie-imei>>
 |0x51|IMEI Check Result|<<gsup-ie-imei-result>>
+|0x60|Source Name|<<gsup-ie-source-name>>
+|0x61|Destination Name|<<gsup-ie-destination-name>>
+|0x62|AN-APDU|<<gsup-ie-an-apdu>>
+|0x63|RR Cause|<<gsup-ie-cause-rr>>
+|0x64|BSSAP Cause|<<gsup-ie-cause-bssap>>
+|0x65|Session Management Cause|<<gsup-ie-cause-sm>>
 |===
 
 [[gsup-ie-empty]]
@@ -1191,6 +1505,102 @@ not permitted on the network (e.g. because it is on a blacklist).
 |0x01|ACK
 |0x02|NACK
 |===
+
+[[gsup-ie-message-class]]
+==== Message Class
+
+Indicate, which kind of message is being sent. This allows to trivially dispatch
+incoming GSUP messages to the right code paths, and should make writing a GSUP
+to MAP converter easier.
+
+This IE was introduced together with inter-MSC handover code. Inter-MSC messages
+must include this IE and set it to the appropriate type. The intention of
+creating this IE was to use it with all GSUP messages eventually.
+
+[options="header",cols="10%,20%,70%"]
+|===
+|Type|Always present|Description
+|1|no |Subscriber Management
+|2|no |SMS
+|3|no |USSD
+|4|yes|Inter-MSC
+|===
+
+[[gsup-ie-source-name]]
+==== Source Name
+
+When the GSUP server is asked to forward a message between two GSUP clients, the
+source name is the IPA name of the client where the message is coming from. The
+source name IE is present, when the GSUP server forwards the message to the
+destination. Although redundant, the source name IE is also sent from the source
+to the GSUP server (so it is easier to follow the network traces).
+
+Source and destination names are sent as nul-terminated strings.
+
+.Message forwarding example
+["mscgen"]
+----
+msc {
+  hscale="1.5";
+  A [label="GSUP Client A"],
+  HLR [label="GSUP Server (OsmoHLR)"],
+  B [label="GSUP Client B"];
+
+  A => HLR [label="Source: A, Destination: B"];
+  HLR => B [label="Source: A, Destination: B"];
+}
+----
+
+
+[[gsup-ie-destination-name]]
+==== Destination Name
+
+The receiving counterpart to source name (<<gsup-ie-source-name>>).
+
+[[gsup-ie-an-apdu]]
+==== AN-APDU
+
+This IE encodes the AN-APDU parameter described in 3GPP TS 29.002 7.6.9.1.
+
+.Access Network Protocol
+[options="header",cols="10%,90%"]
+|===
+|Type|Description
+|0x01|BSSAP
+|0x02|RANAP
+|===
+
+[packetdiag]
+----
+{
+	colwidth = 8
+	node_height = 24
+
+	0-6:	AN-APDU IEI
+	7:	Res
+	8-15:	Length of IE content
+	16-23:	Access Network Protocol
+	24-31:	Data
+}
+----
+
+[[gsup-ie-cause-rr]]
+==== RR Cause
+
+This IE contains the reason for release or completion of an assignment or
+handover. See 3GPP TS 44.018 10.5.2.31 for reference.
+
+[[gsup-ie-cause-bssap]]
+==== BSSAP Cause
+
+This IE indicates why an event is happening on the BSSAP interface. See 3GPP TS
+48.008 3.2.2.5 for reference.
+
+[[gsup-ie-cause-sm]]
+==== Session Management Cause
+
+This IE contains the reason for rejecting a session management request. See 3GPP
+TS 24.008 10.5.6.6 / Table 10.5.157 for reference.
 
 === Session (transaction) management
 
