@@ -3,6 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Oliver Smith <osmith@sysmocom.de>
 Build-Depends: autotools-dev,
+               dh-autoreconf,
                debhelper (>= 9),
                pkg-config,
 # All below also need to be in Depends
@@ -11,6 +12,7 @@ Build-Depends: autotools-dev,
                dblatex,
                docbook5-xml,
                graphviz,
+               libxml2-utils,
                mscgen,
                python,
                python-nwdiag,
@@ -27,6 +29,7 @@ Depends: ${misc:Depends},
          dblatex,
          docbook5-xml,
          graphviz,
+         libxml2-utils,
          mscgen,
          python,
          python-nwdiag,
