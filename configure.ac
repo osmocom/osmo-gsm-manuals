@@ -8,6 +8,10 @@ AC_CONFIG_AUX_DIR([.])
 
 AM_INIT_AUTOMAKE([foreign dist-bzip2 1.6 subdir-objects])
 
+dnl include release helper
+RELMAKE='-include osmo-release.mk'
+AC_SUBST([RELMAKE])
+
 dnl checks for programs
 AC_PROG_INSTALL
 LT_INIT

@@ -10,6 +10,8 @@ SUBDIRS = tests
 $(top_srcdir)/.version:
 	echo $(VERSION) > $@-t && mv $@-t $@
 
+@RELMAKE@
+
 dist-hook:
 	echo $(VERSION) > $(distdir)/.tarball-version
 
