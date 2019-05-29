@@ -1,3 +1,21 @@
+osmo-gsm-manuals-dev (0.1.1) unstable; urgency=medium
+
+  [ Daniel Willmann ]
+  * Add a chapter to explain our different counters
+  * Change VTY samples from OsmoNITB to OsmoMSC
+
+  [ Oliver Smith ]
+  * debian: add patch for debian 8
+  * debian: fix empty debian package
+  * GSUP: document inter-MSC handover additions
+  * debian: more explicit dependencies for debian 8
+  * Makefile.am: include osmo-release.mk
+
+  [ Harald Welte ]
+  * port_numbers: Add VTY + CTRL port of upcoming OsmoCBC
+
+ -- Oliver Smith <osmith@sysmocom.de>  Wed, 29 May 2019 10:13:44 +0200
+
 osmo-gsm-manuals-dev (0.1.0) unstable; urgency=medium
 
   * Proper release number, which will also get tagged.
