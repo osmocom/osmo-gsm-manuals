@@ -1,0 +1,40 @@
+digraph G {
+	rankdir = LR;
+	subgraph cluster_RAN {
+		OsmoBTS1 [label="OsmoBTS"];
+		OsmoBTS2 [label="OsmoBTS"];
+		OsmoBSC;
+		OsmoMGW [label="OsmoMGW\n(for BSC)"];
+
+		OsmoBTS1 -> OsmoBSC [label="Abis/IP", dir="both"];
+		OsmoBTS2 -> OsmoBSC [label="Abis/IP", dir="both"];
+		OsmoBSC -> OsmoMGW [label="MGCP (BTS side)", dir="both"];
+		{ rank = same; OsmoBSC; OsmoMGW }
+
+		OsmoBTS1 -> OsmoMGW [label="RTP", dir="both"];
+		OsmoBTS2 -> OsmoMGW [label="RTP", dir="both"];
+
+		label = "RAN";
+	}
+	subgraph cluster_BSCNAT {
+		OsmoBSCNAT;
+		label = "BSCNAT";
+	}
+	subgraph cluster_CN {
+		OsmoMGW1 [label="OsmoMGW\n(for MSC)"];
+		OsmoMSC [label="MSC\ne.g. OsmoMSC"];
+		Core [label="Other CN Elements"];
+		OsmoMSC -> Core [label="MAP/ISUP/SIP/GSUP", dir="both"];
+		OsmoMSC -> OsmoMGW1 [label="MGCP", dir="both"];
+		{ rank = same; OsmoMSC; OsmoMGW1 }
+		OsmoMGW -> OsmoBSCNAT [label="Osmux", dir="both", color=red];
+		OsmoMGW1 -> Core [label="RTP", dir="both"];
+		label = "CN";
+	}
+
+	OsmoBSC -> OsmoBSCNAT [label="3GPP AoIP\nvia IPA/SCCPlite", dir="both"];
+	OsmoMGW -> OsmoBSCNAT [label="MGCP (CN side)\n(IPA/UDP forwarding via BSC)", dir="both"];
+	OsmoBSCNAT -> OsmoMSC [label="3GPP AoIP\nvia IPA/SCCPlite", dir="both"];
+	OsmoBSCNAT -> OsmoMSC [label="MGCP\nvia UDP", dir="both"];
+	OsmoBSCNAT -> OsmoMGW1 [label="RTP", dir="both"];
+}

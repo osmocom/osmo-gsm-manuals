@@ -1,0 +1,141 @@
+== Osmux
+
+`Osmux` is a protocol aimed at multiplexing and transmitting voice and
+signalling traffic from multiple sources in order to reduce the overall
+bandwidth consumption. This feature becomes specially meaningful in case of
+satellite based GSM systems, where the transmission cost on the back-haul is
+relatively expensive. In such environment, even seemingly small protocol
+optimizations, eg. message batching and trunking, can result in significant cost
+reduction.
+
+Full reference document for the osmux protocol can be found here:
+http://ftp.osmocom.org/docs/latest/osmux-reference.pdf
+
+In Osmocom satellite based GSM networks, the satellite link is envisioned to be
+in between the BSS and the core network, that is, between the BSC and the MSC
+(or BSC-NAT). Hence, Osmocom components can make use of `Osmux` protocol to
+multiplex payload audio streams from call legs between OsmoBSC and OsmoMSC (or
+OsmoBSCNAT). The MGW attached those components need of course also be aware of
+`Osmux` existence in order to properly set up the audio data plane.
+
+=== Osmux and NAT
+
+It is quite usual for satellite based links to use NATs, which means any or both
+of the two components at each side of the satellite link (BSC and MSC/BSC-NAT)
+may end up being behind a NAT and being unable to provide the real public
+address to its peer on the other side of the satellite.
+
+As a result, upon call parameter negotiation (RTP/Osmux IP address and port),
+those parameters won't be entirely useful and some specific logic needs to be
+introduced into the network components to circumvent the NAT under those cases.
+
+For instance, if the BSC and its co-located MGW (BSC/MGW from now on) is under a
+NAT, it may end up providing its private address and port as RTP/Osmux
+parameters to the MSC/MGW through GSM protocols, but MSC will fail to send any
+message to that tuple because of the NAT or routing issues (due to IP address
+being a private address). In that scenario, MSC/MGW needs to be aware that
+there's a NAT and wait until an RTP/Osmux message arrives from the BSC/MGW host.
+It then can, from that message source IP address and port (and CID in case of
+Osmux), discover the real public IP address and port of the peer (BSC/MGW). From
+that point on, the BSC/MGW punched a hole in the NAT (its connection table is
+updated) and MSC/MGW is able to send data back to it on that connection.
+
+Moreover, NATs tend to drop connections from their connection tables after some
+inactivity time, meaning a peer may receive notice about the other end not being
+available while it actually is. This means the GSM network needs to be
+configured in a way to ensure inactivity periods are short enough that this
+cannot occur. That's the reason why OsmoMGW provides the `osmux dummy` VTY
+command to enable sending dummy packets from time to time to keep the
+connections alive.
+
+=== CID allocation
+
+Each peer (BSC/MGW and MSC/MGW) allocates its own _recvCID_, and receives from
+the peer through the used GSM protocol the peer's _recvCID_, which becomes
+the local _sendCID_ for that connection.
+
+----
+BSC/MGW(recvCID=Y,sendCID=?)<-X--MSC/MGW(recvCID=X,sendCID=?)
+BSC/MGW(recvCID=Y,sendCID=X)--Y->MSC/MGW(recvCID=X,sendCID=Y)
+----
+
+This way each peer is responsible for allocating and managing their own local
+address (CID) space. This is basically the same that happens with regular IP
+address and port in the RTP case (and those also apply when Osmux is used, but
+an extra identifier, the CID, is allocated).
+
+In an ideal scenario, without NAT, each BSC/MGW would have a public,
+differentiated and unique IP and port set tuple, And MSC/MGW should be able to
+identify messages coming from them by easily matching source IP address, port
+(and CID in Osmux case) against the parameters negotiated during call set up.
+
+In this kind of scenario, MSC/MGW could easily open and manage one Osmux socket
+per BSC (based on SDP IPaddr and port parameters), with same `<localIPaddr,
+localPort>` tuple, allowing for 256 Osmux CIDs per BSC and hence call legs per
+BSC. Each of the peers could actually have more than one Osmux socket towards
+the other peer, by using a pool of ports or IP addresses, so there's really not
+limit if required as long as there's a way to infer the initially negotiated
+`<srcIP, srcPort, dstIP, dstPort, sendCID>` tuple from the received audio
+packets.
+
+However, due to some constrains from in between NATs explained in section above,
+BSC/MGW IP address and port are not a priory known, and could change between
+different connections coming from it. As a result, it is difficult to infer the
+entire tuple, so for now MGW needs to allocate its Osmux _recvCID_ in a clever
+way, in order to be able to identify the full tuple from it.
+
+Hence, currently OsmoMGW CID allocation implementation shares CID between all
+connections, which means it can only handle up to 256 concurrent Osmux
+connections (call legs).
+
+Future work in OsmoMGW (https://osmocom.org/issues/4092[OS#4092]) plans to use a
+set of local ports for Osmux sockets instead of only 1 currently used. This way
+local ports can be matched against specific `<remoteIP, remotePort>` tuples and
+have an entire 256 Osmux CID space per `<remoteIP, remotePort>` (aka per peer).
+
+=== 3GPP AoIP network setup with Osmux
+
+[[fig-network-osmux-aoip]]
+.Sample node diagram of a 3GPP AoIP network with Osmux enabled
+[graphviz]
+----
+include::network_osmux_aoip.dot[]
+----
+
+.MO-call with Osmux enable on 3GPP AoIP
+[mscgen]
+----
+include::mo_call_osmux_aoip.msc[]
+----
+
+=== SCCPLite network setup with Osmux
+
+[[fig-network-osmux-sccplite]]
+.Sample node diagram of a 3GPP AoIP using A/IP with IPA/SCCPlite network with Osmux enabled
+[graphviz]
+----
+include::network_osmux_sccplite.dot[]
+----
+
+.MO-call with Osmux enable on 3GPP AoIP using A/IP with IPA/SCCPlite
+["mscgen"]
+----
+include::mo_call_osmux_sccplite.msc[]
+----
+
+=== SCCPLite network setup with Osmux + BSC-NAT
+
+[[fig-network-osmux-sccplite-nat]]
+.Sample node diagram of a 3GPP AoIP using A/IP with IPA/SCCPlite network and BSC-NAT with Osmux enabled
+[graphviz]
+----
+include::network_osmux_sccplite_nat.dot[]
+----
+
+.MO-call with Osmux enable on 3GPP AoIP using A/IP with IPA/SCCPlite with a BSC-NAT between BSC and MSC
+["mscgen"]
+----
+include::mo_call_osmux_sccplite_nat.msc[]
+----
+
+include::mgcp_extension_osmux.adoc[]

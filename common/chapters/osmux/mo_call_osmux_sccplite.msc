@@ -1,0 +1,58 @@
+# MO-call with Osmux enable on 3GPP AoIP using A/IP with IPA/SCCPlite
+msc {
+	hscale=2;
+	ms [label="MS"], bts [label="OsmoBTS"], bsc[label="OsmoBSC"], mgw_bsc[label="OsmoMGW(bsc)"], m_sc[label="MSC"], mgw_msc[label="OsmoMGW(msc)"];
+
+	ms box m_sc     [label="We assume a SDCCH is already established"];
+	...;
+
+	ms -> bsc	[label="DTAP CM Service Request"];
+	bsc -> m_sc	[label="Complete Layer 3 Information DTAP CM Service Request"];
+	bsc <- m_sc	[label="Connection Confirmed"];
+
+	# Allocate MGW/MSC Osmux endpoint
+	m_sc -> mgw_msc	[label="MGCP CRCX *@mgw, X-Osmux: *"];
+	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 1, recvCID 5"];
+	mgw_msc -> m_sc	[label="MGCP CRCX rtpbridge/1@mgw OK (MGW:1984, X-Osmux: 5)"];
+
+	bsc <- m_sc     [label="BSSAP ASSGN REQ (CIC:1)"];
+	bts <- bsc      [label="RSL CHAN ACT"];
+	bts -> bsc      [label="RSL CHAN ACT ACK"];
+	ms <- bsc      [label="Assignment Command"];
+	ms -> bsc      [label="Assignment Complete"];
+	...;
+
+	# connect BTS RTP with BSC-MGW RTP, CIC is used as MGW endpoint
+	bts <- bsc	[label="IPA CRCX"];
+	bts box bts	[label="Bind to BTS-local RTP Port (1000)"];
+	bts -> bsc	[label="IPA CRCX ACK (BTS:1000)"];
+	bsc -> mgw_bsc	[label="MGCP CRCX 1@mgw (BTS:1000)"];
+	mgw_bsc box mgw_bsc	[label="Bind to MGW-local RTP Port (2000)\nConnect to BTS:1000"];
+	bsc <- mgw_bsc	[label="MGCP CRCX 1@mgw OK (MGW:2000)"];
+	bts <- bsc	[label="IPA MDCX (MGW:2000)"];
+	bts box bts	[label="Connect RTP socket to remote (MGW) RTP Port"];
+	bts -> bsc	[label="IPA MDCX ACK"];
+	...;
+
+	bsc -> m_sc      [label="BSSMAP ASSGN Complete"];
+	...;
+
+	# MSC configures BSC-MGW MSC-side of the endpoint through MGCP UDP forwarding
+	mgw_bsc <- m_sc    [label="MGCP CRCX 1@mgw (MSC:1984, X-Osmux: 5)"];
+	mgw_bsc box mgw_bsc   [label="Bind to BTS-local Osmux Port (1985)\nAllocate new recvCID 7"];
+	mgw_bsc -> m_sc    [label="MGCP CRCX 1@mgw OK (MGW:1985, X-Osmux: 7)"];
+	mgw_bsc <- m_sc    [label="MGCP MDCX 1@mgw (recvonly) "];
+	mgw_bsc box mgw_bsc   [label="Connect Osmux socket to remote (MSC) Osmux Port"];
+	mgw_bsc -> m_sc    [label="MGCP MDCX 1@mgw OK"];
+	mgw_bsc <= mgw_msc    [label="Osmux Audio MGW:1985 MSC:1984, CID(downlink):7"];
+	bts <= mgw_bsc     [label="RTP Audio BTS:1000 MGW:2000"];
+	ms <= bts       [label="Um Audio (unidirectional)"];
+	ms <- m_sc      [label="DTAP CC ALERTING"];
+	...;
+	mgw_bsc <- m_sc    [label="MGCP MDCX 1@mgw (sndrecv) "];
+	mgw_bsc box mgw_bsc   [label="Switch to bi-directional audio"];
+	mgw_bsc -> m_sc    [label="MGCP MDCX 1@mgw OK"];
+	mgw_bsc <=> mgw_msc   [label="Osmux Audio MGW:1985 MSC:1984, CID(uplink):5, CID(downlink):7"];
+	bts <=> mgw_bsc    [label="RTP Audio BTS:1000 MGW:2000"];
+	ms <=> bts      [label="Um Audio (bidirectional)"];
+}

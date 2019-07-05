@@ -1,0 +1,115 @@
+[[mgcp-extension-osmux]]
+=== Osmux and MGCP
+
+`X-Osmux` indicates to OsmoMGW that a given connection of an `rtpbridge`
+endpoint has to be configured in order to handle Osmux frames instead of RTP
+messages on the data plane.
+
+==== `X-Osmux` Format
+
+The value part of `X-Osmux` must be one integer in range [0..255], or
+alternatively only on request messages, an asterisk (*) if the value is not yet
+known.
+
+`X-Osmux` must be issued in the MGCP header section (typically as its last
+item), before the SDP section starts.
+
+`X-Osmux` can be included inside `CRCX` and `MDCX` request messages, as well as
+their respective response messages.
+
+In request messages, the value part of `X-Osmux` specifies the CID to be used by
+OsmoMGW to _send_ Osmux frames to the remote peer for that connection, also
+known as _sendCID_.
+
+In response messages, the value part of `X-Osmux` specifies the CID where
+OsmoMGW expect to _receive_ Osmux frames from the remote peer for that
+connection, also known as _recvCID_.
+
+.Example: `X-Osmux` format with a known CID 3.
+----
+X-Osmux: 3
+----
+
+.Example: `X-Osmux` format with a wildcard (not yet known) CID.
+----
+X-Osmux: *
+----
+
+==== `X-Osmux` Considerations
+
+If the MGCP client is willing to use Osmux for a given connection, it shall
+specify so during `CRCX` time, and not later. If at `CRCX` time the MGCP client
+doesn't yet know the _sendCID_, it can use an astersik (*) and provide
+_sendCID_ later within `MDCX` messages.
+
+All subsequent `MDCX` messages sent towards an Osmux connection must contain the
+original _sendCID_ sent during `CRCX`. The same way, all `MDCX` response shall
+contain the _recvCID_ sent during `CRCX`.
+
+The other required connection address parameters, such as IP address, port, and
+codecs, are negotiated through MGCP and SDP as usual, but in this case the IP
+address and port specific the Osmux socket IP address and port to use, that
+together with the Osmux CID conform the entire tuple identifying a Osmux stream.
+
+Since Osmux only supports AMR codec payloads, the SDP must specify use of AMR
+codec.
+
+.Example: `CRCX` message that instructs OsmoMGW to create an Osmux connection
+----
+CRCX 189 rtpbridge/1@mgw MGCP 1.0
+C: 36
+M: sendrecv
+X-Osmux: 2
+
+v=0
+o=- 36 23 IN IP4 172.18.2.20
+s=-
+c=IN IP4 1.2.3.4
+t=0 0
+m=audio 2342 RTP/AVP 112
+a=fmtp:112
+a=rtpmap:112 AMR/8000/1
+a=ptime:20
+----
+
+.Example: response to `CRCX` containing the <<recvCID>>
+----
+200 189 OK
+I: 07E41584
+X-Osmux: 2
+Z: rtpbridge/1@mgw
+
+v=0
+o=- foo 21 IN IP4 172.18.1.20
+s=-
+c=IN IP4 172.18.1.20
+t=0 0
+m=audio 11002 RTP/AVP 112
+a=rtpmap:112 AMR/8000
+a=ptime:20
+----
+
+==== `X-Osmux` Support
+
+`X-Osmux` is known to be supported by OsmoMGW on the MGCP server side, and by
+OsmoBSC as well as OsmoMSC on the MGCP client side (through libosmo-mgcp-cli).
+No other programs supporting this feature are known or envisioned at the time of
+writing this document.
+
+In OmoMGW, Osmux support is managed through VTY.
+
+.Example: Sample config file section with Osmux configuation
+----
+mgcp
+ ...
+ osmux on <1>
+ osmux bind-ip 172.18.1.20 <2>
+ osmux port 1984 <3>
+ osmux batch-factor 4 <4>
+ osmux dummy on <5>
+----
+<1> Allow clients to set allocate Osmux connections in `rtpbridge` endpoints, while still allowing RTP connections
+<2> Bind the Osmux socket to the provided IP address
+<3> Bind the Osmux socket to the provided UDP port
+<4> Batch up to 4 RTP payloads of the same stream on each Osmux frame
+<5> Periodically send Osmux dummy frames, useful to punch a hole in NATs and maintain connections opened.
