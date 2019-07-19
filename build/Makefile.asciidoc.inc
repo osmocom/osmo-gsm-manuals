@@ -17,6 +17,7 @@
 #     osmo_yada.pdf: yada/*.adoc yada/*.msc
 
 BUILDDIR = $(OSMO_GSM_MANUALS_DIR)/build
+COMMONDIR = $(OSMO_GSM_MANUALS_DIR)/common
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
 GIT_DATE := $(shell $(OSMO_GSM_MANUALS_DIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
@@ -36,7 +37,7 @@ CLEAN_FILES += $(ASCIIDOC_NAME:%=%__*.png) $(ASCIIDOC_NAME:%=%__*.svg) $(ASCIIDO
 CLEAN_FILES += $(ASCIIDOC_PDF) $(ASCIIDOC_NAME:%=%.html)
 UPLOAD_FILES += $(ASCIIDOC_PDF)
 
-ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf -a srcdir='$(srcdir)'
+ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -f $(BUILDDIR)/python2-filter.conf -a srcdir='$(srcdir)' -a commondir='$(COMMONDIR)'
 DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
 
 ifeq (,$(BUILD_RELEASE))
@@ -53,8 +54,8 @@ all: $(ASCIIDOC_PDF)
 $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(ASCIIDOC_DEPS) \
 		$(ASCIIDOCSTYLE) \
-		$(OSMO_GSM_MANUALS_DIR)/common/*/*.adoc \
-		$(OSMO_GSM_MANUALS_DIR)/common/images/* \
+		$(COMMONDIR)/*/*.adoc \
+		$(COMMONDIR)/images/* \
 		build common
 
 	# a2x can't use a different output file. To support out-of-tree builds,
@@ -79,7 +80,7 @@ check: $(ASCIIDOC_CHECKS)
 
 $(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml \
 		$(ASCIIDOCSTYLE) \
-		$(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc \
+		$(COMMONDIR)/chapters/*.adoc \
 		$(ASCIIDOC_DEPS) \
 		build common
 
