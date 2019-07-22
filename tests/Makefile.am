@@ -9,7 +9,8 @@ OSMO_GSM_MANUALS_NO_INSTALL = 1
 # Generate adoc file that includes all chapters
 ASCIIDOC = test-usermanual.adoc
 ASCIIDOC_DEPS =
-$(ASCIIDOC): $(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc
+COMMON_CHAPTERS = $(shell find $(OSMO_GSM_MANUALS_DIR)/common/chapters -name '*.adoc')
+$(ASCIIDOC): $(COMMON_CHAPTERS)
 	echo ":gfdl-enabled:" > $@
 	echo ":program-name: Test" >> $@
 	echo "" >> $@
@@ -17,7 +18,7 @@ $(ASCIIDOC): $(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc
 	echo "====================================" >> $@
 	echo "Oliver Smith <osmith@sysmocom.de>" >> $@
 	echo "" >> $@
-	for chapter in $(OSMO_GSM_MANUALS_DIR)/common/chapters/*.adoc; do \
+	for chapter in $(COMMON_CHAPTERS); do \
 		echo "include::$${chapter}[]" >> $@; \
 	done;
 CLEAN_FILES = $(ASCIIDOC)
