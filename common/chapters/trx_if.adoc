@@ -1,51 +1,59 @@
 [[trx_if]]
 == TRX Manager UDP socket interface
 
-This is the protocol used between `osmo-trx` and `osmo-bts-trx`.
+This is the protocol used between `osmo-trx` (the transceiver) and
+`osmo-bts-trx` (the BTS or core).
 
-Each TRX Manager UDP socket interface represents a single ARFCN. Each of these
-per-ARFCN interfaces is a pair of UDP sockets, one for control and one for data.
-Given a base port B (5700), the master clock interface is at port P=B. The
-TRX-side control interface for C(N) is on  port P=B+2N+1 and the data interface
-is on an odd numbered port P=B+2N+2. The corresponding core-side interface for
-every socket is at P+100. For any given build, the number of ARFCN interfaces
-can be fixed.
+Each TRX Manager UDP socket interface represents a single transceiver (ARFCN).
+Each of these channels is a pair of UDP sockets, one for control (`TRXC`) and
+one for data (`TRXD`). Additionally, there's a separate global socket managing
+the Master Clock Interface, shared among all channels.
+
+Given a base port `B` (5700), and a set of channels `0..N`, the ports related to
+a channel `0 <= X <= N` are:
+* The Master clock interface is located on port `P=B`.
+* The `TRXC` interface for channel `X` is located on port `P=B+2X+1`
+* The `TRXD` interface for channel `X` is located on port `P=B+2X+2`.
+
+The corresponding interface for every socket is at `P+100` on the BTS side.
 
 [[trx_if_clock_ind]]
 === Indications on the Master Clock Interface
 
-The master clock interface is output only (from the radio).
+The master clock interface is output only (uplink, from the radio to the BTS).
 Messages are "indications".
 
-CLOCK gives the current value of the transceiver clock to be used by the core.
-This message is sent whenever a trasmission packet arrives that is too late or
-too early.  The clock value is NOT the current transceiver time.  It is a time
-setting the the core should use to give better packet arrival times.
+CLOCK gives the current value of the transceiver clock to be used by the BTS.
+This message is usually sent around once per second (217 GSM frames), but can be
+sent at any time. The clock value is NOT the current transceiver time. It is a
+time setting that the BTS should use to give better packet arrival times. The
+initial clock value is taken randomly, and then increased over time as the
+transceiver submits downlink packets to the radio.
 ----
 IND CLOCK <totalFrames>
 ----
 
 [[trx_if_control]]
-=== Commands on the Per-ARFCN Control Interface
+=== TRXC protocol
 
-The per-ARFCN control interface uses a command-reponse protocol. Commands are
-NULL-terminated ASCII strings, one per UDP socket. Each command has a
-corresponding response.
+The per-ARFCN control interface uses a command-response protocol. Each command
+has a corresponding response. Commands are sent in downlink direction (BTS ->
+TRX), and responses are sent in uplink direction (TRX -> BTS). Commands and
+responses are NULL-terminated ASCII strings.
 
-Every command is of the form:
+Every command is structured this way:
 ----
 CMD <cmdtype> [params]
 ----
-
 The `<cmdtype>` is the actual command.
 Parameters are optional depending on the commands type.
+
 Every response is of the form:
 ----
 RSP <cmdtype> <status> [result]
 ----
 The `<status>` is 0 for success and a non-zero error code for failure.
 Successful responses may include results, depending on the command type.
-
 
 ==== Power Control
 
@@ -55,11 +63,11 @@ CMD POWEROFF
 RSP POWEROFF <status>
 ----
 
-`POWERON` starts the transmitter and starts the demodulator.  Initial power
+`POWERON` starts the transmitter and starts the demodulator. Initial power
 level is very low. This command fails if the transmitter and receiver are not
 yet tuned. This command fails if the transmit or receive frequency creates a
 conflict with another ARFCN that is already running. If the transceiver is
-already on, it response with success to this command.
+already on, it answers successfully to this command.
 ----
 CMD POWERON
 RSP POWERON <status>
@@ -102,7 +110,7 @@ RSP TXTUNE <status> <kHz>
 
 ==== Timeslot Control
 
-`SETSLOT` sets the format of the uplink timeslots in the ARFCN.
+`SETSLOT` sets the format of a given uplink timeslot in the ARFCN.
 The `<timeslot>` indicates the timeslot of interest.
 The `<chantype>` indicates the type of channel that occupies the timeslot.
 A chantype of zero indicates the timeslot is off.
@@ -111,48 +119,114 @@ CMD SETSLOT <timeslot> <chantype>
 RSP SETSLOT <status> <timeslot> <chantype>
 ----
 
-=== Messages on the per-ARFCN Data Interface
+Here's the list of channel combinations and related values (`<chantype>`):
+
+.List of channel combinations and related values (`<chantype>`)
+[options="header"]
+|===
+| value | Channel Combination
+|0| Channel is transmitted, but unused
+|1| TCH/FS
+|2| TCH/HS, idle every other slot
+|3| TCH/HS
+|4| Downlink: FCCH + SCH + CCCH + BCCH, Uplink: RACH
+|5| Downlink: FCCH + SCH + CCCH + BCCH + SDCCH/4 + SACCH/4, Uplink: RACH+SDCCH/4
+|6| Downlink: CCCH+BCCH, Uplink: RACH
+|7| SDCCH/8 + SACCH/8
+|8| TCH/F + FACCH/F + SACCH/M
+|9| TCH/F + SACCH/M
+|10| TCH/FD + SACCH/MD
+|11| PBCCH+PCCCH+PDTCH+PACCH+PTCCH
+|12| PCCCH+PDTCH+PACCH+PTCCH
+|13| PDTCH+PACCH+PTCCH
+|===
+
+=== TRXD protocol
 
 Messages on the data interface carry one radio burst per UDP message.
 
-==== Received Data Burst
+==== Uplink Data Burst
 
+.TRXD Uplink data burst message structure
 [packetdiag]
 ----
 {
 	colwidth = 32
 	node_height = 40
 
-	0:	T
-	1-4:	FN
-	5:	A
-	6-7:	C
-	8-155:	Payload
+	0-3:	VER
+	4:	RES
+	5-7:	TN
+	8-39:	FN
+	40-47:	RSSI
+	48-63:	TOA256
+	64-95:	...Payload...
+	96-97:	PAD
 }
 ----
 
-* _T_: timeslot index
-* _FN_: GSM frame number, big endian
-* _A_: RSSI in -dBm
-* _C_: correlator timing offset in 1/256 symbol steps, 2's-comp, big endian
-* _Payload_: 148 bytes soft symbol estimates, 0 -> definite "0", 255 -> definite "1"
+VER: 4 bits::
+TRXD header version, shall be 0.
 
-==== Transmit Data Burst
+TN: 3 bits::
+Timeslot number.
 
+RES: 1 bit::
+Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
+to (0..15), in case anybody would need to transfer UMTS bursts.
+
+FN: 32 bits (4 bytes)::
+GSM frame number, big endian.
+
+RSSI: 8 bits (1 byte)::
+Received Signal Strength Indication in -dBm, encoded without the negative sign.
+
+TOA256: 16 bits (2 bytes)::
+Timing of Arrival in units of 1/256 of symbol, big endian.
+
+Payload: 148 bytes for GSM, 444 bytes for EDGE::
+Contains the uplink burst. Soft symbol estimates, 0 -> definite "0", 255 ->
+definite "1".
+
+PAD: 2 bits (optional)::
+Padding at the end, historical reasons (OpenBTS inheritance). Bits can take any
+value, but 0 is preferred.
+
+==== Downlink Data Burst
+
+.TRXD Downlink data burst message structure
 [packetdiag]
 ----
 {
 	colwidth = 32
 	node_height = 40
 
-	0:	T
-	1-4:	FN
-	5:	A
-	6-153:	Payload
+	0-3:	VER
+	4:	RES
+	5-7:	TN
+	8-39:	FN
+	40-47:	PWR
+	48-95:	...Payload...
 }
 ----
 
-* _T_: timeslot index
-* _FN_ GSM frame number, big endian
-* _A_: transmit level wrt ARFCN max, -dB (attenuation)
-* _Payload_: 148 bytes output symbol values, 0 & 1
+VER: 4 bits::
+TRXD header version, shall be 0.
+
+TN: 3 bits::
+Timeslot number.
+
+RES: 1 bit::
+Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
+to (0..15), in case anybody would need to transfer UMTS bursts.
+
+FN: 32 bits (4 bytes)::
+GSM frame number, big endian.
+
+PWR: 8 bits (1 byte)::
+Contains the relative (to the full-scale amplitude) transmit power level in dB.
+The absolute value is set on the control interface.
+
+Payload: 148 bytes for GSM, 444 bytes for EDGE::
+Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
+using one byte (0x01 or 0x00 respectively).
