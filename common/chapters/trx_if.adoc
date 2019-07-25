@@ -141,20 +141,63 @@ Here's the list of channel combinations and related values (`<chantype>`):
 |13| PDTCH+PACCH+PTCCH
 |===
 
+==== TRXD header version negotiation
+
+Messages on DATA interface may have different header formats, defined by a
+version number, which can be negotiated on the control interface. By default,
+the Transceiver will use the legacy header version (0).
+
+The header format negotiation can be initiated by the BTS using 'SETFORMAT'
+command. If the requested version is not supported by the transceiver, status
+code of the response message should indicate a preferred (basically, the latest)
+version. The format of this message is the following:
+----
+CMD SETFORMAT <timeslot> <ver_req>
+RSP SETFORMAT <ver_resp> <ver_req>
+----
+
+where:
+* `<ver_req>` is the requested version (suggested by the BTS),
+* `<ver_rsp>` is either the applied version if matches `<ver_req>`, or a
+  preferred version if `<ver_req>` is not supported.
+
+If the transceiver indicates `<ver_rsp>` different than `<ver_req>`, the BTS is
+supposed to re-initiate the version negotiation using the suggested `<ver_rsp>`.
+For example:
+
+----
+  BTS -> TRX: CMD SETFORMAT 2
+  BTS <- TRX: RSP SETFORMAT 1 2
+
+  BTS -> TRX: CMD SETFORMAT 1
+  BTS <- TRX: RSP SETFORMAT 1 1
+----
+
+If no suitable `<ver_rsp>` is found, or the `<ver_req>` is incorrect, the status
+code in the response shall be `-1`.
+
+As soon as `<ver_rsp>` matches `<ver_req>` in the response, the process of
+negotiation is complete. Changing the header version is supposed to be done
+before `POWERON`, but can be also done afterwards.
+
 === TRXD protocol
 
 Messages on the data interface carry one radio burst per UDP message.
 
 ==== Uplink Data Burst
 
-.TRXD Uplink data burst message structure
+Uplink data burst message structure differs from version 0 to 1. Basically,
+version 1 contains an extended header with regards to version 0, and the final
+padding existence is completely dropped.
+
+.TRXDv0 Uplink data burst message structure
 [packetdiag]
 ----
 {
 	colwidth = 32
 	node_height = 40
 
-	0-3:	VER
+	0-3:	VER(0)
 	4:	RES
 	5-7:	TN
 	8-39:	FN
@@ -165,8 +208,27 @@ Messages on the data interface carry one radio burst per UDP message.
 }
 ----
 
+.TRXDv1 Uplink data burst message structure
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER(1)
+	4:	RES
+	5-7:	TN
+	8-39:	FN
+	40-47:	RSSI
+	48-63:	TOA256
+	64-71:	MTS
+	72-87:	C/I
+	88-127:	...Payload...
+}
+----
+
 VER: 4 bits::
-TRXD header version, shall be 0.
+TRXD header version, v0 and v1 are specified so far.
 
 TN: 3 bits::
 Timeslot number.
@@ -184,13 +246,84 @@ Received Signal Strength Indication in -dBm, encoded without the negative sign.
 TOA256: 16 bits (2 bytes)::
 Timing of Arrival in units of 1/256 of symbol, big endian.
 
+MTS: 8 bits (1 byte)::
+Contains the Modulation and Training Sequence information. See <<coding-mts>>
+for more information on the encoding.
+
+C/I: 16 bits (2 bytes)::
+Contains the Carrier-to-Interference ratio in centiBels, big endian. The C/I
+value is computed from the training sequence of each burst, where the "ideal"
+training sequence is compared to the actual training sequence and the result
+expressed in centiBels.
+
 Payload: 148 bytes for GSM, 444 bytes for EDGE::
-Contains the uplink burst. Soft symbol estimates, 0 -> definite "0", 255 ->
-definite "1".
+Contains the uplink burst. Unlike the downlink bursts, the uplink bursts are
+designated using the soft-bits notation, so the receiver can indicate its
+assurance from 0 to -127 that a given bit is 1, and from 0 to +127 that a given
+bit is 0. The Viterbi algorithm allows to approximate the original sequence of
+hard-bits (1 or 0) using these values. Each soft-bit (-127..127) of the burst is
+encoded as an unsigned value in range (0..255) respectively using the constant
+shift. This way:
+* 0 -> definite "0"
+* 255 -> definite "1".
 
 PAD: 2 bits (optional)::
 Padding at the end, historical reasons (OpenBTS inheritance). Bits can take any
-value, but 0 is preferred.
+value, but 0 is preferred. Only expected on TRXDv0 headers.
+
+[[coding-mts]]
+===== Coding of MTS: Modulation and Training Sequence info
+
+3GPP TS 45.002 version 15.1.0 defines several modulation types, and a few sets
+of training sequences for each type. The most common are GMSK and 8-PSK (which
+is used in EDGE).
+
+.MTS field structure
+----
++-----------------+---------------------------------------+
+| 7 6 5 4 3 2 1 0 | bit numbers (value range)             |
++-----------------+---------------------------------------+
+| X . . . . . . . | IDLE / nope frame indication (0 or 1) |
++-----------------+---------------------------------------+
+| . X X X X . . . | Modulation, TS set number (see below) |
++-----------------+---------------------------------------+
+| . . . . . X X X | Training Sequence Code (0..7)         |
++-----------------+---------------------------------------+
+----
+
+IDLE / nope frame indication::
+The bit number 7 (MSB) is set to high when either nothing has been detected, or
+during IDLE frames, so noise levels can be delivered, and avoid clock gaps on
+the BTS side. Other bits are ignored, and should be set to low (`0`) in this
+case.
+
+Modulation and TS set number::
+GMSK has 4 sets of training sequences (see tables 5.2.3a-d), while 8-PSK (see
+tables 5.2.3f-g) and the others have 2 sets. Access and Synchronization bursts
+also have several synchronization sequences.
+
+.Modulation and TS set number
+----
++-----------------+---------------------------------------+
+| 7 6 5 4 3 2 1 0 | bit numbers (value range)             |
++-----------------+---------------------------------------+
+| . 0 0 X X . . . | GMSK, 4 TS sets (0..3)                |
++-----------------+---------------------------------------+
+| . 0 1 0 X . . . | 8-PSK, 2 TS sets (0..1)               |
++-----------------+---------------------------------------+
+| . 0 1 1 X . . . | AQPSK, 2 TS sets (0..1)               |
++-----------------+---------------------------------------+
+| . 1 0 0 X . . . | 16QAM, 2 TS sets (0..1)               |
++-----------------+---------------------------------------+
+| . 1 0 1 X . . . | 32QAM, 2 TS sets (0..1)               |
++-----------------+---------------------------------------+
+| . 1 1 X X . . . | RESERVED (0)                          |
++-----------------+---------------------------------------+
+----
+
+Training Sequence Code::
+The Training Sequence Code used to decode an Access or a Synchronization burst.
+This field hence doesn't apply for Normal bursts.
 
 ==== Downlink Data Burst
 
@@ -211,7 +344,7 @@ value, but 0 is preferred.
 ----
 
 VER: 4 bits::
-TRXD header version, shall be 0.
+TRXD header version, v0 and v1 are specified so far.
 
 TN: 3 bits::
 Timeslot number.
