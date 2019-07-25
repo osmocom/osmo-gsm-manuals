@@ -3,7 +3,7 @@
 
 The following gives an overview of all the types of counters available:
 
-=== Osmo Counters
+=== Osmo Counters (deprecated)
 
 Osmo counters are the oldest type of counters added to Osmocom projects.
 They are not grouped.
@@ -26,12 +26,11 @@ The control interface command to get a counter (group) is:
 
 rate_ctr.per_{sec,min,hour,day,abs}.<group_name>.<idx>.[counter_name]
 
-It is possible to get all counters from a group by omitting the counter name
+It is possible to get all counters in a group by omitting the counter name
 
 === Stat Item
 
-Stat items are a grouped replacement for osmo counters, but not many stat
-items are available yet.
+Stat items are a grouped replacement for osmo counters.
 
 * Printed as part of VTY show stats
 * Replacement for osmo counters
@@ -39,12 +38,91 @@ items are available yet.
 * Grouped and indexed like rate counters
 * Items have a unit
 * Keeps a list of the last values measured, so could return an average, min,
-  max, std. deviation
+  max, std. deviation. So far this is not implemented in any of the reporting
+  options.
+
+=== Statistic Levels
+
+There are three levels on which a statistic can be aggregated in Osmocom
+projects: globally, per-peer and per-subscriber.
+
+==== Global
+
+These are global statistics.
+
+==== Peer
+
+These statistics relate to a peer the program connects to such as the NSVC in
+an SGSN.
+
+This level also includes reporting global statistics.
+
+==== Subscriber
+
+These statistics are related to an individual mobile subscriber. An example
+would be bytes transferred in an SGSN PDP context.
+
+This level also includes global and peer-based statistics.
 
 === Stats Reporter
 
-Statsd stats reporter can send osmo counter, rate counter and stats item values to statsd
+The stats reporter periodically collects osmo counter, rate counter and
+stat item values and sends them to a backend. Currently implemented are
+outputting to the configured log targets and a statsd connector.
 
-See the stats reporter command of the VTY reference for details on how to
-setup the connection to statsd.
+==== Configuring a stats reporter
 
+Periodically printing the statistics to the log can be done in the following
+way:
+
+.Log statistics
+====
+
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# stats interval 60 <1>
+OsmoBSC(config)# stats reporter log <2>
+OsmoBSC(config-stats)# level global <3>
+OsmoBSC(config-stats)# enable <4>
+----
+====
+
+<1> The interval determines how often the statistics are reported.
+<2> Write the statistic information to any configured log target.
+<3> Report only `global` statistics (can be `global`, `peer`, or
+    `subscriber`).
+<4> Enable the reporter, `disable` will disable it again.
+
+The counter values can also be sent to any aggregation/visualization tool that
+understands the statsd format, for example a statsd server with graphite or
+prometheus using the statsd_exporter together with grafana.
+
+The statsd format is specified in https://github.com/b/statsd_spec
+
+.Report statistics to statsd
+====
+
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+OsmoBSC(config)# stats interval 10
+OsmoBSC(config)# stats reporter statsd <1>
+OsmoBSC(config-stats)# prefix BSC1 <2>
+OsmoBSC(config-stats)# level subscriber <3>
+OsmoBSC(config-stats)# remote-ip 1.2.3.4 <4>
+OsmoBSC(config-stats)# remote-port 8125 <5>
+OsmoBSC(config-stats)# enable
+----
+====
+
+<1> Configure the statsd reporter.
+<2> Prefix the reported statistics. This is useful to distinguish statistics
+    from multiple instances of the same service.
+<3> Report only `global` statistics or include `peer` or `subscriber`
+    statistics as well.
+<4> IP address of the statsd server.
+<5> UDP port of the statsd server. Statsd by default listens to port 8125.
+
+Setting up a statsd server and configuring the visualization is beyond the
+scope of this document.
