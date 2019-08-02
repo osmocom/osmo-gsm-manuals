@@ -73,8 +73,7 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
 	  || true
 	TEXINPUTS="$(OSMO_GSM_MANUALS_DIR)" \
-		a2x $(A2X_OPTS) $(notdir $<) || (echo "ERROR: a2x failed! Running asciidoc to get verbose errors..."; \
-			asciidoc -v $(ASCIIDOC_OPTS) $(notdir $<); exit 1)
+		a2x -vv $(A2X_OPTS) $(notdir $<)
 
 check: $(ASCIIDOC_CHECKS)
 
