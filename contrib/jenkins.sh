@@ -12,7 +12,7 @@ fi
 osmo-clean-workspace.sh
 
 autoreconf -fi
-./configure
+./configure --enable-asciidoc-warnings-check
 $MAKE $PARALLEL_MAKE
 $MAKE $PARALLEL_MAKE check
 $MAKE $PARALLEL_MAKE distcheck

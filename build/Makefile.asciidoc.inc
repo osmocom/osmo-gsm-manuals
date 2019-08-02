@@ -75,7 +75,10 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 	TEXINPUTS="$(OSMO_GSM_MANUALS_DIR)" \
 		a2x -vv $(A2X_OPTS) $(notdir $<)
 
-check: $(ASCIIDOC_CHECKS)
+check:
+	if [ -n "$$ASCIIDOC_WARNINGS_CHECK" ]; then \
+		$(MAKE) $(ASCIIDOC_CHECKS); \
+	fi
 
 $(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml \
 		$(ASCIIDOCSTYLE) \

@@ -28,6 +28,15 @@ then
 	AC_MSG_ERROR("missing dependencies!")
 fi
 
+# Asciidoc warnings check (OS#4140)
+AC_ARG_ENABLE(asciidoc_warnings_check,
+	[AS_HELP_STRING(
+		[--enable-asciidoc-warnings-check],
+		[Fail the build if asciidoc prints any warnings]
+	)],
+	[asciidoc_warnings_check=$enableval], [asciidoc_warnings_check="no"])
+AM_CONDITIONAL([ASCIIDOC_WARNINGS_CHECK], [test x"$asciidoc_warnings_check" = x"yes"])
+
 AC_OUTPUT(
     osmo-gsm-manuals.pc
     Makefile
