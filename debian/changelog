@@ -1,3 +1,22 @@
+osmo-gsm-manuals-dev (0.2.0) unstable; urgency=medium
+
+  [ Oliver Smith ]
+  * contrib/jenkins.sh: run "make maintainer-clean"
+  * tests: pick up subdirs inside common/chapters
+  * Makefile.asciidoc.inc: always run verbose asciidoc
+  * Makefile.asciidoc.inc: warnings check not default
+
+  [ Pau Espin Pedrol ]
+  * Makefile.asciidoc.inc: Export commondir attribute to asciidoc files
+  * common: Introduce Osmux documentation
+  * common: trx_if.adoc: Improve documentation
+  * common: trx_if.adoc: Add documentation about TRXDv1 and SETFORMAT
+
+  [ Daniel Willmann ]
+  * counters-overview: Add a section about the stats reporter
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Thu, 08 Aug 2019 12:07:24 +0200
+
 osmo-gsm-manuals-dev (0.1.1) unstable; urgency=medium
 
   [ Daniel Willmann ]
