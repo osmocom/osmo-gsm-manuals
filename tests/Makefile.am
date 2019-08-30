@@ -6,10 +6,11 @@ EXTRA_DIST = test-usermanual-docinfo.xml \
 # Do not install any of the test pdfs
 OSMO_GSM_MANUALS_NO_INSTALL = 1
 
-# Generate adoc file that includes all chapters
+# Generate adoc file that includes all chapters (OS#4183: glossary.adoc must be the last file)
 ASCIIDOC = test-usermanual.adoc
 ASCIIDOC_DEPS =
-COMMON_CHAPTERS = $(shell find $(OSMO_GSM_MANUALS_DIR)/common/chapters -name '*.adoc')
+COMMON_CHAPTERS = $(shell find $(OSMO_GSM_MANUALS_DIR)/common/chapters -name '*.adoc' | grep -v glossary\.adoc) \
+		  $(OSMO_GSM_MANUALS_DIR)/common/chapters/glossary.adoc
 $(ASCIIDOC): $(COMMON_CHAPTERS)
 	echo ":gfdl-enabled:" > $@
 	echo ":program-name: Test" >> $@
