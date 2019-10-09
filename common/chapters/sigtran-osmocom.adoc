@@ -152,8 +152,8 @@ SS7/SIGTRAN stack, there are the following options:
 
 . implement SCCP connection coupling.  This is something like a proxy
   for connection-oriented SCCP, and is what is used in SS7 to route
-  beyond a given MTP netwokr (e.g. at gateways between different MTP
-  networks)
+  beyond a given MTP network (e.g. at gateways between different MTP
+  networks).
 
 . consider all SCCP messages to be destined for the local point code
   of the receiver.  This then means that the SG functionality must be
@@ -231,7 +231,7 @@ All you need to make sure is:
 * to point all BSCs and the MSC to connect to the IP+Port of the STP
 * to configure the point code of the MSC in the BSCs
 
-==== A minimaal 3G configuration to get started
+==== A minimal 3G configuration to get started
 
 You will be running the following programs:
 
@@ -252,7 +252,7 @@ include::sigtran-simple-3g.dot[]
 ----
 
 You can use the OsmoSTP fully dynamic registration feature, so the
-HNBGWs, the SMC and the SGSNwill simply register with their point
+HNBGWs, the MSC and the SGSN will simply register with their point
 codes to the STP, and the STP will create most configuration on the
 fly.
 
@@ -345,7 +345,7 @@ An AS has the following properties:
 |Description|More verbose description (for human user only)
 |Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
 |Routing Key|Routing Key (mostly Point Code) routed to this AS
-|Traffic Mode|Theoretically Bradcast, Load-Balance.  Currently only Ovverride
+|Traffic Mode|Theoretically Broadcast, Load-Balance.  Currently only Override
 |Recovery Timeout|Duration of the AS T(r) recovery timer.  During this time,
                   outgoing messages are queued. If the AS is ACTIVE
                   before timer expiration, the queue is drained.  At
@@ -398,7 +398,7 @@ Application Servers are identified by their name.
 
 === Osmocom SCCP Instances
 
-An Osmocom SS7 Instance can be bound to an Osmocom SS7 Instance.  It
+An Osmocom SCCP Instance can be bound to an Osmocom SS7 Instance.  It
 will register/bind for the ITU-standard Service Indicator (SI).
 
 === Osmocom SCCP User
@@ -419,7 +419,7 @@ corresponding SSNs.
 This is how Osmocom represents each individual connection of
 connection-oriented SCCP.
 
-To illustrate the practical applicaiton: For the common use case of
+To illustrate the practical application: For the common use case of
 the A or Iu interfaces, this means that every dedicated radio channel
 that is currently active to any UE/MS has one SCCP connection to the
 MSC and/or SGSN.
