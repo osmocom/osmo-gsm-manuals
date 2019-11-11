@@ -209,7 +209,7 @@ Not used.
 
 [options="header",cols="15%,85%"]
 |===
-|0x04|Register Requst
+|0x04|Register Request
 |0x05|Register Error
 |0x06|Register Result
 |0x08|Challenge Request

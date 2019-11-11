@@ -91,7 +91,7 @@ NSEI  101, NS-VC 101, Remote: BSS, ALIVE UNBLOCKED, UDP 10.9.1.119:23000
   ALIVE ACK missing count   :        0 (0/s 0/m 0/h 0/d)
   RESET ACK missing count   :        0 (0/s 0/m 0/h 0/d)
  NSVC Peer Statistics:
-  ALIVE reponse time        :        0 ms
+  ALIVE response time       :        0 ms
 ----
 
 .Example: Inspecting BSSGP state

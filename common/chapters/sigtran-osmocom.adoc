@@ -14,7 +14,7 @@ This is despite the fact that ETSI/3GPP mandated the use of SCCP over
 MTP over E1/T1 TDM lines for the A interface at that time.
 
 Instead of going down to the TDM based legacy physical layers, OsmoBSC
-implemented someting called an IPA multiplex, which apparently some
+implemented something called an IPA multiplex, which apparently some
 people also refer to as SCCPlite.  We have never seen any
 specifications for this interface, but implemented it from scratch
 using protocol traces.
@@ -197,7 +197,7 @@ STP is performing some routing function.  Compares this to your web
 browser not knowing about IP routers, it just establishes an http
 connection to a web server.
 
-This is also why most GSM nework architecture diagrams will not
+This is also why most GSM network architecture diagrams will not
 explicitly show an STP.  It is not part of the cellular network.
 Rather, one or many STPs are part of the underlying SS7 signaling
 transport network, on top of which the cellular network elements are

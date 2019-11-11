@@ -68,7 +68,7 @@ depending on the signaling direction. A mobile originated DTMF tone is
 signaled using START/STOP DTMF messages which are hauled through various
 protocols upwards into the core network.
 
-Contrary to that, a mobile terminated DTMF tone is not transfered as an out of
+Contrary to that, a mobile terminated DTMF tone is not transferred as an out of
 band message. Instead, in-band signaling is used, which means a tone is injected
 early inside a PBX or MGW.
 

@@ -82,11 +82,11 @@ A tool called ipaccess-config can be used to configure a new ip.access nanoBTS.
 ==== ipaccess-config
 
 This program is very helpful tool which is used to configure Unit ID and
-Primarly OML IP. You can find this tool in the OsmoBSC repository under:
+Primary OML IP. You can find this tool in the OsmoBSC repository under:
 './src/ipaccess'
 
 
-.Example: using ipaccess-config to configure Unit ID and Primarly OML IP of
+.Example: using ipaccess-config to configure Unit ID and Primary OML IP of
 nanoBTS
 ----
 $ ./ipaccess-config -u 1801/0/0<1>  10.9.1.195<2> -o 10.9.1.154<3>

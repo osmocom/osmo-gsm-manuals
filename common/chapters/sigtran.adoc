@@ -89,9 +89,9 @@ isolated MTP networks, each with their own MTP dialect and addressing.
 SCCP provides both connectionless (datagram) and connection-oriented
 services.  Both are used in the context of cellular networks.
 
-==== SCCP Adresses
+==== SCCP Addresses
 
-SCCP Adresses are quite complex.  This is due to the fact that it is
+SCCP Addresses are quite complex.  This is due to the fact that it is
 not simply one address format, but in fact a choice of one or multiple
 different types of addresses.
 
@@ -136,11 +136,11 @@ as well as the _Nature of Address Indication_.
 |NAI|Nature of Address Indicator|Exists in GTI=1 and is sort of a mixture of TON + NPI
 |TT|Translation Type      |Used as a look-up key in Global Title Translation Tables
 |NP|Numbering Plan        |Indicates ITU Numbering Plan, such as E.164, E.212, E.214
-|ES|Encoding Scheme       |Just a peculiar way to idicate the length of the digits
+|ES|Encoding Scheme       |Just a peculiar way to indicate the length of the digits
 |- |Signals               |The actual "phone number digits"
 |====
 
-For more information about SCCP Adresses and Global Titles, please
+For more information about SCCP Addresses and Global Titles, please
 refer to <<itu-t-q713>>
 
 
@@ -189,7 +189,7 @@ connection is established.
 
 This means that connection-oriented SCCP can not be routed across MTP
 network boundaries the same way as connectionless SCCP messages.
-Instead, an STP would have to perform _connection coupling_, whic is
+Instead, an STP would have to perform _connection coupling_, which is
 basically the equivalent of an application-level proxy between two
 SCCP connections, each over one of the two MTP networks.
 
@@ -233,7 +233,7 @@ them.  For more information, please see the related IETF RFCs.
 
 ===== Signaling Gateway (SG)
 
-The Signaling Gateway (SG) interconnects the SS7 network wit external
+The Signaling Gateway (SG) interconnects the SS7 network with external
 applications.  It translates (parts of) the SS7 protocol stack into an
 IP based SIGTRAN protocol stack.  Which parts at which level of the
 protocol stack are translated to what depends on the specific SIGTRAN

@@ -98,7 +98,7 @@ writing this document.
 
 In OmoMGW, Osmux support is managed through VTY.
 
-.Example: Sample config file section with Osmux configuation
+.Example: Sample config file section with Osmux configuration
 ----
 mgcp
  ...

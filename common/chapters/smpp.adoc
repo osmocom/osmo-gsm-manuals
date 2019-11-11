@@ -128,7 +128,7 @@ TLVs to each SMPP DELIVER PDU:
 |===
 
 All of the above values reflect the *last measurement report* as
-recieved vi A-bis RSL from the BTS.  It is thus a snapshot value (of
+received vi A-bis RSL from the BTS.  It is thus a snapshot value (of
 the average within one 480ms SACCH period), and not an average over
 all the SACCH periods during which the channel was open or the SMS was
 received. Not all measurement reports contain all the values.  So you
@@ -143,5 +143,5 @@ to each SMPP DELIVER PDU:
 [options="header", cols="3,1,1,5"]
 |===
 | TLV | IEI | Length | Purpose
-| TLVID_osmo_imei | 0x2306 | variable | IMEI of the subscibers phone (ME)
+| TLVID_osmo_imei | 0x2306 | variable | IMEI of the subscribers phone (ME)
 |===

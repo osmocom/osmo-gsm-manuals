@@ -169,7 +169,7 @@ The rate counter group name have to be prefixed with interval
 specification which can be any of "*per_sec*", "*per_min*", "*per_hour*", "*per_day*"
 or "*abs*" for absolute value.
 
-The old-style counters available via "+counter.*+" variables are superceeded by "+rate_ctr.abs+"
+The old-style counters available via "+counter.*+" variables are superseded by "+rate_ctr.abs+"
 so its use is discouraged.
 There might still be some applications not yet converted to rate_ctr.
 

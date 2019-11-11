@@ -363,7 +363,7 @@ Direction: SGSN / VLR => HLR
 |===
 
 The conditional 'AUTS' and 'RAND' IEs are both present in case the SIM
-(via UE) requests an UMTS AKA re-synchronization procedure.  Eiter
+(via UE) requests an UMTS AKA re-synchronization procedure.  Either
 both optional IEs are present, or none of them.
 
 ==== Send Authentication Info Error
@@ -1181,7 +1181,7 @@ tuple.
 |27|RES|<<gsup-ie-res>>|C|TLV|2-18
 |===
 
-The conditional IEs 'IK', 'CK', 'AUTN' and 'RES' are onl present in
+The conditional IEs 'IK', 'CK', 'AUTN' and 'RES' are only present in
 case the subscriber supports UMTS AKA.
 
 [[gsup-ie-rand]]
@@ -1197,7 +1197,7 @@ The 4-byte Authentication Result of the GSM Authentication Algorithm.
 [[gsup-ie-kc]]
 ==== Kc
 
-The 8-byte Encryption Key of the GSM Authentication and Key Agreemnt
+The 8-byte Encryption Key of the GSM Authentication and Key Agreement
 Algorithm.
 
 [[gsup-ie-ik]]
