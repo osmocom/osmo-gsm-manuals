@@ -120,12 +120,16 @@ GSM::
 GSMTAP::
   GSM tap; pseudo standard for encapsulating GSM protocol layers over
   UDP/IP for analysis
+GSUP::
+  Generic ubscriber Update Protocol.  Osmocom-specific alternative to TCAP/MAP
 GT::
   Global Title; an address in SCCP
 GTP::
   GPRS Tunnel Protocol; used between SGSN and GGSN
 HLR::
   Home Location Register; central subscriber database of a GSM network
+HNB-GW::
+  Home NodeB Gateway.  Entity between femtocells (Home NodeB) and CN in 3G/UMTS.
 HPLMN::
   Home PLMN; the network that has issued the subscriber SIM and has his record in HLR
 IE::
@@ -143,6 +147,12 @@ IP::
   Internet Protocol (_IETF RFC 791_ <<ietf-rfc791>>)
 IPA::
   _ip.access GSM over IP_ protocol; used to multiplex a single TCP connection
+Iu::
+  Interface in 3G/UMTS between RAN and CN
+IuCS::
+  Iu interface for circuit-switched domain.  Used in 3G/UMTS between RAN and MSC
+IuPS::
+  Iu interface for packet-switched domain.  Used in 3G/UMTS between RAN and SGSN
 LAC::
   Location Area Code; 16bit identifier of Location Area within network
 LAPD::
@@ -174,8 +184,13 @@ MM::
   Mobility Management; part of the GSM Layer 3 Protocol
 MNC::
   Mobile Network Code; identifies network within a country; assigned by national regulator
+MNCC::
+  Mobile Network Call Control; Unix domain socket based Interface between MSC and external call control entity
+  like osmo-sip-connector
 MNO::
   Mobile Network Operator; operator with physical radio network under his MCC/MNC
+MO::
+  Mobile Originated.  Direction from Mobile (MS/UE) to Network
 MS::
   Mobile Station; a mobile phone / GSM Modem
 MSC::
@@ -183,6 +198,8 @@ MSC::
   core network
 MSISDN::
   Mobile Subscriber ISDN Number; telephone number of the subscriber
+MT::
+  Mobile Terminated.  Direction from Network  to Mobile (MS/UE)
 MTP::
   Message Transfer Part; SS7 signaling protocol (_ITU-T Q.701_ <<itu-t-q701>>)
 MVNO::
