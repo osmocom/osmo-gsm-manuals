@@ -66,6 +66,9 @@ CEPT::
   Administrations.
 CGI::
   Cell Global Identifier comprised of MCC, MNC, LAC and BSIC
+CSFB::
+  Circiut-Switched Fall Back; Mechanism for switching from LTE/EUTRAN to UTRAN/GERAN when circuit-switched
+  services such as voice telephony are required.
 dB::
   deci-Bel; relative logarithmic unit
 dBm::
@@ -297,6 +300,10 @@ SDCCH::
   and SMS transport in GSM
 SDK::
   Software Development Kit
+SGs::
+  Interface between MSC (GSM/UMTS) and MME (LTE/EPC) to facilitate CSFB and SMS.
+SGSN::
+  Serving GPRS Support Node; Core network element for packet-switched services in GSM and UMTS.
 SIGTRAN::
   Signaling Transport over IP (_IETF RFC 2719_ <<ietf-rfc2719>>)
 SIM::
