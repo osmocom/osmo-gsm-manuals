@@ -19,7 +19,7 @@ implement the BSC-side of the A-bis protocol as something originally
 called `bs11-abis`.  All of this was 'just for fun', in order to learn
 more and to boldly go where no Free Software developer has gone before.
 The goal was to learn and to bring Free Software into a domain that
-despite its ubiquity had not yet seen and Free / Open Source software
+despite its ubiquity, had not yet seen any Free / Open Source software
 implementations.
 
 `bs11-abis` quickly turned into `bsc-hack`, then 'OpenBSC' and its
@@ -250,7 +250,7 @@ for networks to be installed and configured by anyone but professional
 GSM engineers, specialized in their respective area like radio planning,
 radio access network, back-haul or core network.
 
-If you do not share an existing background in GSM network architecture,
+If you do not share an existing background in GSM network architecture and
 GSM protocols, correctly installing, configuring and optimizing your GSM
 network will be tough, irrespective whether you use products with
 Osmocom software or those of traditional telecom suppliers.
