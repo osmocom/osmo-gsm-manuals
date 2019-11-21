@@ -15,7 +15,7 @@ Build-Depends: autotools-dev,
                libxml2-utils,
                mscgen,
                python,
-               python-nwdiag,
+               python3-nwdiag,
                python-pychart,
                xsltproc
 Standards-Version: 3.9.8
@@ -32,7 +32,7 @@ Depends: ${misc:Depends},
          libxml2-utils,
          mscgen,
          python,
-         python-nwdiag,
+         python3-nwdiag,
          python-pychart,
          xsltproc
 Description: Osmocom manuals shared code

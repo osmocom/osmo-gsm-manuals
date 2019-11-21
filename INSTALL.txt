@@ -10,7 +10,7 @@ apt-get install \
   mscgen \
   graphviz \
   python-pychart \
-  python-nwdiag
+  python3-nwdiag
 
 (Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)
 

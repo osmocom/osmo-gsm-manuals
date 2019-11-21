@@ -21,7 +21,7 @@ check_dep_bin xsltproc libxslt
 check_dep_bin a2x asciidoc
 check_dep_bin asciidoc asciidoc
 check_dep_bin dblatex dblatex
-check_dep_bin packetdiag nwdiag
+check_dep_bin packetdiag3 python3-nwdiag
 check_dep_bin dot graphviz
 check_dep_bin python2 python2
 check_dep_python2_module pychart python2-pychart
