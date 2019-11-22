@@ -11,6 +11,7 @@ the Master Clock Interface, shared among all channels.
 
 Given a base port `B` (5700), and a set of channels `0..N`, the ports related to
 a channel `0 <= X <= N` are:
+
 * The Master clock interface is located on port `P=B`.
 * The `TRXC` interface for channel `X` is located on port `P=B+2X+1`
 * The `TRXD` interface for channel `X` is located on port `P=B+2X+2`.
@@ -152,11 +153,12 @@ command. If the requested version is not supported by the transceiver, status
 code of the response message should indicate a preferred (basically, the latest)
 version. The format of this message is the following:
 ----
-CMD SETFORMAT <timeslot> <ver_req>
+CMD SETFORMAT <ver_req>
 RSP SETFORMAT <ver_resp> <ver_req>
 ----
 
 where:
+
 * `<ver_req>` is the requested version (suggested by the BTS),
 * `<ver_rsp>` is either the applied version if matches `<ver_req>`, or a
   preferred version if `<ver_req>` is not supported.
