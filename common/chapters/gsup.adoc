@@ -166,8 +166,9 @@ msc {
 ==== Purge MS
 
 Using the Purge MS procedure, the SGSN or VLR can request purging of MS
-related state from a previous SGSN or VLR during an inter-SGSN / inter-MSC location
-update.
+related state from the HLR.  It is used after the SGSN or VLR detects that no radio
+contact has been established for a prolonged duration (i.e. longer than the periodic LU
+timeout). See 3GPP TS 23.012 Section 3.6.1.4 for a description of this procedure.
 
 .Purge MS (Normal Case)
 ["mscgen"]
