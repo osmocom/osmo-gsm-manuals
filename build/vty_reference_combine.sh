@@ -3,6 +3,10 @@
 # see Makefile.vty-reference.inc
 set -e
 
+# Allow overriding the "generated" output dir, so we don't have collisions when building multiple VTY references in one
+# Osmocom project (OS#4292)
+VTYGEN=${VTYGEN:-generated}
+
 # first argument: merge_doc.xsl
 MERGE_DOC="$1"
 shift
@@ -12,11 +16,11 @@ reference="$1"
 test "$(ls -1 $reference | wc -l)" = "1"
 shift
 
-combined="generated/combined.xml"
-combine_src="generated/combine_src.xml"
+combined="$VTYGEN/combined.xml"
+combine_src="$VTYGEN/combine_src.xml"
 
 set -x
-mkdir -p generated
+mkdir -p "$VTYGEN"
 cp $reference "$combined"
 
 while [ -n "$1" ]; do
