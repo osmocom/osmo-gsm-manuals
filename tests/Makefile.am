@@ -1,7 +1,10 @@
 OSMO_GSM_MANUALS_DIR = $(top_srcdir)
 EXTRA_DIST = test-usermanual-docinfo.xml \
 	test-vty-reference.xml \
-	vty
+	vty \
+	test2-vty-reference.xml \
+	vty-test2 \
+	$(NULL)
 
 # Do not install any of the test pdfs
 OSMO_GSM_MANUALS_NO_INSTALL = 1
@@ -26,7 +29,7 @@ CLEAN_FILES = $(ASCIIDOC)
 
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 
-VTY_REFERENCE = test-vty-reference.xml
+VTY_REFERENCE = test-vty-reference.xml test2-vty-reference.xml
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.vty-reference.inc
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.common.inc
 

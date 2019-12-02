@@ -1,0 +1,17 @@
+<vtydoc xmlns='urn:osmocom:xml:libosmocore:vty:doc:1.0'>
+  <node id='_common_cmds_'>
+    <name>Common Commands</name>
+    <description>These commands are available on all VTY nodes. They are listed here only once, to unclutter the VTY reference.</description>
+    <command id='help'>
+      <params>
+        <param name='help' doc='Description of the interactive help system' />
+      </params>
+    </command>
+    <command id='list'>
+      <params>
+        <param name='list' doc='Print command list' />
+      </params>
+    </command>
+    <!-- (...) -->
+  </node>
+</vtydoc>
