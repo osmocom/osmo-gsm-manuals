@@ -17,7 +17,7 @@
 # e.g.
 #
 #     OSMO_GSM_MANUALS_DIR = ..
-#     VTY_REFERENCE = osmofoo-vty-reference
+#     VTY_REFERENCE = osmofoo-vty-reference.xml
 #     include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.vty-reference.inc
 #
 # This uses the Makefile.docbook.inc, you should not mix uses of
