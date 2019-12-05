@@ -14,9 +14,7 @@ Build-Depends: autotools-dev,
                graphviz,
                libxml2-utils,
                mscgen,
-               python,
                python3-nwdiag,
-               python-pychart,
                xsltproc
 Standards-Version: 3.9.8
 Homepage: https://git.osmocom.org/osmo-gsm-manuals/
@@ -31,9 +29,7 @@ Depends: ${misc:Depends},
          graphviz,
          libxml2-utils,
          mscgen,
-         python,
          python3-nwdiag,
-         python-pychart,
          xsltproc
 Description: Osmocom manuals shared code
  All Osomocom repositories require this package to build their manuals.

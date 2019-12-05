@@ -9,7 +9,6 @@ apt-get install \
   docbook5-xml \
   mscgen \
   graphviz \
-  python-pychart \
   python3-nwdiag
 
 (Note that asciidoc-dblatex is required from debian 9 on and did not exist before.)

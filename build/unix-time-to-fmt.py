@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Usage:
 
   unix-time-to-fmt.py 1234567 [%Y-%m-%d[...]]
 
 Convert unix timestamp to a string of the given format in UTC, according to
-  https://docs.python.org/2/library/time.html
+  https://docs.python.org/3/library/time.html
 Default is '%Y-%b-%d' --> 2016-Jan-01
 """
 

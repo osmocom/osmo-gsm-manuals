@@ -1,4 +1,4 @@
-#!  /usr/bin/env python
+#!/usr/bin/env python3
 """Simple wrapper for filter programs which ensures that a blank
 is returned as output.  The purpose is to silence the
 AsciiDoc warning "no output from filter".
