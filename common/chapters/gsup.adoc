@@ -1685,20 +1685,43 @@ contain a single TV of the following format:
 |===
 |Field|Presence|Length|Description
 |T|M|1|Identity type
-|V|O|...|Encoded identity itself
+|V|O|1|ToN/NPI header
+|V|O|...|BCD encoded (or alphanumeric) identity
 |===
 
 where the identity type can be one of the following:
 
 .Identity types of SM-RP-DA / SM-RP-OA IEs
-[options="header",cols="15%,85%"]
+[options="header",cols="15%,15%,70%"]
 |===
-|Type|Description
-|0x01|IMSI (see 3GPP TS 29.002, clause 7.6.2.1)
-|0x02|MSISDN (see 3GPP TS 29.002, clause 7.6.2.17)
-|0x03|Service centre address (see 3GPP TS 29.002, clause 7.6.2.27)
-|0xff|Omit value for noSM-RP-DA and noSM-RP-OA
+|Type|ToN/NPI Header|Description
+|0x01|No|IMSI (see 3GPP TS 29.002, clause 7.6.2.1)
+|0x02|Yes|MSISDN (see 3GPP TS 29.002, clause 7.6.2.17)
+|0x03|Yes|Service centre address (see 3GPP TS 29.002, clause 7.6.2.27)
+|0xff|No|Omit value for noSM-RP-DA and noSM-RP-OA
 |===
+
+Coding of the optional ToN/NPI header, as well as all possible ToN/NPI values,
+is described in 3GPP TS 129.002, section 17.7.8 "Common data types", and
+can be summarized as follows:
+
+.ToN/NPI header coding (as per 3GPP TS 129.002, MSB first)
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0:	extension
+	1-3:	nature of address indicator
+	4-7:	numbering plan indicator
+}
+----
+
+Please note that unlike both <<gsup-ie-imsi>> and <<gsup-ie-msisdn>>, where the value
+part is encoded as LV (i.e. contains an additional length), an identity in both
+<<gsup-ie-sm-rp-da>> / <<gsup-ie-sm-rp-oa>> IEs shall not contain the redundant
+length octet.
 
 [[gsup-ie-sm-rp-ui]]
 ==== SM-RP-UI (SM TPDU)
