@@ -114,6 +114,8 @@ GPL::
   GNU General Public License, a copyleft-style Free Software License
 Gp::
   Gp interface between SGSN and GGSN; uses GTP protocol
+GPRS::
+  General Packet Radio Service; the packet switched 2G technology
 GPS::
   Global Positioning System; provides a highly accurate clock reference
   besides the global position
