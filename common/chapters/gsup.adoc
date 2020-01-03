@@ -439,7 +439,7 @@ Direction: HLR => SGSN / VLR
 |08|MSISDN|<<gsup-ie-msisdn>>|O|TLV|0-9
 |09|HLR Number|<<gsup-ie-hlr>>|O|TLV|0-9
 |04|PDP info complete|<<gsup-ie-empty>>|O|TLV|2
-|05|PDP info|<<gsup-ie-pdpinfo>>|1-10|TLV|
+|05|PDP info|<<gsup-ie-pdpinfo>>|O|TLV|1-10
 |===
 
 If the PDP info complete IE is present, the old PDP info list shall be cleared.
@@ -519,7 +519,7 @@ Direction: HLR => SGSN / VLR
 |08|MSISDN|<<gsup-ie-msisdn>>|O|TLV|0-9
 |09|HLR Number|<<gsup-ie-hlr>>|O|TLV|0-9
 |04|PDP info complete|<<gsup-ie-empty>>|M|TLV|2
-|05|PDP info|<<gsup-ie-pdpinfo>>|0-10|TLV|
+|05|PDP info|<<gsup-ie-pdpinfo>>|C|TLV|0-10
 |14|PDP-Charging Characteristics|<<gsup-ie-charging>>|O|TLV|4
 |===
 
@@ -558,7 +558,7 @@ Direction: HLR => SGSN / VLR
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
-|10|PDP context id|<<gsup-ie-pdpinfo>> (no conditional IE)|0-10|TLV|
+|10|PDP Context ID|<<gsup-ie-pdpctxid>>|C|TLV|3
 |===
 
 ==== Delete Subscriber Data Error
