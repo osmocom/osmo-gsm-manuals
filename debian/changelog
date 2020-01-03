@@ -1,3 +1,37 @@
+osmo-gsm-manuals-dev (0.3.0) unstable; urgency=medium
+
+  [ Oliver Smith ]
+  * tests/Makefile.am: always put glossary at the end
+  * Cosmetic: fix Makefile.vty.reference.inc example
+  * Support multiple VTY reference manuals
+  * tests: add second VTY reference
+  * Drop python2 and pychart dependencies
+  * debian/check-depends.sh: add inkscape to depends
+
+  [ Pau Espin Pedrol ]
+  * sigtran-osmocom.adoc: Fix typos
+  * Fix python-nwdiag dependency on new debian distros
+  * trx_if.adoc: Fix typo and formatting of bullet list
+
+  [ Martin Hauke ]
+  * Fix some typos
+
+  [ Harald Welte ]
+  * typo / stylistic fixes by Tom Tessier
+  * missing glossary items; mostly MSC/3G related
+  * some more missing items from glossary.
+  * gsup: Fix description of Purge MS procedure
+  * Add GPRS
+
+  [ Neels Hofmeyr ]
+  * D-GSM biblio entries
+
+  [ Vadim Yanitskiy ]
+  * chapters/gsup.adoc: further documentation for SM-RP-DA/OA IE coding
+  * chapters/gsup.adoc: fix message definitions containing gsup-ie-pdpinfo
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Fri, 03 Jan 2020 13:00:12 +0100
+
 osmo-gsm-manuals-dev (0.2.0) unstable; urgency=medium
 
   [ Oliver Smith ]
