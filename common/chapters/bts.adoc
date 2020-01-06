@@ -399,3 +399,50 @@ network
    timeslot 7
     phys_chan_config PDCH
 ----
+
+=== Tuning Access to the BTS
+
+OsmoBSC offers several configuration options to fine-tune access to the BTS.
+It can allow only a portion of the subscribers access to the network.
+This can also be used to ramp up access to the network on startup by slowly
+letting in more and more subscribers. This is especially useful for isolated
+cells with a huge number of subscribers.
+
+==== Load Management
+
+Every SIM card is member of one of the ten regular ACCs (0-9). Access to the
+BTS can be restricted to SIMs that are members of certain ACCs.
+
+Since the ACCs are distributed uniformly across all SIMs allowing only ACCs
+0-4 to connect to the BTS should reduce its load by 50%.
+
+The default is to allow all ACCs to connect.
+
+.Example: Restrict access to the BTS by ACC
+----
+network
+ bts 0
+  rach access-control-class 1 barred <1>
+  rach access-control-class 9 allowed <2>
+----
+<1> Disallow SIMs with access-class 1 from connecting to the BTS
+<2> Permit SIMs with access-class 9 to connect to the BTS.
+
+
+Smaller cells with lots of subscribers can be overwhelmed with traffic after
+the network is turned on. This is especially true in areas with little to no
+reception from other networks. To manage the load OsmoBSC has an option to
+enable one Access Class at a time so initial access to the network is
+distributed across a longer time.
+
+.Example: Ramp up access to the BTS after startup
+----
+network
+ bts 0
+  access-control-class-ramping <1>
+  access-control-class-ramping-step-interval 30 <2>
+  access-control-class-ramping-step-size 1 <3>
+----
+<1> Turn on access-control-class ramping
+<2> Enable more ACCs every 30 seconds
+<3> At each step enable one more ACC
