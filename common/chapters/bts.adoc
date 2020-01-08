@@ -408,6 +408,15 @@ This can also be used to ramp up access to the network on startup by slowly
 letting in more and more subscribers. This is especially useful for isolated
 cells with a huge number of subscribers.
 
+Other options control the behaviour of the MS when it needs to access the
+random access channel before a dedicated channel is established.
+
+If the BTS is connected to the BSC via a high-latency connection the MS should
+wait longer for an answer to a RACH request. If it does not the network will
+have to deal with an increased load due to duplicate RACH requests. However,
+in order to minimize the delay when a RACH request or response gets lost the
+MS should not wait too long before retransmitting.
+
 ==== Load Management
 
 Every SIM card is member of one of the ten regular ACCs (0-9). Access to the
@@ -446,3 +455,51 @@ network
 <1> Turn on access-control-class ramping
 <2> Enable more ACCs every 30 seconds
 <3> At each step enable one more ACC
+
+
+==== RACH Parameter Configuration
+
+The following parameters allow control over how the MS can access the random
+access channel (RACH). It is possible to set a minimum receive level under
+which the MS will not even attempt to access the network.
+
+The RACH is a shared channel which means multiple MS can choose to send a
+request at the same time. To minimize the risk of a collision each MS will
+choose a random number of RACH slots to wait before trying to send a RACH
+request.
+
+On very busy networks the range this number is chosen from should be
+high to avoid collisions, but a lower range reduces the overall delay when
+trying to establish a channel.
+
+The option `rach tx integer N` controls the range from which this number X
+is chosen. It is `0 <= X < max(8,N)`.
+
+After sending a RACH request the MS will wait a random amount of slots before
+retransmitting its RACH request. The range it will wait is also determined by
+the option `rach tx integer N`, but calculating it is not so straightforward.
+It is defined as `S <= X < S+N` where `S` is determined from a table.
+
+In particular `S` is lowest when `N` is one of 3, 8, 14 or 50 and highest when
+`N` is 7, 12 or 32.
+
+For more information see _3GPP TA 44.018_ <<3gpp-ts-44-018>> Ch. 3.3.1.1.2 and
+Table 3.3.1.1.2.1 in particular.
+
+The amount of times the MS attempts to retransmit RACH requests can also be
+changed. A higher number means more load on the RACH while a lower number can
+cause channel establishment to fail due to collisions or bad reception.
+
+.Example: Configure RACH Access Parameters
+----
+network
+ bts 0
+  rxlev access min 20 <1>
+  rach tx integer 50<2>
+  rach max transmission <3>
+----
+<1> Allow access to the network if the MS receives the BCCH of the cell at
+-90dBm or better (20dB above -110dBm).
+<2> This number affects how long the MS waits before (re-)transmitting RACH
+requests.
+<3> How often to retransmit the RACH request.

@@ -69,6 +69,9 @@
 - [[[3gpp-ts-44-006]]] 3GPP TS 44.006: Mobile Station - Base Station
   System (MS - BSS) interface; Data Link (DL) layer specification
   http://www.3gpp.org/DynaReport/44006.htm
+- [[[3gpp-ts-44-018]]] 3GPP TS 44.018: Mobile radio interface layer 3
+  specification; Radio Resource Control (RRC) protocol
+  http://www.3gpp.org/DynaReport/44018.htm
 - [[[3gpp-ts-44-064]]] 3GPP TS 44.064: Mobile Station - Serving GPRS
   Support Node (MS-SGSN); Logical Link Control (LLC) Layer Specification
   http://www.3gpp.org/DynaReport/44064.htm
