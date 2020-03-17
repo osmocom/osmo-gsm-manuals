@@ -1,0 +1,293 @@
+[[cs7_config]]
+== Configure SCCP/M3UA
+
+All CNI programs using SCCP/M3UA act as M3UA ASP role and SCTP client,
+expecting to connect to a Signalling Gateway (STP/SG) implementing the M3UA
+SG role as SCTP server. The STP/SG then routes M3UA messages between its
+ASPs, typically by point-codes.
+
+In an all-Osmocom CNI, the typical simple/minimal usage is:
+
+- OsmoSTP acts as the STP/SG (server role) and routes between the ASP,
+- All other Osmocom CNI programs act as SCTP client and provide ASP
+  implementations.
+
+For example, in an all-Osmocom minimal setup,
+
+- OsmoMSC contacts an OsmoSTP and subscribes its point-code 0.23.1;
+- then OsmoBSC also contacts the same OsmoSTP, subscribes with its own
+  point-code 1.23.3.
+- Using these established links, OsmoBSC initiates an A-interface link by
+  directing a BSSAP RESET message to the MSC's point-code 0.23.1,
+- and the RESET ACK response from the MSC is routed back to the BSC's
+  point-code 1.23.3.
+
+The details of SCCP/M3UA are configured in the 'cs7' section of the VTY
+configuration.
+
+Osmocom programs automatically configure missing SCCP/M3UA configuration, by
+assuming sane defaults for small/minimal all-Osmocom installations, which may
+not be what you want in larger networks integrating with non-Osmocom core
+network elements.
+
+If no explicit `routing-key` is set, it may be determined at runtime by
+negotiation with OsmoSTP -- see OsmoSTP manual chapter "Osmocom M3UA Routing
+Key Management Extensions", regarding config option `accept-asp-connections
+dynamic-permitted`.
+
+The complete active configuration of an Osmocom program can be obtained by the
+VTY command `show cs7 config` (the usual `show running-config` omits
+automatically configured items). Here is an example of OsmoMSC's default
+configuration:
+
+----
+OsmoMSC> show cs7 config
+cs7 instance 0
+ point-code 0.23.1
+ asp asp-clnt-OsmoMSC-A-Iu 2905 0 m3ua
+  remote-ip 127.0.0.1
+  sctp-role client
+ as as-clnt-OsmoMSC-A-Iu m3ua
+  asp asp-clnt-OsmoMSC-A-Iu
+  routing-key 2 0.23.1
+----
+
+At the time of writing, SCCP/M3UA links involving Osmocom program are:
+
+- A-interface: OsmoBSC to OsmoMSC
+- IuCS-interface: OsmoHNBGW to OsmoMSC
+- IuPS-interface: OsmoHNBGW to OsmoSGSN
+
+=== Connect to STP Instance
+
+By default, an STP instance is assumed to listen on the default M3UA port
+(2905) on the local host (127.0.0.1).
+
+Establishing an SCCP/M3UA link towards a remote STP instance can be configured
+as:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  # IP address of the remote STP:
+  remote-ip 10.23.24.1
+  # optional: local bind to a specific IP
+  local-ip 10.9.8.7
+----
+
+Be aware that such an `asp` needs to be linked to an `as`, see <<as_and_asp>>.
+
+=== Local Point-Code
+
+Each CNI program on an SCCP/M3UA link typically has a local point-code,
+configurable by:
+
+----
+cs7 instance 0
+ point-code 7.65.4
+----
+
+If an explicit routing context is configured, this point-code is repeated in
+the `routing-key` configuration:
+
+----
+cs7 instance 0
+ point-code 0.23.1
+ as my-as m3ua
+  routing-key 2 0.23.1
+----
+
+See also <<point_code_format>>.
+
+=== Remote Point-Code
+
+Programs establishing communication across SCCP links need a remote SCCP
+address, typically by point-code, to contact.
+
+For example,
+
+- OsmoBSC needs to know the MSC's point-code, to be able to establish the A-interface.
+- OsmoHNBGW needs to know the MSC's point-code, to be able to establish the IuCS-interface.
+- OsmoHNBGW needs to know the SGSN's point-code, to be able to establish the IuPS-interface.
+
+To maintain remote SCCP addresses, each `cs7` instance maintains an SCCP address book:
+
+----
+cs7 instance 0
+ sccp-address remote-pc-example
+  point-code 1.23.1
+----
+
+This address book entry on its own has no effect. It is typically referenced by
+specific configuration items depending on the individual programs.
+
+Examples:
+
+- An OsmoBSC configures the MSC's remote SCCP address:
+
+----
+cs7 instance 0
+ sccp-address my-remote-msc
+  point-code 1.23.1
+msc 0
+ msc-addr my-remote-msc
+----
+
+- An HNBGW configures both the remote MSC's and SGSN's SCCP addresses:
+
+----
+cs7 instance 0
+ sccp-address my-msc
+  point-code 0.23.1
+ sccp-address my-sgsn
+  point-code 0.23.2
+hnbgw
+ iucs
+  remote-addr my-msc
+ iups
+  remote-addr my-sgsn
+----
+
+Besides a point-code, an SCCP address can have several routing indicators:
+
+- PC: routing by point-code is the default for Osmocom.
+- GT: routing by Global Title is configurable by `routing-indicator GT`.
+- IP: routing by IP address is configurable by `routing-indicator IP`.
+
+In OsmoSTP, only routing by point-code is currently implemented.
+
+[[point_code_format]]
+=== Point-Code Format
+
+Point-codes can be represented in various formats. For details, see OsmoSTP
+manual, chapter "Point Codes".
+
+By default, Osmocom uses a point-code representation of 3.8.3, i.e. first digit
+of 3 bit, second digit of 8 bit, and third digit of 3 bit.
+
+----
+cs7 instance 0
+ point-code format 3 8 3
+ point-code 0.23.1
+----
+
+Often, point-codes are also represented as a single decimal number:
+
+----
+cs7 instance 0
+ point-code format 24
+ point-code 185
+----
+
+It is also possible to use a dash as delimiter.
+
+----
+cs7 instance 0
+ point-code delimiter dash
+ point-code 0-23-1
+----
+
+
+[[as_and_asp]]
+=== AS and ASP
+
+Each CNI program needs at least one Application Server `as` and one Application
+Server Process `asp` configured on its `cs7` to be able to communicate on
+SCCP/M3UA. An `asp` needs to be part of at least one `as`. For details, see the
+OsmoSTP manual, chapters "Application Server" and "Application Server Process".
+
+In Osmocom's `cs7`, any amount of `as` and `asp` can be configured by name, and
+an `as` references the `asp` entries belonging to it by their names.
+
+In a simple/minimal Osmocom setup, an Osmocom CNI program would have exactly
+one `as` with one `asp`.
+
+For example:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  # where to reach the STP:
+  remote-ip 127.0.0.1
+  sctp-role client
+ as my-as m3ua
+  asp my-asp
+----
+
+In Osmocom CNI programs, it is possible to omit the `as` and/or `asp` entries,
+which the program will then attempt to configure automatically.
+
+When configuring both `as` and `asp` manually, make sure to link them by name.
+For example, the following configuration will *fail*, because `as` and `asp`
+are not linked:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  remote-ip 127.0.0.1
+ as my-as m3ua
+  routing-key 2 0.23.1
+----
+
+To *fix* above config, link the `asp` to an `as` by adding `asp my-asp`:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  remote-ip 127.0.0.1
+ as my-as m3ua
+  asp my-asp
+  routing-key 2 0.23.1
+----
+
+=== Subsystem Number (SSN)
+
+Osmocom CNI programs typically route SCCP/M3UA messages by PC+SSN: each ASP,
+having a given SCCP address, receives messages for one or more specific
+subsystems, identified by a Subsystem Number (SSN).
+
+For example, the A-interface between BSC and MSC uses SSN = BSSAP (254). In
+Osmocom programs, SSNs do not need to be configured; they implicitly, naturally
+relate to the interfaces that a program implements.
+
+For example, OsmoBSC takes the configured remote MSC's SCCP address and adds
+the SSN = BSSAP to it in order to contact the MSC's A-interface. To receive
+A-interface messages from the MSC, OsmoBSC subscribes a local user for this SSN
+on the ASP.
+
+=== Routing Context / Routing Key
+
+In SCCP/M3UA, messages can be routed by various Routing Indicators (PC+SSN, PC,
+GT, ...). Osmocom CNI programs typically use PC+SSN as Routing Indicator.
+
+On the SG (for example OsmoSTP), each ASP's distinct Routing Indicator needs to
+be indexed by a distinct Routing Context (a simple index number scoped per SG),
+to forward M3UA to the correct peer.
+
+The Osmocom SG implementation employs Routing Key Management (RKM, see OsmoSTP
+manual) to automatically determine a distinct Routing Context index for each
+connected ASP. Routing Contexts can also be configured manually -- some
+non-Osmocom SG implementations require this.
+
+Each Routing Context is associated with a Routing Indicator and address; this
+association is called a Routing Key.
+
+For example, to configure an OsmoBSC with a local point-code of 1.23.3 to
+receive M3UA with Routing Context of 2 and RI=PC:
+
+----
+cs7 instance 0
+ point-code 1.23.3
+ as my-as m3ua
+  routing-key 2 1.23.3
+----
+
+Osmocom programs so far implement Routing Keys by Destination Point Code (DPC),
+plus optional Subsystem Number (SSN) and/or Service Indicator (SI):
+
+----
+routing-key RCONTEXT DPC
+routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup)
+routing-key RCONTEXT DPC ssn SSN
+routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup) ssn SSN
+----
