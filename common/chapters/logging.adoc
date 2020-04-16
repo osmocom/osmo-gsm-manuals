@@ -227,7 +227,7 @@ initialized automatically. To descrease stderr logging to absolute minimum, you 
 OsmoBSC> enable
 OsmoBSC# configure terminal
 OsmoBSC(config)# log stderr
-OsmoBSC(config-log)# logging level all fatal
+OsmoBSC(config-log)# logging level force-all fatal
 ----
 
 ==== Logging to a file
