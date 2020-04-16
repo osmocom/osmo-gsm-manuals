@@ -47,7 +47,6 @@ which protocol / interface.
 |TCP|4267|Control Interface|osmo-mgw
 |UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
-|UDP|2427|GSMTAP|osmo-pcu, osmo-bts
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
 |===============
 ////
