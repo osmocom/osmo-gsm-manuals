@@ -1025,8 +1025,8 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 |0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
 |61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
-|30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
-|31|Session State|<<gsup-ie-session-state>>|M|TLV|3
+|30|Session ID|<<gsup-ie-session-id>>|O|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|O|TLV|3
 |===
 
 
