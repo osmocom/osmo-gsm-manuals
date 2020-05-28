@@ -64,26 +64,27 @@ CMD POWEROFF
 RSP POWEROFF <status>
 ----
 
-`POWERON` starts the transmitter and starts the demodulator. Initial power
-level is very low. This command fails if the transmitter and receiver are not
-yet tuned. This command fails if the transmit or receive frequency creates a
-conflict with another ARFCN that is already running. If the transceiver is
-already on, it answers successfully to this command.
+`POWERON` starts the transmitter and starts the demodulator. Initial power level
+is by default very low, unless set explicitly by `SETPOWER`/`ADJPOWER`
+beforehand while in `POWEROFF` state. This command fails if the transmitter and
+receiver are not yet tuned. This command fails if the transmit or receive
+frequency creates a conflict with another ARFCN that is already running. If the
+transceiver is already on, it answers successfully to this command.
 ----
 CMD POWERON
 RSP POWERON <status>
 ----
 
-`SETPOWER` sets output power in dB wrt full scale.
-This command fails if the transmitter and receiver are not running.
+`SETPOWER` sets transmit power attenuation wrt the nominal transmit power of
+the transceiver, in dB.
 ----
 CMD SETPOWER <dB>
 RSP SETPOWER <status> <dB>
 ----
 
-`ADJPOWER` adjusts power by the given dB step.  Response returns resulting power
-level wrt full scale. This command fails if the transmitter and receiver are not
-running.
+`ADJPOWER` adjusts by the given dB the transmit power attenuation of the
+transceiver.  Response returns resulting transmit power attenuation wrt the
+nominal transmit power of the transceiver.
 ----
 CMD ADJPOWER <dBStep>
 RSP ADJPOWER <status> <dBLevel>
