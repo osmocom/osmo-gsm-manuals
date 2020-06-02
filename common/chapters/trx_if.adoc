@@ -75,6 +75,14 @@ CMD POWERON
 RSP POWERON <status>
 ----
 
+`NOMTXPOWER` is used by the BTS to retrieve the nominal output transmit power of
+the transceiver. `SETPOWER/ADJPOWER` attenuations (dB) are expected to be
+applied based on this value (dBm).
+----
+CMD NOMTXPOWER
+RSP NOMTXPOWER <status> <dBm>
+----
+
 `SETPOWER` sets transmit power attenuation wrt the nominal transmit power of
 the transceiver, in dB.
 ----
