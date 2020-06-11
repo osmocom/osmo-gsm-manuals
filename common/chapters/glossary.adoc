@@ -201,6 +201,10 @@ MS::
 MSC::
   Mobile Switching Center; network element in the circuit-switched
   core network
+MSC pool::
+  A number of redundant MSCs serving the same core network, which a BSC / RNC
+  distributes load across; see also the "MSC Pooling" chapter in OsmoBSC's user
+  manual <<userman-osmobsc>> and _3GPP TS 23.236_ <<3gpp-ts-23-236>>
 MSISDN::
   Mobile Subscriber ISDN Number; telephone number of the subscriber
 MT::
@@ -214,6 +218,10 @@ NCC::
 NITB::
   Network In The Box; combines functionality traditionally provided
   by BSC, MSC, VLR, HLR, SMSC functions; see OsmoNITB
+NRI::
+  Network Resource Indicator, typically 10 bits of a TMSI indicating which MSC
+  of an MSC pool attached the subscriber; see also the "MSC Pooling" chapter in
+  OsmoBSC's user manual <<userman-osmobsc>> and _3GPP TS 23.236_ <<3gpp-ts-23-236>>
 NSEI::
   NS Entity Identifier
 NVCI::

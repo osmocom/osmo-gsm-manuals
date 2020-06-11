@@ -41,6 +41,9 @@
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
   (U)SIM application toolkit; Stage 2
   http://www.3gpp.org/DynaReport/23048.htm
+- [[[3gpp-ts-23-236]]] 3GPP TS 23.236: Intra-domain connection of Radio Access
+  Network (RAN) nodes to multiple Core Network (CN) nodes
+  http://www.3gpp.org/DynaReport/23236.htm
 - [[[3gpp-ts-24-007]]] 3GPP TS 24.007: Mobile radio interface signalling
   layer 3; General Aspects
   http://www.3gpp.org/DynaReport/24007.htm
