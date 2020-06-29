@@ -45,6 +45,9 @@ which protocol / interface.
 |TCP|4265|Control Interface|osmo-cbc
 |TCP|4266|D-GSM MS Lookup: mDNS serve|osmo-hlr
 |TCP|4267|Control Interface|osmo-mgw
+|TCP|4268|telnet (VTY)|osmo-uecups
+|SCTP|4268|UECUPS|osmo-uecups
+|TCP|4269|telnet (VTY)|osmo-e1d
 |UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
