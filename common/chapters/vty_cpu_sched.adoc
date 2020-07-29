@@ -1,0 +1,117 @@
+[[vty_cpu_sched]]
+== VTY Process and Thread management
+
+Most Osmocom programs provide, some support to tune some system
+settings related to the running process, its threads, its scheduling policies,
+etc.
+
+All of these settings can be configured through the VTY, either during startup
+by means of usual config files or through direct human interaction at the telnet
+VTY interface while the process is running.
+
+[[vty_cpu_sched_policy]]
+=== Scheduling Policy
+
+The scheduler to use as well as some of its properties (such as realtime
+priority) can be configured at any time for the entire process. This sort of
+functionality is useful in order to increase priority for processes running
+time-constrained procedures, such as those acting on the Um interface, like
+_osmo-trx_ or _osmo-bts_, where use of this feature is highly recommended.
+
+.Example: Set process to use RR scheduler
+----
+cpu-sched
+ policy rr 1 <1>
+----
+<1> Configure process to use _SCHED_RR_ policy with real time priority 1
+
+[[vty_cpu_sched_cpu_affinity_mask]]
+=== CPU-Affinity Mask
+
+Most operating systems allow for some sort of configuration on restricting the
+amount of CPUs a given process or thread can run on. The procedure is sometimes
+called as _cpu-pinning_ since it allows to keep different processes pinned on a
+subset of CPUs to make sure the scheduler won't run two CPU-hungry processes on
+the same CPU.
+
+The set of CPUs where each thread is allowed to run on is expressed by means of
+a bitmask in hexadecimal representation, where the right most bit relates to
+CPU 0, and the Nth most significant bit relates to CPU _N-1_. Setting the bit
+means the process is allowed to run on that CPU, while clearing it means the
+process is forbidden to run on that CPU.
+
+Hence, for instance a cpu-affinity mask of _0x00_ means the thread is not
+allowed on any CPU, which will cause the thread to stall until a new value is
+applied. A mask of _0x01_ means the thread is only allowed to run on the 1st CPU
+(CPU 0). A mask of _0xff00_ means CPUs 8-15 are allowed, while 0-7 are not.
+
+For single-threaded processes (most of Osmocom are), it is usually enough to set
+this line in VTY config file as follows:
+----
+cpu-sched
+ cpu-affinity self 0x01 <1>
+----
+<1> Allow main thread (the one managing the VTY) only on CPU 0
+
+Or otherwise:
+----
+cpu-sched
+ cpu-affinity all 0x01 <1>
+----
+<1> Allow all threads only on CPU 0
+
+
+For multi-threaded processes, it may be desired to run some threads on a subset
+of CPUs while another subset may run on another one. In order to identify
+threads, one can either use the TID of the thread (each thread has its own PID
+in Linux), or its specific Thread Name in case it has been set by the
+application.
+
+The related information on all threads available in the process can be listed
+through VTY. This allows identifying quickly the different threads, its current
+cpu-affinity mask, etc.
+
+.Example: Get osmo-trx Thread list information from VTY
+----
+OsmoTRX> show cpu-sched threads
+Thread list for PID 338609:
+ TID: 338609, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338610, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338611, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338629, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338630, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338631, NAME: 'osmo-trx-uhd', cpu-affinity: 0x3
+ TID: 338634, NAME: 'UHDAsyncEvent', cpu-affinity: 0x3
+ TID: 338635, NAME: 'TxLower', cpu-affinity: 0x3
+ TID: 338636, NAME: 'RxLower', cpu-affinity: 0x3
+ TID: 338637, NAME: 'RxUpper0', cpu-affinity: 0x3
+ TID: 338638, NAME: 'TxUpper0', cpu-affinity: 0x3
+ TID: 338639, NAME: 'RxUpper1', cpu-affinity: 0x3
+ TID: 338640, NAME: 'TxUpper1', cpu-affinity: 0x3
+----
+
+At runtime, one can change the cpu-affinity mask for a given thread identifying
+it by either TID or name:
+
+.Example: Set CPU-affinity from VTY telnet interface
+----
+OsmoTRX> cpu-affinity TxLower 0x02 <1>
+OsmoTRX> cpu-affinity TxLower 0x03 <2>
+----
+<1> Allow thread named _TxLower_ (_338635_) only on CPU 1
+<2> Allow with TID _338636_ (_RxLower_) only on CPU 0 and 1
+
+Since thread names are set dynamically by the process during startup or at a
+later point after creating the thread itself, One may need to specify in the
+config file that the mask must be applied by the thread itself once being
+configured rather than trying to apply it immediately. To specify so, the
+_delay_ keyword is using when configuring in the VTY. If the _delay_ keyword is
+not used, the VTY will report and error and fail at startup when trying to apply
+a cpu-affinity mask for a yet-to-be-created thread.
+
+.Example: Set CPU-affinity from VTY config file
+----
+cpu-sched
+ cpu-affinity TxLower 0x01 delay <1>
+----
+<1> Allow thread named _TxLower_ (_338635_) only on CPU 1. It will be applied by the thread itself when created.
