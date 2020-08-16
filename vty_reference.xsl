@@ -40,6 +40,31 @@
             </listitem>
         </varlistentry></variablelist>
 
+      <xsl:if test="./vty:attributes[@scope='application']">
+        <variablelist>
+          <varlistentry>
+            <listitem>
+              <para>Attributes</para>
+            </listitem>
+          </varlistentry>
+        <xsl:for-each select="./vty:attributes[@scope='application']/*">
+          <varlistentry>
+            <listitem>
+              <xsl:choose>
+                <xsl:when test="@flag">
+                  <para>Flag: <xsl:value-of select="@flag" /></para>
+                </xsl:when>
+                <xsl:otherwise>
+                  <para>Flag: (not assigned)</para>
+                </xsl:otherwise>
+              </xsl:choose>
+              <para><xsl:value-of select="@doc" /></para>
+            </listitem>
+          </varlistentry>
+        </xsl:for-each>
+        </variablelist>
+      </xsl:if>
+
         <variablelist>
           <varlistentry>
             <listitem>
