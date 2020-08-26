@@ -98,6 +98,15 @@ CMD ADJPOWER <dBStep>
 RSP ADJPOWER <status> <dBLevel>
 ----
 
+`RFMUTE` locks the RF transceiver, hence disabling emission and reception of
+information on Air interface of the channel associated to the TRXC connection
+the command is sent on. Parameter with value of `1` is used to mute, and value
+of `0` is used to unmute.
+----
+CMD RFMUTE <1|0>
+RSP RFMUTE <status> <1|0>
+----
+
 ==== Tuning Control
 
 `RXTUNE` tunes the receiver to a given frequency in kHz. This command fails if the
