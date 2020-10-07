@@ -40,11 +40,66 @@
             </listitem>
         </varlistentry></variablelist>
 
+      <!-- Unfortunately, there is no xsl:function support in XSL 1.0 -->
+
+      <!-- Print global attributes (if any) -->
+      <xsl:if test="./vty:attributes[@scope='global']">
+        <variablelist>
+          <varlistentry>
+            <listitem>
+              <para>Global attributes</para>
+            </listitem>
+          </varlistentry>
+        <xsl:for-each select="./vty:attributes[@scope='global']/*">
+          <varlistentry>
+            <listitem>
+              <xsl:choose>
+                <xsl:when test="@flag">
+                  <para>Flag: <xsl:value-of select="@flag" /></para>
+                </xsl:when>
+                <xsl:otherwise>
+                  <para>Flag: (not assigned)</para>
+                </xsl:otherwise>
+              </xsl:choose>
+              <para><xsl:value-of select="@doc" /></para>
+            </listitem>
+          </varlistentry>
+        </xsl:for-each>
+        </variablelist>
+      </xsl:if>
+
+      <!-- Print library specific attributes (if any) -->
+      <xsl:if test="./vty:attributes[@scope='library']">
+        <variablelist>
+          <varlistentry>
+            <listitem>
+              <para>Library specific attributes</para>
+            </listitem>
+          </varlistentry>
+        <xsl:for-each select="./vty:attributes[@scope='library']/*">
+          <varlistentry>
+            <listitem>
+              <xsl:choose>
+                <xsl:when test="@flag">
+                  <para>Flag: <xsl:value-of select="@flag" /></para>
+                </xsl:when>
+                <xsl:otherwise>
+                  <para>Flag: (not assigned)</para>
+                </xsl:otherwise>
+              </xsl:choose>
+              <para><xsl:value-of select="@doc" /></para>
+            </listitem>
+          </varlistentry>
+        </xsl:for-each>
+        </variablelist>
+      </xsl:if>
+
+      <!-- Print application specific attributes (if any) -->
       <xsl:if test="./vty:attributes[@scope='application']">
         <variablelist>
           <varlistentry>
             <listitem>
-              <para>Attributes</para>
+              <para>Application specific attributes</para>
             </listitem>
           </varlistentry>
         <xsl:for-each select="./vty:attributes[@scope='application']/*">
