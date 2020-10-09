@@ -344,3 +344,91 @@ OsmoMSC(config-net)# list
   periodic location update <6-1530>
   no periodic location update
 ----
+
+==== The attribute system
+
+The VTY allows to edit the configuration at runtime. For many VTY commands the
+configuration change is immediately valid but for some commands a change becomes
+valid on a certain event only. In some cases it is even necessary to restart the
+whole process.
+
+To give the user an overview, which configuration change applies when, the VTY
+implemets a system of attribute flags, which can be displayed using the `show`
+command with the parameter `vty-attributes`
+
+.Example: Typing `show vty-attributes` at the VTY prompt
+----
+OsmoBSC> show vty-attributes
+  Global attributes:
+    !  This command applies immediately
+    @  This command applies on VTY node exit
+  Library specific attributes:
+    A  This command applies on ASP restart
+    I  This command applies on IPA link establishment
+    L  This command applies on E1 line update
+  Application specific attributes:
+    o  This command applies on A-bis OML link (re)establishment
+    r  This command applies on A-bis RSL link (re)establishment
+    l  This command applies for newly created lchans
+----
+
+The attributes are symbolized through a single ASCII letter (flag) and do exist
+in three levels. This is more or less due to the technical aspects of the VTY
+implementation. For the user, the level of an attribute has only informative
+purpose.
+
+The global attributes, which can be found under the same attribute letter in every
+osmocom application, exist on the top level. The Library specific attributes below
+are used in various osmocom libraries. Like with the global attributes the attribute
+flag letter stays the same throughout every osmocom application here as well. On
+the third level one can find the application specific attributes. Those are unique
+to each osmocom application and the attribute letters may have different meanings
+in different osmocom applications. To make the user more aware of this, lowercase
+letters were used as attribute flags.
+
+The `list` command with the parameter `with-flags` displays a list of available
+commands on the current VTY node, along with attribute columns on the left side.
+Those columns contain the attribute flag letters to indicate to the user how the
+command behaves in terms of how and when the configuration change takes effect.
+
+.Example: Typing `list with-flags` at the VTY prompt
+----
+OsmoBSC(config-net-bts)# list with-flags
+  . ...  help
+  . ...  list [with-flags]
+  . ...  show vty-attributes
+  . ...  show vty-attributes (application|library|global)
+  . ...  write terminal
+  . ...  write file [PATH]
+  . ...  write memory
+  . ...  write
+  . ...  show running-config
+  . ...  exit
+  . ...  end
+  . o..  type (unknown|bs11|nanobts|rbs2000|nokia_site|sysmobts)
+  . ...  description .TEXT
+  . ...  no description
+  . o..  band BAND
+  . .r.  cell_identity <0-65535>
+  . .r.  dtx uplink [force]
+  . .r.  dtx downlink
+  . .r.  no dtx uplink
+  . .r.  no dtx downlink
+  . .r.  location_area_code <0-65535>
+  . o..  base_station_id_code <0-63>
+  . o..  ipa unit-id <0-65534> <0-255>
+  . o..  ipa rsl-ip A.B.C.D
+  . o..  nokia_site skip-reset (0|1)
+  ! ...  nokia_site no-local-rel-conf (0|1)
+  ! ...  nokia_site bts-reset-timer  <15-100>
+----
+
+There are multiple columns because a single command may be associated with
+multiple attributes at the same time. To improve readability each flag letter
+gets a dedicated column. Empty spaces in the column are marked with a dot (".")
+
+In some cases the listing will contain commands that are associated with no
+flags at all. Those commands either play an exceptional role (interactive
+commands outside "configure terminal", vty node navigation commands, commands
+to show / write the config file) or will require a full restart of the overall
+process to take effect.
