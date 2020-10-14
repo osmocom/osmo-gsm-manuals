@@ -56,6 +56,9 @@
 - [[[3gpp-ts-31-102]]] 3GPP TS 31.102: Characteristics of the
   Universal Subscriber Identity Module (USIM) application
   http://www.3gpp.org/DynaReport/31102.htm
+- [[[3gpp-ts-31-103]]] 3GPP TS 31.103: Characteristics of the
+  IMS Subscriber Identity Module (ISIM) application
+  http://www.3gpp.org/DynaReport/31103.htm
 - [[[3gpp-ts-31-111]]] 3GPP TS 31.111: Universal Subscriber Identity
   Module (USIM) Application Toolkit (USAT)
   http://www.3gpp.org/DynaReport/31111.htm
