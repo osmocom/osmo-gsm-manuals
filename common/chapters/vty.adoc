@@ -57,6 +57,9 @@ following will explain the commonly used syntactical patterns:
 |===============
 |Pattern|Example|Explanation
 |`A.B.C.D`|`127.0.0.1`|An IPv4 address
+|`A.B.C.D/M`|`192.168.1.0/24`|An IPv4 address and mask
+|`X:X::X:X`|`::1`|An IPv6 address
+|`X:X::X:X/M`|`::1/128`|An IPv6 address and mask
 |`TEXT`|`example01`|A single string without any spaces, tabs
 |`.TEXT`|`Some information`|A line of text
 |`(OptionA\|OptionB\|OptionC)`|`OptionA`|A choice between a list of available options
