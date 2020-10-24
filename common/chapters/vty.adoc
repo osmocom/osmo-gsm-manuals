@@ -363,6 +363,7 @@ command with the parameter `vty-attributes`
 ----
 OsmoBSC> show vty-attributes
   Global attributes:
+    ^  This command is hidden (check expert mode)
     !  This command applies immediately
     @  This command applies on VTY node exit
   Library specific attributes:
@@ -435,3 +436,39 @@ flags at all. Those commands either play an exceptional role (interactive
 commands outside "configure terminal", vty node navigation commands, commands
 to show / write the config file) or will require a full restart of the overall
 process to take effect.
+
+==== The expert mode
+
+Some VTY commands are considered relatively dangerous if used in production operation,
+so the general approach is to hide them. This means that they don't show up anywhere
+but the source code, but can still be executed. On the one hand, this approach reduces
+the risk of an accidental invocation and potential service degradation; on the other,
+it complicates intentional use of the hidden commands.
+
+The VTY features so-called __expert__ mode, that makes the hidden commands appear in
+the interactive help, as well as in the XML VTY reference, just like normal ones. This
+mode can be activated from the 'VIEW' node by invoking the `enable` command with the
+parameter `expert-mode`. It remains active for the individual VTY session, and gets
+disabled automatically when the user switches back to the 'VIEW' node or terminates
+the session.
+
+A special attribute in the output of the `list with-flags` command indicates whether
+a given command is hidden in normal mode, or is a regular command:
+
+.Example: Hidden commands in the output of the `list with-flags` command
+----
+OsmoBSC> enable expert-mode <1>
+OsmoBSC# list with-flags
+  ...
+  ^   bts <0-255> (activate-all-lchan|deactivate-all-lchan) <2>
+  ^   bts <0-255> trx <0-255> (activate-all-lchan|deactivate-all-lchan) <2>
+  .   bts <0-255> trx <0-255> timeslot <0-7> sub-slot <0-7> mdcx A.B.C.D <0-65535> <3>
+  ^   bts <0-255> trx <0-255> timeslot <0-7> sub-slot <0-7> (borken|unused) <2>
+  .   bts <0-255> trx <0-255> timeslot <0-7> sub-slot <0-7> handover <0-255> <3>
+  .   bts <0-255> trx <0-255> timeslot <0-7> sub-slot <0-7> assignment <3>
+  .   bts <0-255> smscb-command (normal|schedule|default) <1-4> HEXSTRING <3>
+  ...
+----
+<1> This command enables the __expert__ mode.
+<2> This is a hidden command (only shown in the __expert__ mode).
+<3> This is a regular command that is always shown regardless of the mode.
