@@ -406,14 +406,14 @@ OsmoBSC(config-net-bts)# list with-flags
   . ...  write file [PATH]
   . ...  write memory
   . ...  write
-  . ...  show running-config
+  . ...  show running-config <1>
   . ...  exit
   . ...  end
-  . o..  type (unknown|bs11|nanobts|rbs2000|nokia_site|sysmobts)
+  . o..  type (unknown|bs11|nanobts|rbs2000|nokia_site|sysmobts) <2>
   . ...  description .TEXT
   . ...  no description
   . o..  band BAND
-  . .r.  cell_identity <0-65535>
+  . .r.  cell_identity <0-65535> <3>
   . .r.  dtx uplink [force]
   . .r.  dtx downlink
   . .r.  no dtx uplink
@@ -423,9 +423,13 @@ OsmoBSC(config-net-bts)# list with-flags
   . o..  ipa unit-id <0-65534> <0-255>
   . o..  ipa rsl-ip A.B.C.D
   . o..  nokia_site skip-reset (0|1)
-  ! ...  nokia_site no-local-rel-conf (0|1)
-  ! ...  nokia_site bts-reset-timer  <15-100>
+  ! ...  nokia_site no-local-rel-conf (0|1) <4>
+  ! ...  nokia_site bts-reset-timer  <15-100> <4>
 ----
+<1> This command has no attributes assigned.
+<2> This command applies on A-bis OML link (re)establishment.
+<3> This command applies on A-bis RSL link (re)establishment.
+<4> This command applies immediately.
 
 There are multiple columns because a single command may be associated with
 multiple attributes at the same time. To improve readability each flag letter
