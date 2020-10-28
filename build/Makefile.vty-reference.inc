@@ -79,7 +79,7 @@ $(GEN_DIR)/docbook_vty.xml: \
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
 		$$($(OSMO_GSM_MANUALS_DIR)/build/find_existing_path.sh "vty/*reference.xml" $(builddir) $(srcdir)) \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
-		$(srcdir)/vty/*additions*.xml
+		$(srcdir)/vty/*additions*.xml > $(GEN_DIR)/combined.xml
 	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl $(GEN_DIR)/combined.xml \
 		> $(GEN_DIR)/docbook_vty.xml
 
@@ -98,5 +98,5 @@ $(GEN_DIR)/docbook_%-vty-reference.xml: \
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
 		$$($(OSMO_GSM_MANUALS_DIR)/build/find_existing_path.sh "*reference.xml" $$VTYDIR_BUILD $$VTYDIR_SRC) \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
-		$$VTYDIR_SRC/*additions*.xml && \
+		$$VTYDIR_SRC/*additions*.xml > $$VTYGEN/combined.xml && \
 	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl $$VTYGEN/combined.xml > "$@"
