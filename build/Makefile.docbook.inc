@@ -12,7 +12,7 @@
 #
 #     OSMO_GSM_MANUALS_DIR = ..
 #     DOCBOOKS = osmo_yada.xml osmo_moo.xml
-#     ASCIIDOC_DEPS = $(srcdir)/for_all/*.xml
+#     DOCBOOKS_DEPS = $(srcdir)/for_all/*.xml
 #     include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.docbook.inc
 #     osmo_yada.pdf: yada/*.xml
 #
