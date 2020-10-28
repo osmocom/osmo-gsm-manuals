@@ -20,7 +20,6 @@ combined="$VTYGEN/combined.xml"
 combine_src="$VTYGEN/combine_src.xml"
 
 set -x
-mkdir -p "$VTYGEN"
 cp $reference "$combined"
 
 while [ -n "$1" ]; do

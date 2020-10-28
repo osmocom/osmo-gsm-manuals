@@ -49,47 +49,52 @@
 
 DOCBOOKS = $(VTY_REFERENCE)
 
-# First VTY reference
-DOCBOOKS_DEPS = generated/docbook_vty.xml
+# Directory for intermediate results
+GEN_DIR = generated
 
-# Additional VTY references: prepend "generated/docbook_"
+# First VTY reference
+DOCBOOKS_DEPS = $(GEN_DIR)/docbook_vty.xml
+
+# Additional VTY references: prepend "$(GEN_DIR)/docbook_"
 # For example:
 # VTY_REFERENCE = osmosgsn-vty-reference.xml osmogbproxy-vty-reference.xml
-# DOCBOOK_DEPS = generated/docbook_vty.xml generated/docbook_osmogbproxy-vty-reference.xml
-DOCBOOKS_DEPS += $(patsubst %,generated/docbook_%,$(filter-out $(firstword $(VTY_REFERENCE)),$(VTY_REFERENCE)))
+# DOCBOOK_DEPS = $(GEN_DIR)/docbook_vty.xml $(GEN_DIR)/docbook_osmogbproxy-vty-reference.xml
+DOCBOOKS_DEPS += $(patsubst %,$(GEN_DIR)/docbook_%,$(filter-out $(firstword $(VTY_REFERENCE)),$(VTY_REFERENCE)))
 
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.docbook.inc
 
 MERGE_DOC = $(shell realpath $(OSMO_GSM_MANUALS_DIR)/merge_doc.xsl)
 
-CLEAN_FILES += generated
+CLEAN_FILES += $(GEN_DIR)
 CLEAN_FILES += $(BUILT_REFERENCE_XML)
 
 # First VTY reference
-generated/docbook_vty.xml: \
+$(GEN_DIR)/docbook_vty.xml: \
 			   $(srcdir)/vty/*xml \
 			   $(BUILT_REFERENCE_XML) \
 			   $(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
 			   $(OSMO_GSM_MANUALS_DIR)/common/chapters/vty.xml \
 			   $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl
+	mkdir -p $(GEN_DIR)
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
 		$$($(OSMO_GSM_MANUALS_DIR)/build/find_existing_path.sh "vty/*reference.xml" $(builddir) $(srcdir)) \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
 		$(srcdir)/vty/*additions*.xml
-	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl generated/combined.xml \
-		> generated/docbook_vty.xml
+	xsltproc $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl $(GEN_DIR)/combined.xml \
+		> $(GEN_DIR)/docbook_vty.xml
 
 # Additional VTY references
-generated/docbook_%-vty-reference.xml: \
+$(GEN_DIR)/docbook_%-vty-reference.xml: \
 			 $(srcdir)/vty-%/*xml \
 			 $(BUILT_REFERENCE_XML) \
 			 $(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
 			 $(OSMO_GSM_MANUALS_DIR)/common/chapters/vty.xml \
 			 $(OSMO_GSM_MANUALS_DIR)/vty_reference.xsl
-	export VTYDIR_NAME="vty-$(patsubst generated/docbook_%-vty-reference.xml,%,$@)" && \
+	export VTYDIR_NAME="vty-$(patsubst $(GEN_DIR)/docbook_%-vty-reference.xml,%,$@)" && \
 	export VTYDIR_SRC="$(srcdir)/$$VTYDIR_NAME" && \
 	export VTYDIR_BUILD="$(builddir)/$$VTYDIR_NAME" && \
 	export VTYGEN="$@_combine" && \
+	mkdir -p $$VTYGEN && \
 	$(OSMO_GSM_MANUALS_DIR)/build/vty_reference_combine.sh "$(MERGE_DOC)" \
 		$$($(OSMO_GSM_MANUALS_DIR)/build/find_existing_path.sh "*reference.xml" $$VTYDIR_BUILD $$VTYDIR_SRC) \
 		$(OSMO_GSM_MANUALS_DIR)/common/vty_additions.xml \
