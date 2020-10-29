@@ -59,6 +59,7 @@ cs7 instance 0
 At the time of writing, SCCP/M3UA links involving Osmocom program are:
 
 - A-interface: OsmoBSC to OsmoMSC
+- Lb-interface: OsmoBSC to OsmoSMLC
 - IuCS-interface: OsmoHNBGW to OsmoMSC
 - IuPS-interface: OsmoHNBGW to OsmoSGSN
 - Lb-interface: OsmoSMLC to OsmoBSC
@@ -123,6 +124,7 @@ address, typically by point-code, to contact.
 For example,
 
 - OsmoBSC needs to know the MSC's point-code, to be able to establish the A-interface.
+- OsmoBSC needs to know the SMLC's point-code, to be able to establish the Lb-interface.
 - OsmoHNBGW needs to know the MSC's point-code, to be able to establish the IuCS-interface.
 - OsmoHNBGW needs to know the SGSN's point-code, to be able to establish the IuPS-interface.
 
@@ -147,6 +149,16 @@ cs7 instance 0
   point-code 1.23.1
 msc 0
  msc-addr my-remote-msc
+----
+
+- An OsmoBSC configures the SMLC's remote SCCP address:
+
+----
+cs7 instance 0
+ sccp-address my-remote-smlc
+  point-code 0.42.6
+smlc
+ smlc-addr my-remote-smlc
 ----
 
 - An HNBGW configures both the remote MSC's and SGSN's SCCP addresses:
