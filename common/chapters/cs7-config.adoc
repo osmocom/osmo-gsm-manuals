@@ -319,3 +319,85 @@ routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup)
 routing-key RCONTEXT DPC ssn SSN
 routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup) ssn SSN
 ----
+
+[[sccp-multiple-cs7]]
+=== Multiple cs7 Instances
+
+It is possible to connect to several STPs from an Osmocom CNI program. Which
+`cs7 instance` to use is usually indicated by choosing an SCCP address
+configured at the desired instance.
+
+For example, an OsmoBSC can run A- and Lb-interface via distinct STP
+connections, by configuring two separate `cs7 instance` sections with different
+STP addresses. Which instance to use is chosen by assigning an SCCP address from
+the desired instance:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  remote-ip 10.23.24.1
+
+cs7 instance 1
+ # default remote-ip for STP is 127.0.0.1
+ sccp-address smlc-on-local-stp
+  point-code 0.23.6
+
+msc 0
+
+smlc
+ smlc-addr smlc-on-local-stp
+ enable
+----
+
+The above example points `cs7 instance 0` to a remote STP for the A-interface.
+`msc 0` has no explicit `msc-addr` set, so it uses the first `cs7 instance 0`
+and its default point-code for the A-interface.
+
+The second `cs7 instance 1` points at a locally running STP at 127.0.0.1. `cs7
+instance 1` contains an addressbook entry named `smlc-on-local-stp`. By
+assigning this address to the `smlc-addr`, the Lb interface will run on `cs7
+instance 1` via the local STP.
+
+The remaining AS, ASP and point-codes are automatically configured. A fully
+written out version of above example is:
+
+----
+cs7 instance 0
+ # the default point-code for a BSC is 0.23.3
+ point-code 0.23.3
+ asp my-asp 2905 0 m3ua
+  remote-ip 10.23.24.1
+  sctp-role client
+ as as-clnt-A-0-m3ua m3ua
+  asp my-asp
+ # the default point-code for an MSC is 0.23.1
+ sccp-address msc0
+  point-code 0.23.1
+ sccp-address bsc-on-A
+  point-code 0.23.3
+
+cs7 instance 1
+ point-code 0.23.3
+ asp asp-clnt-Lb-1-m3ua 2905 0 m3ua
+  remote-ip localhost
+  sctp-role client
+ as as-clnt-Lb-1-m3ua m3ua
+  asp asp-clnt-Lb-1-m3ua
+ sccp-address smlc-on-local-stp
+  point-code 0.23.6
+ sccp-address bsc-on-Lb
+  point-code 0.23.3
+
+msc 0
+ msc-addr msc0
+ # when bsc-addr is omitted, the chosen cs7 instance's point-code is used
+ bsc-addr bsc-on-A
+
+smlc
+ # when smlc-addr is omitted, cs7 instace 0 would be used with the SMLC's
+ # default point-code
+ smlc-addr smlc-on-local-stp
+ # when bsc-addr is omitted, the chosen cs7 instance's point-code is used
+ bsc-addr bsc-on-Lb
+ enable
+----
