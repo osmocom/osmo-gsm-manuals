@@ -27,6 +27,9 @@ UPLOAD_FILES += $(DOCBOOKS_PDF)
 
 all: $(DOCBOOKS_PDF)
 
+# Allow the users to re-define the include directory
+INC_DIR ?= $(PWD)/generated
+
 # Lint the file
 %.xml-lint: %.xml
 	xmllint --xinclude --postvalid --noout $<
@@ -34,6 +37,6 @@ all: $(DOCBOOKS_PDF)
 # Create a PDF file and lint it before
 # xslt path: find includes in both $(OSMO_GSM_MANUALS_DIR)/common/chapters and $(builddir)/generated
 %.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS) build common
-	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$$PWD/generated" \
+	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$(INC_DIR)" \
 		$(dblatex_quiet) -P draft.mode=no -o $(notdir $@) $<
 
