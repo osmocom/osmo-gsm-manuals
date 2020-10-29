@@ -38,6 +38,12 @@
   http://ftp.osmocom.org/docs/latest/osmoggsn-usermanual.pdf
 - [[[vty-ref-osmoggsn]]] Osmocom Project: OsmoGGSN VTY Reference Manual.
   http://ftp.osmocom.org/docs/latest/osmoggsn-vty-reference.pdf
+- [[[userman-osmosmlc]]] Osmocom Project: OpenSMLC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmosmlc-usermanual.pdf
+- [[[vty-ref-osmosmlc]]] Osmocom Project: OsmoSMLC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmosmlc-vty-reference.pdf
+- [[[3gpp-ts-23-032]]] 3GPP TS 23.032: Universal Geographical Area Description
+  (GAD)
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
   (U)SIM application toolkit; Stage 2
   http://www.3gpp.org/DynaReport/23048.htm
@@ -72,6 +78,7 @@
 - [[[3gpp-ts-35-206]]] 3GPP TS 35.206: 3G Security; Specification of
   the MILENAGE algorithm set: Algorithm specification
   http://www.3gpp.org/DynaReport/35206.htm
+- [[[3gpp-ts-43-059]]] 3GPP TS 23.059: Location Services (LCS) in GERAN
 - [[[3gpp-ts-44-006]]] 3GPP TS 44.006: Mobile Station - Base Station
   System (MS - BSS) interface; Data Link (DL) layer specification
   http://www.3gpp.org/DynaReport/44006.htm
@@ -98,6 +105,8 @@
 - [[[3gpp-ts-48-058]]] 3GPP TS 48.058: Base Station Controller - Base
   Transceiver Station (BSC - BTS) Interface; Layer 3 specification
   http://www.3gpp.org/DynaReport/48058.htm
+- [[[3gpp-ts-49-031]]] 3GPP TS 49.031: Location Services (LCS); Base Station
+  System Application Part LCS Extension (BSSAP-LE)
 - [[[3gpp-ts-51-011]]] 3GPP TS 51.011: Specification of the Subscriber
   Identity Module - Mobile Equipment (SIM-ME) interface
 - [[[3gpp-ts-51-014]]] 3GPP TS 51.014: Specification of the SIM
