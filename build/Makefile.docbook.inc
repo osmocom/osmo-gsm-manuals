@@ -38,5 +38,5 @@ INC_DIR ?= $(PWD)/generated
 # xslt path: find includes in both $(OSMO_GSM_MANUALS_DIR)/common/chapters and $(builddir)/generated
 %.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS) build common
 	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$(INC_DIR)" \
-		$(dblatex_quiet) -P draft.mode=no -o $(notdir $@) $<
+		$(dblatex_quiet) -P draft.mode=no -o $@ $<
 
