@@ -27,10 +27,8 @@ clean:
 
 distclean: clean
 
-publish: all
-	mkdir -p out
-	cp *.pdf out
-	rsync -avz -e "$(SSH_COMMAND)" ./out/ docs@rita.osmocom.org:web-files/latest/
+publish: $(UPLOAD_FILES)
+	rsync -avz -e "$(SSH_COMMAND)" $(UPLOAD_FILES) docs@rita.osmocom.org:web-files/latest/
 
 # Install and uninstall targets
 # Notes about OSMO_GSM_MANUALS_NO_INSTALL:
