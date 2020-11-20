@@ -333,3 +333,65 @@ SCTP (and thus all the higher layer protocols of the various SIGTRAN
 stackings) operates on top of both IPv4 and IPv6.  As the entire
 underlying IP transport is transparent to the SS7/SCCP applications,
 there is no restriction on whether to use SIGTRAN over IPv4 or IPv6.
+
+==== SCTP multi-homing in SIGTARN
+
+SCTP, unlike more traditional IP L4 protocols (TCP, UDP) doesn't work
+based on a _connection_ between source IP:port and Destination IP:port.
+
+Instead, SCTP creates _associations_ between two endpoints, both of which
+can have any number of IP addresses.  This means that in case of
+network outage, traffic can continue to flow through any of the IP
+addresses of that association.
+
+The Linux kernel by default advertises all IP addresses of the local
+system to the peer.  This can be seen when inspecting the SCTP INIT
+chunk e.g. in wireshark.  While this may be a reasonable default in some
+use cases, it is not always the best idea.  Imagine addresses of
+internal/private IP networks, for example local bridge devices between
+lxc or docker containers, or local VMs.  Such addresses have no
+significance beyond the local machine.
+
+Subsequently, libosmo-sigtran allows the user to explicitly select which
+local IP addresses shall be used in SCTP multi-homing for the SIGTRAN
+associations it manages.  The user can achieve this by specifying
+multiple `local-ip` VTY commands within one `asp` (SCTP client role) or
+within one `listen m3ua 2905` (SCTP server role).
+
+==== SCTP role
+
+The _SCTP role_ defines which of the two L4 protocol roles SCTP assumes:
+
+* The _SCTP server_ role binds to a local port and handles incoming
+  connections from clients
+* The _SCTP client_ role connects to a remote SCTP sever.
+
+==== M3UA/SUA role
+
+The _M3UA role_ (or _SUA role_) determines which role a given peer of a
+M3UA connection implements.  3GPP specifies the following role:
+
+* _SGP_ (Signaling Gateway): The entity connected to the larger SS7
+  network
+* _ASP_ (Application Server Process): A client application that connects
+  to the SGW to talk to the SS7 network
+* _IPSP_ (IP Server Process): M3UA in point-to-point mode
+
+Osmocom (libosmo-sigtran) implements both the SGP and ASP roles, but not
+the IPSP role.
+
+==== traffic modes in SIGTRAN
+
+Whenever an AS consists of multiple ASPs, the traffic mode expresses how
+messages are distributed between those ASPs.
+
+* _Override_: There is always one active ASP and multiple hot standby
+  ASPs.  If the active ASP fails, one of the remaining ASPs will become
+  the new active ASP.
+* _Loadshare_: The messages will be distributed between the different
+  ASPs in a way to distribute the load among them.  Details are
+  implementation specific.
+* _Broadcast_: A copy of every incoming signaling message is sent to
+  _all_ the ASPs in broadcast traffic mode.
+
+Osmocom (libosmo-sigtran) implements all above-mentioned traffic modes.
