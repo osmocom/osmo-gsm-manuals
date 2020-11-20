@@ -59,6 +59,17 @@ At the time of writing, SCCP/M3UA links involving Osmocom program are:
 - IuPS-interface: OsmoHNBGW to OsmoSGSN
 - Lb-interface: OsmoSMLC to OsmoBSC
 
+On the SCTP/IP level, those connections are actually all established from
+the respective program (BSC, MSC, HNBGW, SGSN, SMLC) to OsmoSTP.  Hence,
+if you look at the traffic in a protocol analyzer like wireshark, at IP
+level, you will see each of those programs establishing an SCTP
+association from a random local IP to the well-known SCTP port for M3UA
+(2905) at the OsmoSTP.
+
+Those star-connections for M3UA/SCTP then are the transport network for
+higher level protocols like SCCP.  OsmoSTP then acts as central router
+for SCCP-level message exchange between all the connected programs.
+
 === Connect to STP Instance
 
 By default, an STP instance is assumed to listen on the default M3UA port
