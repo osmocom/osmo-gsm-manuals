@@ -285,6 +285,9 @@ comprised of M3UA over SCTP over IP.
 
 M3UA is specified in <<ietf-rfc4666>>.
 
+M3UA is the SIGTRAN variant chosen by 3GPP for A, IuCs and IuPS
+interfaces over IP.
+
 ===== SCCP User Adaptation (SUA)
 
 SUA basically "chops off" everything up to and including the SCCP
