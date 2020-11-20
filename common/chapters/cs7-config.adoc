@@ -6,6 +6,10 @@ expecting to connect to a Signalling Gateway (STP/SG) implementing the M3UA
 SG role as SCTP server. The STP/SG then routes M3UA messages between its
 ASPs, typically by point-codes.
 
+For an introduction about SCCP/M3UA/SS7/SIGTRAN technology, please see
+the chapter _Signaling Networks: SS7 and SIGTRAN_ in the OsmoSTP user
+manual.
+
 In an all-Osmocom CNI, the typical simple/minimal usage is:
 
 - OsmoSTP acts as the STP/SG (server role) and routes between the ASP,
