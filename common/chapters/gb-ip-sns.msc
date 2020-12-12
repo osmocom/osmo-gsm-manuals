@@ -1,0 +1,38 @@
+msc {
+	hscale="2";
+	pcu [label="PCU"], sgsn [label="SGSN"];
+
+	|||;
+	pcu rbox sgsn	[label="(1) Initial Configuration after [re] start of PCU with NSEI 1024"];
+	--- 		[label="SNS-Size procedure to inform SGSN of PCU NS-VC capacity"];
+	pcu -> sgsn 	[label="SNS-SIZE (NSEI=1234, MAX-NR-NSVCS=8, NUM-IP-EP=1)"];
+	pcu <- sgsn	[label="SNS-SIZE-ACK (NSEI=1234)"];
+	---		[label="PCU-originated SNS-CONFIG: Configure SGSN downlink flows"];
+	pcu -> sgsn	[label="SNS-CONFIG (NSEI=1234, List of PCU side IPv4/IPv6 Elements)"];
+	pcu <- sgsn	[label="SNS-CONFIG-ACK"];
+	---		[label="SGSN-originated SNS-CONFIG: Configure PCU uplink flows"];
+	pcu <- sgsn	[label="SNS-CONFIG (NSEI=1234, List of SGSN side IPv4/IPv6 Elements)"];
+	pcu -> sgsn	[label="SNS-CONFIG-ACK"];
+	|||;
+	pcu rbox sgsn	[label="(2) Establishment of full mesh of  NS-VCs: Each PCU side EP to each SGSN side EP"];
+	---		[label="NS-ALIVE procedure to the first SGSN-side IPv4 Endpoint"];
+	pcu -> sgsn	[label="NS-ALIVE"];
+	pcu <- sgsn	[label="NS-ALIVE-ACK"];
+	---		[label="NS-ALIVE procedure to the second SGSN-side IPv4 Endpoint"];
+	pcu -> sgsn	[label="NS-ALIVE"];
+	pcu <- sgsn	[label="NS-ALIVE-ACK"];
+	|||;
+	pcu rbox sgsn	[label="(3) Establishment of BSGGP Virtual Connections (BVC)"];
+	---		[label="BVC-RESET of the (PCU global) Signaling BVC"];
+	pcu -> sgsn	[label="NS-UNITDATA( BVC-RESET (BVCI=0) )"];
+	pcu <- sgsn	[label="NS-UNITDATA( BVC-RESET-ACK (BVCI=0) )"];
+	|||;
+	---		[label="BVC-RESET of the PTP BVC of the first cell in the BSS"];
+	pcu -> sgsn	[label="NS-UNITDATA( BVC-RESET (BVCI=999, RA-ID 262-42-13135-0) )"];
+	pcu <- sgsn	[label="NS-UNITDATA( BVC-RESET-ACK (BVCI=999) )"];
+	...;
+	---		[label="BVC-RESET of the PTP BVC of the Nth cell in the BSS"];
+	pcu -> sgsn	[label="NS-UNITDATA( BVC-RESET (BVCI=543, RA-ID 262-42-24675-0) )"];
+	pcu <- sgsn	[label="NS-UNITDATA( BVC-RESET-ACK (BVCI=543) )"];
+
+}

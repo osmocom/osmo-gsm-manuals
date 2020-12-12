@@ -1,0 +1,62 @@
+[[gb-sgsn-pool]]
+== Gb interface in SGSN Pooling
+
+SGSN Pooling is a modern optional extension of the 3GPP GERAN
+architecture.  It is officially referred-to as _Intra Domain Connection
+of RAN Nodes to Multiple CN Nodes_.  It requires The use of IP-SNS and
+does not support legacy or non-standard Gb variants.
+
+Without this optional feature, a given PCU/BSS always connects to one
+SGSN via a Gb interface.  All traffic is handled through that one
+interface.
+
+While the NS-level load sharing function and the _weights_ of the IP-SNS
+allow for load distribution between different user plane entities, there
+was demand for additional scalability and fail-over capabilities leading
+to the SGSN pooling feature.
+
+The major changes introduced to the Gb interface by SGSN pooling are as
+follows:
+
+* There is a separate NSE in the BSS for each of the SGSNs in the pool,
+  creating a 1:1 relationship between BSS-NSE and SGSN.
+* Each of those per-SGSN NSEs has it's own NS-VCGs and NS-VCs, unrelated
+  to those of the other NSEs
+* Each of those per-SGSN NSEs has it's own Signaling BVC
+* Each Cell in the BSS has one PTP BVC _per SGSN in the pool_
+
+This relationship is illustrated in <<fig-gb-pool>> below.
+
+[[fig-gb-pool]]
+.Gb interface concepts when SGSN pooling feature is used (from 3GPP TS 48.016)
+image::./common/images/gb-concepts-pool.pdf[]
+
+Looking strictly at the Gb interface, this means that there is a completely
+separate Gb interface between each BSS and each pool member SGSN.  All of the
+procedures explained in <<gb-ip-sns>> hence occur N number of times to N number
+of SGSN pool members.
+
+=== Status of SGSN Pool support in Osmocom
+
+==== osmo-pcu
+
+There is currently no direct support for SGSN pooling in `osmo-pcu`
+itself.  However, as of December 2020, `osmo-gbproxy` is being extended
+with SGSN pooling support.
+
+This means that SGSN pooling can be added to any `osmo-pcu` based
+deployment by introducing `osmo-gbproxy` between `osmo-pcu` and the SGSN.
+
+The use of `osmo-gbproxy` also has the added benefit that all Gb
+interfaces from various PCUs are aggregated into one Gb interface
+towards (each) SGSN.  Most deployments are used to such a _one interface
+per BSS_ approach as they are used to the BSC-colocated PCU architecture
+and not to the BTS-colocated PCU architecture as implemented in Osmocom.
+
+==== osmo-gbproxy
+
+FIXME
+
+==== osmo-sgsn
+
+FIXME

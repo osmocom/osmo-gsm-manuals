@@ -1,0 +1,179 @@
+[[gb_variants]]
+== Gb interface variants
+
+There are a couple of variants of the Gb interface out there.  This
+section tries to provide an overview into what those variants are, how
+they differ from each other and how to configure Osmocom software
+accordingly.
+
+The two peers involved in any Gb interface must always be in agreement
+about the specific Gb interface variant before they are  able to
+connect.
+
+=== Gb over Frame Relay over E1/T1
+
+Historically, this is the first Gb interface that was specified as part
+of GSM Release 97 when GPRS was first introduced.
+
+Like all other terrestrial GSM interfaces, it uses circuit-switched
+technology from the PDH/ISDN family of systems:  E1 or T1 lines as per
+ITU-T G.703 / G.704.
+
+GSM TS 08.16 and later <<3gpp-ts-48-016>> specify that Frame Relay (FR)
+shall be used as transport layer between the E1/T1 bit-stream and the
+NS-level Gb messages.
+
+Two peer entities such as a GPRS BSS and a SGSN are interconnected by a
+NS-VCG (Virtual Connection Group) consisting of any number of NS-VCs
+(Virtual Connections).
+
+Each NS-VC in turn operates over a Frame Relay Permanent Virtual Circuit
+(PVC), identified by its DLCI (Data Link Connection Identifier).
+
+The protocol stacking is BSSGP/NS/FR/E1.
+
+.Example: Gb over Frame Relay configuration
+----
+ns
+ nse 2001 nsvci 11 frnet hdlcnet1 dlci 16 <1>
+ nse 2001 nsvci 12 frnet hdlcnet2 dlci 17
+ nse 2001 nsvci 13 frnet hdlcnet3 dlci 18
+ nse 2001 nsvci 14 frnet hdlcnet4 dlci 19
+ nse 2002 nsvci 15 frnet hdlcnet5 dlci 20 <2>
+ nse 2002 nsvci 16 frnet hdlcnet6 dlci 21
+ nse 2003 nsvci 17 frnet hdlcnet7 dlci 22 <3>
+ nse 2003 nsvci 18 frnet hdlcnet8 dlci 23
+----
+<1> one NSE (2001) with four NS-VCI (11..14) on hdlcnet1..4 with their respective DLCI
+<2> another NSE (2002) with two NS-VCI (15..16) on hdlcnet5..6 with their respective DLCI
+<3> another NSE (2003) with two NS-VCI (17..18) on hdlcnet7..8 with their respective DLCI
+
+==== FR Driver Support
+
+The Osmocom NS/FR support currently requires the individual Frame Relay
+Links to be exposed as Linux kernel HDLC net-devices.  The Osmocom NS
+implementation has to be instructed which `hdlcX` network devices it
+shall use for each NS-VC, and which DLCIs to use on them.
+
+The Linux kernel Frame Relay LMI support (which only implements the user
+role anyway) is not used.  Instead, the ITU-T Q.933 LMI is implemented
+as part of the Osmocom NS code in libosmogb.  You must hence use
+`sethdlc hdlcX fr lmi none` to configure the HDLC net-devices for use
+with Osmocom.  The net-devices must also be _up_, e.g. using the
+`ip link set hdlcX up` command in some system start-up script.
+
+As the Osmocom Gb implementation uses AF_PACKET sockets on those
+`hdlcX` network interfaces, the respective program must be running with
+`CAP_NET_RAW` capability.
+
+=== Gb over Frame Relay encapsulated in GRE/IP
+
+This is a variant of the Gb-over-FR specified above.  However, an
+external router (e.g. certain ancient Cisco routers) is used to take the
+Frame Relay frames from the physical E1/T1 TDM circuit and wrap them
+into the GRE encapsulation as per IETF RFC 2784.
+
+Those GRE/IP messages from the external Cisco router are then passed to
+the Osmocom Gb stack (e.g. to `osmo-gbproxy`).
+
+The protocol stacking is BSSGP/NS/FR/GRE/IP.
+
+FIXME: Example configuration
+
+----
+ns
+ encapsulation framerelay-gre enabled 1
+ encapsulation framerelay-gre local-ip 127.0.0.1
+----
+
+
+=== Gb over IP "ip.access style"
+
+This is a non-standard variant of Gb which is not found in the GSM/3GPP
+specifications.
+
+It uses an UDP/IP based transport layer, while not yet implementing the
+IP-SNS that is normally required by a true 3GPP Gb over IP interface
+described further below.  Hence, this variant resembles an intermediate
+state where a Gb interface originally designed for Frame Relay is used
+over IP without any of the IP-specific procedures specified by 3GPP.
+
+The major difference to 3GPP Gb over IP specified below are:
+
+* No support for the IP-SNS and its SNS-SIZE, SNS-ADD, SNS-DELETE,
+  SNS-WEIGHT procedures
+* Use of the NS-RESET, NS-BLOCK and NS-UNBLOCK procedures which are
+  normally forbidden over an IP network.
+
+The protocol stacking is BSSGP/NS/UDP/IP.
+
+FIXME: Full example configuration
+
+----
+ns
+ encapsulation udp local-ip 127.0.0.1
+ encapsulation udp local-port 23000
+----
+
+[[gb-ip-sns]]
+=== 3GPP Gb over IP with IP-SNS
+
+This is the only official, 3GPP-standardized way of speaking a Gb
+interface over IP based transport.
+
+It features the IP Sub-Network Service (IP-SNS) in order to dynamically
+exchange information about IP endpoints (IP+port tuples) between the Gb
+interface peers.  This means that normally only one basic / first IP
+endpoint needs to be configured.  All additional IP endpoints and their
+relative weight for load distribution are then negotiated via the
+IP-SNS.
+
+The major differences of this true IP based Gb compared to any of the
+above are:
+
+* No use of the NS-RESET, NS-BLOCK or NS-UNBLOCK procedures
+* Ability to use some NS-VCs only for signaling (data_weight=0) or only
+  for user plane traffic (signaling_weight=0).  This helps with SGSNs
+  that have an internal control/user plane separation architecture.
+
+Once the IP endpoints of the peers are known to each other, A full mesh
+of NS-VCs between all PCU-side endpoints and all SGSN endpoints is
+established.
+
+<<fig-gb-sns-nsvcs>> below illustrates a deployment with two IP
+endpoints on both the BSS (PCU) and the SGSN, as well as the resulting
+four NS-VCs established between them.
+
+[[fig-gb-sns-nsvcs]]
+.IP sub-network relationship between NS-VCs and NS-VLs (from 3GPP TS 48.016)
+image::./common/images/gb-ip-nsvc.pdf[]
+
+The sequence of messages in an IP-SNS enabled Gb interface bring-up can
+be seen in <<fig-ip-sns-sequence>>.  Here we have a PCU/BSS with a
+single IP endpoint and a SGSN with two IP endpoints, which results in
+only two NS-VC being established.
+
+Furthermore, for each of the cells in the BSS/PCU, we can see the
+BVC-RESET procedure for its corresponding PTP BVC.
+
+[[fig-ip-sns-sequence]]
+.Initialization of Gb interface using IP-SNS procedures
+[mscgen]
+----
+include::gb-ip-sns.msc[]
+----
+
+==== PCU Configuration
+
+FIXME: Full example configuration
+
+.Example: osmo-pcu configuration for use with IP-SNS
+----
+pcu
+ gb-dialect ip-sns
+----
+
+NOTE: The initial IP endpoint for osmo-pcu is not configured in the PCU
+itself, but in the BSC, who downloads the Gb interface configuration to
+the BTS during BTS OML start-up, which in turn passes it to the PCU over
+the unix domain socket between BTS and PCU
