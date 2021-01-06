@@ -1,3 +1,57 @@
+osmo-gsm-manuals-dev (1.0.0) unstable; urgency=medium
+
+  [ Daniel Willmann ]
+  * bts: Document access control classes and acc ramping
+  * bts.adoc: Add information about RACH tuning parameters
+
+  [ Neels Hofmeyr ]
+  * fix srcdir to reflect $abs_srcdir
+  * fixup: ensure existence of $(abs_srcdir)
+  * add common/chapters/cs7-config
+  * vty reference: allow reference XML generated at build time
+  * bibliography, glossary: add MSC pooling related bits
+
+  [ Harald Welte ]
+  * port_numbers: Add osmo-mgw CTRL port
+  * port_numbers: Add missing mDNS port for D-GSM / osmo-hlr
+  * synchronize port_numbers.adoc with wiki
+  * port_numbers: Add port numbers for upcoming OsmoSMLC
+  * biblio: Add 3GPP TS 31.103 (ISIM)
+  * sigtran: Mention that M3UA was chosen by 3GPP
+  * sigtran: Describe sctp/m3ua role, multi-homing, traffic-modes
+  * cs7-config: Mention OsmoSMLC
+  * cs7-config: Explain that A/Iu/Lb interfaces are reouted via STP
+  * cs7-config: Reference the OsmoSTP user manual for more info on SS7
+  * Add common chapters on GB interface variants and SGSN pool
+
+  [ Vadim Yanitskiy ]
+  * logging: fix section 6.5.3: logging level s/all/force-all/ fatal
+  * port_numbers: fix: GSMTAP has noting to do with port 2427/udp
+  * GSUP: fix E-Routing-Error: both session state / ID IEs are optional
+  * vty_reference.xsl: handle application specific attributes
+  * vty_reference.xsl: also handle 'global' and 'library' attributes
+  * chapters/vty: add IPv4/mask and IPv6/mask examples
+  * chapters/vty: add documentation for the expert mode
+  * chapters/vty: add in-place comments to the attribute examples
+  * Makefile.docbook.inc: fix incorrect variable name in documentation
+  * Makefile.vty-reference.inc: create 'generated' in this file
+  * Makefile.docbook.inc: allow to re-define the include directory
+  * vty_reference_combine.sh: print the final result to stdout
+  * Makefile.docbook.inc: generate *.pdf in the given directory
+  * Makefile.common.inc: make 'publish' target use $(UPLOAD_FILES)
+
+  [ Pau Espin Pedrol ]
+  * trx_if: Clarify {SET;ADJ}POWER TRXC commands
+  * trx_if.adoc: Document cmd NOMTXPOWER
+  * Drop common/chapters/{bts,bsc}.adoc
+  * chapters: Introduce vty_cpu_sched.adoc chapter
+  * trx_if.adoc: Document RFMUTE TRXC command
+
+  [ Philipp Maier ]
+  * vty: explain how command attributes are used
+
+ -- Harald Welte <laforge@osmocom.org>  Wed, 06 Jan 2021 17:21:50 +0100
+
 osmo-gsm-manuals-dev (0.3.0) unstable; urgency=medium
 
   [ Oliver Smith ]
