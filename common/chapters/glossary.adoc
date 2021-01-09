@@ -30,6 +30,8 @@ AGCH::
   channel in response to RACH request
 AGPL::
   GNU Affero General Public License, a copyleft-style Free Software License
+AQPSK::
+  Adaptive QPSK, a modulation scheme used by VAMOS channels on Downlink
 ARFCN::
   Absolute Radio Frequency Channel Number; specifies a tuple of uplink
   and downlink frequencies
@@ -377,6 +379,11 @@ USIM::
 USSD::
   Unstructured Supplementary Service Data; textual dialog between subscriber
   and core network, e.g. '*#100#' -> 'Your extension is 1234'
+VAMOS::
+  Voice services over Adaptive Multi-user channels on One Slot;  an optional
+  extension for GSM specified in Release 9 of 3GPP GERAN specifications
+  (_3GPP TS 48.018_ <<3gpp-ts-48-018>>) allowing two independent UEs to
+  transmit and receive simultaneously on traffic channels
 VCTCXO::
   Voltage Controlled, Temperature Compensated Crystal Oscillator;  a
   precision oscillator, superior to a classic crystal oscillator, but
