@@ -200,6 +200,105 @@ RSP SETSLOT 0 4 1 C7/S1
 Unless explicitly configured as described above, all timeslots will be using the
 default Training Sequence Code and set configured with the 'SETTSC' command.
 
+===== VAMOS enabled channel combinations (optional)
+
+The BTS may at any time re-configure channel combination of a timeslot (primarily
+during channel activation) to activate or deactivate VAMOS mode in the transceiver.
+For this purpose, the following additional channel combinations shall be used:
+
+.List of VAMOS enabled channel combinations and related values
+[options="header"]
+|===
+| value | Channel Combination
+|VFF| V0(TCH/F) & V1(TCH/F), 2 channels total
+|VHH| V0(TCH/H0) & V1(TCH/H0) + V0(TCH/H1) & V1(TCH/H1), 4 channels total
+|VFH| V0(TCH/F) & V1(TCH/H0) + V0(TCH/F) & V1(TCH/H1), 3 channels total
+|HVHH| TCH/H0 + V0(TCH/H1) & V1(TCH/H1), 3 channels total (mixed)
+|===
+
+where both `V0` and `V1` define a _VAMOS pair_.  Symbols `&` and `+` indicate
+simultaneous and sequential transmission in the TDMA domain respectively.
+Therefore a combination `V0(a) & V1(b)` indicates that both channels `a`
+and `b` are simultaneously active during a timeslot period.
+
+.Example: `VFF` in time domain (2 channels)
+----
+ MS1: | V0(TCH/F) | V0(TCH/F) | V0(TCH/F) | V0(TCH/F) | ...
+ -----+-----------+-----------+-----------+-----------+------------> TDMA frames
+ MS2: | V1(TCH/F) | V1(TCH/F) | V1(TCH/F) | V1(TCH/F) | ...
+----
+
+.Example: `VHH` in time domain (4 channels)
+----
+ MS1: | V0(TCH/H0) |            | V0(TCH/H0) |            | ...
+ MS2: |            | V0(TCH/H1) |            | V0(TCH/H1) | ...
+ -----+------------+------------+------------+------------+--------> TDMA frames
+ MS3: | V1(TCH/H0) |            | V1(TCH/H0) |            | ...
+ MS4: |            | V1(TCH/H1) |            | V1(TCH/H1) | ...
+----
+
+.Example: `VFH` in time domain (3 channels)
+----
+ MS1: |  V0(TCH/F) |  V0(TCH/F) |  V0(TCH/F) |  V0(TCH/F) | ...
+ -----+------------+------------+------------+------------+--------> TDMA frames
+ MS2: | V1(TCH/H0) |            | V1(TCH/H0) |            | ...
+ MS3: |            | V1(TCH/H1) |            | V1(TCH/H1) | ...
+----
+
+.Example: `HVHH` in time domain (3 channels)
+----
+ MS1: |    TCH/H0  |            |    TCH/H0  |            | ...
+ MS2: |            | V0(TCH/H1) |            | V0(TCH/H1) | ...
+ -----+------------+------------+------------+------------+--------> TDMA frames
+ MS3: |            | V1(TCH/H1) |            | V1(TCH/H1) | ...
+----
+
+NOTE: Combination `HVHH` is special, because it allows the network to multiplex
+a legacy user device (`MS1`) with a pair of VAMOS capable devices (`MS2` and `MS3`)
+on the same timeslot, so the former (`MS1`) is not required to support the new
+orthogonal training sequences nor AQPSK modulation on Downlink.
+
+For all VAMOS specific channel combinations, it's *required* to specify Training
+Sequence codes and the corresponding TSC sets (see 3GPP TS 45.002, table 5.2.3e
+for more details on TSC set selection):
+
+.Example: configuring a timeslot to use `VFF` combination
+----
+CMD SETSLOT <timeslot> VFF C0/S1 <1> C0/S2 <2>
+RSP SETSLOT <status> <timeslot> VFF C0/S1 C0/S2
+----
+<1> V0(TCH/F) is configured to use TSC 0 from set 1 (table 5.2.3a)
+<2> V1(TCH/F) is configured to use TSC 0 from set 2 (table 5.2.3b)
+
+.Example: configuring a timeslot to use `VHH` combination
+----
+CMD SETSLOT <timeslot> VHH C1/S3 <1> C1/S4 <2>
+RSP SETSLOT <status> <timeslot> VHH C1/S3 C1/S4
+----
+<1> V0(TCH/H0) and V0(TCH/H1) are configured to use TSC 1 from set 3 (table 5.2.3c)
+<2> V1(TCH/H0) and V1(TCH/H1) are configured to use TSC 1 from set 4 (table 5.2.3d)
+
+.Example: configuring a timeslot to use `VFH` combination
+----
+CMD SETSLOT <timeslot> VFH C2/S1 <1> C2/S4 <2>
+RSP SETSLOT <status> <timeslot> VFH C2/S1 C2/S4
+----
+<1> V0(TCH/F) is configured to use TSC 2 from set 1 (table 5.2.3a)
+<2> V1(TCH/H0) and V1(TCH/H1) are configured to use TSC 2 from set 4 (table 5.2.3d)
+
+.Example: configuring a timeslot to use `HVHH` combination
+----
+CMD SETSLOT <timeslot> HVHH C0/S1 <1> C0/S1 <2> C0/S2 <3>
+RSP SETSLOT <status> <timeslot> HVHH C0/S1 C0/S1 C0/S2
+----
+<1> Legacy TCH/H0 is configured to use TSC 0 from set 1 (table 5.2.3a)
+<2> V0(TCH/H1) is configured to use TSC 0 from set 1 (table 5.2.3a)
+<3> V1(TCH/H1) is configured to use TSC 0 from set 2 (table 5.2.3b)
+
+NOTE: Using Training Sequences from the same set for a _VAMOS pair_ is not permitted!
+In the example for `HVHH`, legacy TCH/H0 does not belong to a _VAMOS pair_, so it can
+be configured to use any sequence from any set.
+
 ==== TRXD header version negotiation
 
 Messages on DATA interface may have different header formats, defined by a
