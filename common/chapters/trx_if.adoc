@@ -127,6 +127,20 @@ CMD TXTUNE <kHz>
 RSP TXTUNE <status> <kHz>
 ----
 
+==== Training Sequence configuration
+
+The usual way to configure all timeslots at once involves sending of the `SETTSC`
+command with a desired Training Sequence Code `<tsc>`:
+----
+CMD SETTSC <tsc>
+CMD SETTSC <status> <tsc>
+----
+
+This command instructs the transceiver to use the given Training Sequence Code
+from the TSC set 1 (see 3GPP TS 45.002, table 5.2.3a) for Normal Burst detection
+on the receive path.  It does not affect the transmit path because bursts coming
+from the BTS do contain the Training Sequence bits.
+
 ==== Timeslot Control
 
 `SETSLOT` sets the format of a given uplink timeslot in the ARFCN.
