@@ -400,7 +400,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(0)
-	4:	RES
+	4:	RES [rotate = 270]
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -418,7 +418,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(1)
-	4:	RES
+	4:	RES [rotate = 270]
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -437,7 +437,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(1)
-	4:	RES
+	4:	RES [rotate = 270]
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -551,7 +551,7 @@ a TS set indicated by the preceding bits.
 	node_height = 40
 
 	0-3:	VER
-	4:	RES
+	4:	RES [rotate = 270]
 	5-7:	TN
 	8-39:	FN
 	40-47:	PWR
