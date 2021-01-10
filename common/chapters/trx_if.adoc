@@ -375,7 +375,7 @@ padding existence is completely dropped.
 	40-47:	RSSI
 	48-63:	TOA256
 	64-95:	...Payload...
-	96-97:	PAD
+	96-111:	PAD
 }
 ----
 
@@ -438,7 +438,7 @@ shift. This way:
 * 0 -> definite "0"
 * 255 -> definite "1".
 
-PAD: 2 bits (optional)::
+PAD: 2 bytes (optional)::
 Padding at the end, historical reasons (OpenBTS inheritance). Bits can take any
 value, but 0 is preferred. Only expected on TRXDv0 headers.
 
