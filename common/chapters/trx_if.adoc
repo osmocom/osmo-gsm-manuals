@@ -341,7 +341,50 @@ before `POWERON`, but can be also done afterwards.
 
 === TRXD protocol
 
-Messages on the data interface carry one radio burst per UDP message.
+Messages on the data interface carry one radio burst per UDP message.  Two
+kinds of such messages exist:
+
+* `TRX -> L1` (from transceiver to the L1): Uplink messages received from the MS,
+* `L1 -> TRX` (from the L1 to transceiver): Downlink messages sent to the MS.
+
+Regardless of the origin, all PDUs have the following common structure:
+
+.General message format
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER
+	4:	RFU [rotate = 270]
+	5-7:	TN
+	8-63:	... Specific fields ...
+	64-95:	Burst bits [colheight = 3]
+}
+----
+
+VER: 4 bits::
+TRXD header version, common for both `TRX -> L1` and `L1 -> TRX` directions.
+
+TN: 3 bits::
+TDMA timeslot number.
+
+RFU: 1 bit::
+Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
+to (0..15), in case anybody would need to transfer UMTS bursts.
+
+FN: 32 bits (4 bytes)::
+TDMA frame number, big endian.
+
+Specific fields: variable length::
+This part depends on the origin of a message and the header version.  See below.
+
+Burst bits: variable length::
+The actual bit sequence of a burst, where each bit takes one octet.  Depending on
+the origin, all bits in the sequence are either _soft-bits_ (from demodulator) or
+_hard-bits_ (to the modulator).  Length of the sequence depends on modulation
+type of the burst.
 
 ==== Uplink Data Burst
 
@@ -403,19 +446,6 @@ padding existence is completely dropped.
 	72-87:	C/I
 }
 ----
-
-VER: 4 bits::
-TRXD header version, v0 and v1 are specified so far.
-
-TN: 3 bits::
-Timeslot number.
-
-RES: 1 bit::
-Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
-to (0..15), in case anybody would need to transfer UMTS bursts.
-
-FN: 32 bits (4 bytes)::
-GSM frame number, big endian.
 
 RSSI: 8 bits (1 byte)::
 Received Signal Strength Indication in -dBm, encoded without the negative sign.
@@ -528,19 +558,6 @@ a TS set indicated by the preceding bits.
 	48-95:	Hard-bits
 }
 ----
-
-VER: 4 bits::
-TRXD header version, v0 and v1 are specified so far.
-
-TN: 3 bits::
-Timeslot number.
-
-RES: 1 bit::
-Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
-to (0..15), in case anybody would need to transfer UMTS bursts.
-
-FN: 32 bits (4 bytes)::
-GSM frame number, big endian.
 
 PWR: 8 bits (1 byte)::
 Contains the relative (to the full-scale amplitude) transmit power *reduction*
