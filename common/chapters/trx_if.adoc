@@ -528,8 +528,9 @@ FN: 32 bits (4 bytes)::
 GSM frame number, big endian.
 
 PWR: 8 bits (1 byte)::
-Contains the relative (to the full-scale amplitude) transmit power level in dB.
-The absolute value is set on the control interface.
+Contains the relative (to the full-scale amplitude) transmit power *reduction*
+in dB.  The absolute value is set on the control interface, so the resulting
+power is calculated as follows: `full_scale - (absolute_red + relative_red)`.
 
 Hard-bits: 148 bytes for GSM, 444 bytes for EDGE::
 Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
