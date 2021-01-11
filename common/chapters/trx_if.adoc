@@ -500,8 +500,10 @@ consisting of a sequence of four Access Bursts (see 3GPP TS 44.060).  The
 transceiver shall use `0110` as the modulation type to indicate that.
 
 Training Sequence Code::
-The Training Sequence Code used to decode an Access or a Synchronization burst.
-This field hence doesn't apply for Normal bursts.
+The Training Sequence Code identifies the Training Sequence of a received
+burst.  The value of this field corresponds to one of the sequences defined
+in 3GPP TS 45.002, section 5.2, and depends on the actual modulation and
+the TSC set indicated by the preceding bits.
 
 ==== Downlink Data Burst
 
