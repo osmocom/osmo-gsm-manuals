@@ -482,7 +482,9 @@ also have several synchronization sequences.
 +-----------------+---------------------------------------+
 | . 0 1 0 X . . . | 8-PSK, 2 TS sets (0..1)               |
 +-----------------+---------------------------------------+
-| . 0 1 1 X . . . | RFU (Reserved for Future Use)         |
+| . 0 1 1 0 . . . | GMSK, Access Burst (see note)         |
++-----------------+---------------------------------------+
+| . 0 1 1 1 . . . | RFU (Reserved for Future Use)         |
 +-----------------+---------------------------------------+
 | . 1 0 0 X . . . | 16QAM, 2 TS sets (0..1)               |
 +-----------------+---------------------------------------+
@@ -491,6 +493,11 @@ also have several synchronization sequences.
 | . 1 1 X X . . . | AQPSK (Downlink), 4 TS sets (0..3)    |
 +-----------------+---------------------------------------+
 ----
+
+NOTE: A radio block on PDCH is carried by the sequence of four Normal Bursts.
+The one exception is a special radio block occasionally used on the Uplink
+consisting of a sequence of four Access Bursts (see 3GPP TS 44.060).  The
+transceiver shall use `0110` as the modulation type to indicate that.
 
 Training Sequence Code::
 The Training Sequence Code used to decode an Access or a Synchronization burst.
