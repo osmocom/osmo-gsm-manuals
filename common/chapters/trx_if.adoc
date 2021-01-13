@@ -374,7 +374,7 @@ padding existence is completely dropped.
 	8-39:	FN
 	40-47:	RSSI
 	48-63:	TOA256
-	64-95:	...Payload...
+	64-95:	Soft-bits
 	96-111:	PAD
 }
 ----
@@ -394,7 +394,7 @@ padding existence is completely dropped.
 	48-63:	TOA256
 	64-71:	MTS
 	72-87:	C/I
-	88-127:	...Payload...
+	88-127:	Soft-bits
 }
 ----
 
@@ -427,7 +427,7 @@ value is computed from the training sequence of each burst, where the "ideal"
 training sequence is compared to the actual training sequence and the result
 expressed in centiBels.
 
-Payload: 148 bytes for GSM, 444 bytes for EDGE::
+Soft-bits: 148 bytes for GSM, 444 bytes for EDGE::
 Contains the uplink burst. Unlike the downlink bursts, the uplink bursts are
 designated using the soft-bits notation, so the receiver can indicate its
 assurance from 0 to -127 that a given bit is 1, and from 0 to +127 that a given
@@ -510,7 +510,7 @@ This field hence doesn't apply for Normal bursts.
 	5-7:	TN
 	8-39:	FN
 	40-47:	PWR
-	48-95:	...Payload...
+	48-95:	Hard-bits
 }
 ----
 
@@ -531,6 +531,6 @@ PWR: 8 bits (1 byte)::
 Contains the relative (to the full-scale amplitude) transmit power level in dB.
 The absolute value is set on the control interface.
 
-Payload: 148 bytes for GSM, 444 bytes for EDGE::
+Hard-bits: 148 bytes for GSM, 444 bytes for EDGE::
 Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
 using one byte (0x01 or 0x00 respectively).
