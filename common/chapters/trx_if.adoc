@@ -299,15 +299,16 @@ NOTE: Using Training Sequences from the same set for a _VAMOS pair_ is not permi
 In the example for `HVHH`, legacy TCH/H0 does not belong to a _VAMOS pair_, so it can
 be configured to use any sequence from any set.
 
+[[trx_if_pdu_version_nego]]
 ==== TRXD header version negotiation
 
-Messages on DATA interface may have different header formats, defined by a
-version number, which can be negotiated on the control interface. By default,
-the Transceiver will use the legacy header version (0).
+Messages on DATA interface may have different formats, defined by a version number,
+which can be negotiated on the control interface.  By default, the Transceiver will
+use the legacy header version (0).  See <<trx_if_pdu_versioning>>.
 
-The header format negotiation can be initiated by the BTS using 'SETFORMAT'
-command. If the requested version is not supported by the transceiver, status
-code of the response message should indicate a preferred (basically, the latest)
+The format negotiation can be initiated by the BTS using 'SETFORMAT' command.
+If the requested version is not supported by the transceiver, status code of
+the response message should indicate a preferred (basically, the latest)
 version. The format of this message is the following:
 ----
 CMD SETFORMAT <ver_req>
@@ -385,6 +386,31 @@ The actual bit sequence of a burst, where each bit takes one octet.  Depending o
 the origin, all bits in the sequence are either _soft-bits_ (from demodulator) or
 _hard-bits_ (to the modulator).  Length of the sequence depends on modulation
 type of the burst.
+
+[[trx_if_pdu_versioning]]
+==== PDU versioning
+
+The format of a PDU, i.e. presence and ordering of certain fields, is determined by
+the version number indicated in the first octet.  This is usually referred as
+`TRXDvN`, where `N` is the version number (e.g. TRXDv0 or TRXDv1).  A version number
+indicates the message format to be used for both directions: `TRX -> L1` and
+`L1 -> TRX`.  The same version shall be used for all messages in both directions,
+mixing in any way is not permitted.
+
+The version negotiation is optionally initiated by the `L1` on the control interface,
+and expected to be performed before starting the transceiver (i.e. sending 'POWERON'
+command).  See <<trx_if_pdu_version_nego>>.
+
+The current header allows to distinguish up to 16 different versions.
+The following versions are defined so far:
+
+* TRXDv0 - initial version of TRXD protocol, inherited as-is from OpenBTS project.
+* TRXDv1 (proposed in July 2019):
+** Introduced the concept of protocol versioning;
+** Introduced NOPE / IDLE indications;
+** New field: MTS (Modulation and Training Sequence);
+** New field: C/I (Carrier-to-interface) ratio;
+** Downlink messages mostly unchanged.
 
 ==== Uplink Data Burst
 
