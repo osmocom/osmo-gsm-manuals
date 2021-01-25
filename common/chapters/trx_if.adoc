@@ -22,6 +22,10 @@ a channel `0 <= X <= N` are:
 
 The corresponding interface for every socket is at `P+100` on the BTS side.
 
+NOTE: Starting from TRXDv2, it's possible to use only one socket for all
+channels.  In this case, the global `TRXD` interface for all channels shall
+be established on port `P=B+1`.  See <<trx_if_pdu_batching>> for more details.
+
 [[trx_if_clock_ind]]
 === Indications on the Master Clock Interface
 
@@ -358,8 +362,8 @@ before `POWERON`, but can be also done afterwards.
 
 === TRXD protocol
 
-PDUs on the data interface carry one radio burst per one UDP packet.
-Two kinds of TRXD PDU exist:
+Messages on the data interface carry one or optionally multiple radio bursts
+(see <<trx_if_pdu_batching>>) per one UDP datagram.  Two kinds of TRXD PDU exist:
 
 * `TRX -> L1` (from transceiver to the L1): Uplink messages received from the MS,
 * `L1 -> TRX` (from the L1 to transceiver): Downlink messages sent to the MS.
@@ -390,12 +394,20 @@ The following versions are defined so far:
 ** New field: MTS (Modulation and Training Sequence);
 ** New field: C/I (Carrier-to-interface) ratio;
 ** Downlink messages mostly unchanged.
+* TRXDv2 (proposed in January 2021):
+** Introduced the concept of burst batching (many bursts in one message);
+** Changed the field ordering (facilitating aligned access);
+** New field: batching indicator;
+** New field: TRX number;
+** New field: SCPIR for VAMOS.
 
-==== Uplink Data Burst
+==== Uplink PDU format
 
-Uplink data burst message structure differs from version 0 to 1. Basically,
-version 1 contains an extended header with regards to version 0, and the final
-padding existence is completely dropped.
+An Uplink TRXD PDU contains a demodulated burst with the associated measurements
+(signal strength, timing delay, etc.) and TDMA frame/timeslot number.  Starting
+from TRXDv1, a PDU may contain no payload, indicating the upper layers that the
+transceiver was not able to demodulate a burst (e.g. due to bad signal quality
+or the lack of signal during IDLE TDMA frames).
 
 .TRXDv0 Uplink data burst message structure
 [packetdiag]
@@ -452,6 +464,48 @@ padding existence is completely dropped.
 }
 ----
 
+.TRXDv2 Uplink message structure
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER(2)
+	4:	RFU
+	5-7:	TN
+	8:	BATCH
+	9:	RFU
+	10-15:	TRXN
+	16-23:	MTS
+	24-31:	RSSI
+	32-47:	TOA256
+	48-63:	C/I
+	64-95:	FN
+	96-127:	Soft-bits
+}
+----
+
+.TRXDv2 Uplink message structure (batched part)
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-4:	RFU
+	5-7:	TN
+	8:	BATCH
+	9:	RFU
+	10-15:	TRXN
+	16-23:	MTS
+	24-31:	RSSI
+	32-47:	TOA256
+	48-63:	C/I
+	64-95:	Soft-bits
+}
+----
+
 VER: 4 bits::
 TRXD header version, common for both `TRX -> L1` and `L1 -> TRX` directions.
 
@@ -461,6 +515,12 @@ Timeslot number.
 RFU: variable bit-length::
 Reserved for Future Use.  The sending side of the PDU shall set all bits to
 {bit-zero};  the receiving side shall ignore `RFU` fields.
+
+BATCH: 1 bit::
+This bit indicates whether a batched PDU follows (see <<trx_if_pdu_batching>>).
+
+TRXN: 6 bits::
+The transceiver (PHY channel) number this PDU is coming from.
 
 FN: 32 bits (4 bytes)::
 GSM frame number, big endian.
@@ -562,7 +622,7 @@ the TSC set indicated by the preceding bits.
 
 ==== Downlink Data Burst
 
-.TRXD Downlink data burst message structure
+.TRXDv0 and TRXDv1 Downlink data burst message structure
 [packetdiag]
 ----
 {
@@ -578,6 +638,48 @@ the TSC set indicated by the preceding bits.
 }
 ----
 
+.TRXDv2 Downlink data burst message structure
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER(2)
+	4:	RFU
+	5-7:	TN
+	8:	BATCH
+	9:	RFU
+	10-15:	TRXN
+	16-23:	MTS
+	24-31:	PWR
+	32-39:	SCPIR
+	40-63:	RFU
+	64-95:	FN
+	96-127:	Hard-bits
+}
+----
+
+.TRXDv2 Downlink PDU structure (batched part)
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-4:	RFU
+	5-7:	TN
+	8:	BATCH
+	9:	RFU
+	10-15:	TRXN
+	16-23:	MTS
+	24-31:	PWR
+	32-39:	SCPIR
+	40-63:	RFU
+	64-95:	Hard-bits
+}
+----
+
 VER: 4 bits::
 TRXD header version, common for both `TRX -> L1` and `L1 -> TRX` directions.
 
@@ -585,7 +687,18 @@ TN: 3 bits::
 Timeslot number.
 
 RFU: variable bit-length::
-Reserved for Future Use, all bits shall be set to low (`0`).
+Reserved for Future Use.  The sending side of the PDU shall set all bits to
+{bit-zero};  the receiving side shall ignore `RFU` fields.
+
+BATCH: 1 bit::
+This bit indicates whether a batched PDU follows (see <<trx_if_pdu_batching>>).
+
+TRXN: 6 bits::
+The transceiver (PHY channel) number this PDU is addressed to.
+
+MTS: 8 bits (1 byte)::
+Contains the Modulation and Training Sequence information. See <<coding-mts>>
+for more information on the encoding.
 
 FN: 32 bits (4 bytes)::
 GSM frame number, big endian.
@@ -595,6 +708,142 @@ Contains the relative (to the full-scale amplitude) transmit power *reduction*
 in dB.  The absolute value is set on the control interface, so the resulting
 power is calculated as follows: `full_scale - (absolute_red + relative_red)`.
 
+SCPIR: 8 bits (1 byte)::
+SCPIR (Subchannel Power Imbalance Ratio) - the ratio of power between Q and I
+channels for a VAMOS pair.  This field shall be present when `MTC` field
+indicates the use of `AQPSK` modulation.  Otherwise, all bits shall be set
+to {bit-zero}.  The value is a signed integer with a valid range: -10..10 dB.
+
 Hard-bits: 148 x N bytes (variable length, N defined by modulation type)::
 Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
 using one byte (0x01 or 0x00 respectively).
+
+[[trx_if_pdu_batching]]
+==== PDU batching
+
+Starting from TRXDv2, it's possible to combine several PDUs into a single
+datagram - this is called _PDU batching_.  The purpose of _PDU batching_
+is to reduce socket load and eliminate possible PDU reordering, especially
+in a multi-TRX setup.
+
+All _batched PDUs_ in a datagram must belong to the same TDMA frame number
+indicated in the first part.  The ordering of PDUs in a datagram may be
+different from the examples below, however it's recommended to batch PDUs
+in ascending order determined by TDMA timeslot number and/or `TRXN`.
+
+The following PDU combinations in a datagram are possible:
+
+* `a)` one datagram contains PDUs with the same TDMA timeslot number for all
+transceivers (total N PDUs per a TDMA timeslot);
+* one datagram contains complete TDMA frame with PDUs for all 8 timeslots:
+** `b)` either for a single transceiver (total 8 PDUs per a TDMA frame),
+** `c)` or for all transceivers (total 8 x N PDUs per a TDMA frame).
+
+None of these combinations are mandatory to support.
+
+NOTE: Automatic negotiation of the batching algorithm(s) is not yet specified.
+Currently both sides need to be manually configured to use _PDU batching_.
+
+NOTE: Size of the biggest possible TRXD datagram should be less than the
+_MTU (Maximum Transmission Unit)_ of the network interface connecting
+both BTS and the transceiver.  Otherwise the datagram is split across
+multiple IP packets, which may negatively affect performance.
+
+.Example: datagram structure for combination a)
+----
++--------+----------------+---------+------------------------+
+| TRXN=0 | TDMA FN=F TN=T | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=1 | TDMA FN=F TN=T | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=2 | TDMA FN=F TN=T | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=T | BATCH=0 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+----
+
+.Example: datagram structure for combination b)
+----
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=0 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=1 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=2 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=7 | BATCH=0 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+----
+
+.Example: datagram structure for combination c)
+----
++--------+----------------+---------+------------------------+
+| TRXN=0 | TDMA FN=F TN=0 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=0 | TDMA FN=F TN=1 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=0 | TDMA FN=F TN=2 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=6 | BATCH=1 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+| TRXN=N | TDMA FN=F TN=7 | BATCH=0 | Hard-/Soft-bits        |
++--------+----------------+---------+------------------------+
+----
+
+[[trx_if_pdu_vamos]]
+==== Coding of VAMOS PDUs
+
+In VAMOS mode, the throughput of a cell is increased by multiplexing two subscribers
+on a single TDMA timeslot.  Basically, *two* bursts are getting transmitted during
+one TDMA timeslot period, and both of them need delivered over the TRXD interface.
+
+In the Downlink direction, the two bursts belonging to a _VAMOS pair_ shall be
+concatenated together and sent in one TRXD PDU.  The resulting hard-bit sequence
+shall *not* be interleaved: `V0(0..147) + V1(0..147)` (296 hard-bits total), i.e.
+one complete burst for subscriber `V0` takes the first 148 bytes, and another
+complete burst for subscriber `V1` takes the remaining 148 bytes.  The `MTS` field
+shall indicate the use of `AQPSK` modulation, and the `SCPIR` field shall indicate
+the Power Imbalance Ratio between `V0` and `V1`.
+
+.Example: Downlink datagram containing a VAMOS PDU
+----
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+-----------+---------------------------------------+
+| TRXN=N | TDMA FN=F TN=T | Mod=AQPSK | Hard-bits: V0(0..147) + V1(0..147)    |
++--------+----------------+-----------+---------------------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----
+
+In the Uplink direction though, one or even both of the two bursts may be lost
+(e.g. due to high noise figures), so they shall always be sent in two separate
+PDUs.  The missing bursts shall be substituted by NOPE indications, so it's
+always a pair of _batched PDUs_.  The `MTS` field shall indicate the use of
+`GMSK` modulation.
+
+.Example: Uplink datagram containing batched VAMOS PDUs (both present)
+----
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+----------+----------------------------------------+
+| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V0 (148 bytes)           |
++--------+----------------+----------+----------------------------------------+
+| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V1 (148 bytes)           |
++--------+----------------+----------+----------------------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----
+
+.Example: Uplink datagram containing batched VAMOS PDUs (one lost)
+----
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+----------+----------------------------------------+
+| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V0 (148 bytes)           |
++--------+----------------+----------+----------------------------------------+
+| TRXN=N | TDMA FN=F TN=T | NOPE.ind |
++--------+----------------+----------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----
