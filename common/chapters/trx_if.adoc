@@ -342,8 +342,8 @@ before `POWERON`, but can be also done afterwards.
 
 === TRXD protocol
 
-Messages on the data interface carry one radio burst per UDP message.  Two
-kinds of such messages exist:
+PDUs on the data interface carry one or multiple radio bursts per UDP message.
+Two kinds of such messages exist:
 
 * `TRX -> L1` (from transceiver to the L1): Uplink messages received from the MS,
 * `L1 -> TRX` (from the L1 to transceiver): Downlink messages sent to the MS.
@@ -411,6 +411,11 @@ The following versions are defined so far:
 ** New field: MTS (Modulation and Training Sequence);
 ** New field: C/I (Carrier-to-interface) ratio;
 ** Downlink messages mostly unchanged.
+* TRXDv2 (proposed in January 2021):
+** Introduced the concept of burst batching (many bursts in one message);
+** Changed the field ordering (facilitating aligned access);
+** New field: batching indicator;
+** New field: SCPIR for VAMOS.
 
 ==== Uplink Data Burst
 
@@ -470,6 +475,47 @@ padding existence is completely dropped.
 	48-63:	TOA256
 	64-71:	MTS (NOPE.ind)
 	72-87:	C/I
+}
+----
+
+.TRXDv2 Uplink message structure
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER(2)
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-23:	SPARE (0)
+	24-31:	RSSI
+	32-47:	TOA256
+	48-63:	C/I
+	64-95:	FN
+	96-127:	Soft-bits [colheight = 3]
+}
+----
+
+.TRXDv2 Uplink message structure (batched part)
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	SPARE (0)
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-23:	SPARE (0)
+	24-31:	RSSI
+	32-47:	TOA256
+	48-63:	C/I
+	64-95:	Soft-bits [colheight = 3]
 }
 ----
 
@@ -569,7 +615,7 @@ a TS set indicated by the preceding bits.
 
 ==== Downlink Data Burst
 
-.TRXD Downlink data burst message structure
+.TRXDv0 and TRXDv1 Downlink data burst message structure
 [packetdiag]
 ----
 {
@@ -585,11 +631,114 @@ a TS set indicated by the preceding bits.
 }
 ----
 
+.TRXDv2 Downlink data burst message structure
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-23:	SPARE (0)
+	24-31:	PWR
+	32-63:	FN
+	64-95:	Hard-bits [colheight = 3]
+}
+----
+
+.TRXDv2 Downlink data burst message structure (batched part)
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	SPARE (0)
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-23:	SPARE (0)
+	24-31:	PWR
+	32-63:	Hard-bits [colheight = 3]
+}
+----
+
+.TRXDv2 Downlink data burst message structure for AQPSK
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	VER
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-19:	SPARE (0)
+	20-23:	SCPIR
+	24-31:	PWR
+	32-63:	FN
+	64-95:	Hard-bits for V0/V1 [colheight = 3]
+}
+----
+
+.TRXDv2 Downlink data burst message structure (batched part) for AQPSK
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 40
+
+	0-3:	SPARE (0)
+	4:	RES [rotate = 270]
+	5-7:	TN
+	8-15:	MTS
+	16:	BATCH [rotate = 270]
+	17-19:	SPARE (0)
+	20-23:	SCPIR
+	24-31:	PWR
+	32-63:	Hard-bits for V0/V1 [colheight = 3]
+}
+----
+
 PWR: 8 bits (1 byte)::
 Contains the relative (to the full-scale amplitude) transmit power *reduction*
 in dB.  The absolute value is set on the control interface, so the resulting
 power is calculated as follows: `full_scale - (absolute_red + relative_red)`.
 
+SCPIR: 4 bits::
+SCPIR (Subchannel Power Imbalance Ratio) - the ratio of power between Q and I
+channels for a VAMOS pair.  Value range: 0 .. 10.  This field shall be present
+when `MTC` field indicates the use of _AQPSK_ modulation.  Otherwise all bits
+shall be set to 0.
+
 Hard-bits: 148 bytes for GSM, 444 bytes for EDGE::
 Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
 using one byte (0x01 or 0x00 respectively).
+
+Hard-bits for V0/V1: 148 bytes each, 296 bytes total::
+This field contains two sequences of hard-bits (148 bytes each) for an _AQPSK_
+moduleted burst (VAMOS mode).  The two sequences are *not* interleaved: one
+complete sequence for subscriber `V0` takes the first 148 bytes, then another
+complete sequence for subscriber `V1` takes the subsequent 148 bytes.
+
+[[trx_if_pdu_batching]]
+==== Burst batching
+
+Starting from TRXDv2, it's possible to combine several bursts into a single
+PDU - this is called _burst batching_.  The purpose of FIXME
+
+The ordering of bursts may be different with the only requirement that all
+_batched_ bursts must belong to the same TDMA frame number indicated in the
+first part.  Thus the following combinations are possible:
+
+* one PDU contains bursts of the same TDMA timeslot for all transceivers;
+* one PDU contains complete TDMA frame with all timeslots:
+** either for a single transceiver,
+** or for all transceivers.
