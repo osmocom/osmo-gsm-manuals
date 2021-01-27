@@ -3,41 +3,84 @@
 == Appendix A. Bibliography / References
 
 [bibliography]
+- [[[userman-ice1usb]]] Osmocom Project: icE1usb User Manual.
+- [[[userman-ogt]]] Pau Espin: osmo-gsm-tester User Manual.
+- [[[userman-remsim]]] Harald Welte: osmo-remsim User Manual.
 - [[[osmobts-abis-spec]]] Neels Hofmeyr & Harald Welte. OsmoBTS Abis
   Protocol Specification.
   http://ftp.osmocom.org/docs/latest/osmobts-abis.pdf
-- [[[userman-osmobts]]] Osmocom Project: OsmoBTS User Manual.
-  http://ftp.osmocom.org/docs/latest/osmobts-usermanual.pdf
-- [[[vty-ref-osmobts]]] Osmocom Project: OsmoBTS VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmobts-vty-reference.pdf
 - [[[userman-osmobsc]]] Osmocom Project: OsmoBSC User Manual.
   http://ftp.osmocom.org/docs/latest/osmobsc-usermanual.pdf
 - [[[vty-ref-osmobsc]]] Osmocom Project: OsmoBSC VTY Reference Manual.
   http://ftp.osmocom.org/docs/latest/osmobsc-vty-reference.pdf
-- [[[userman-osmomsc]]] Osmocom Project: OsmoMSC User Manual.
-  http://ftp.osmocom.org/docs/latest/osmomsc-usermanual.pdf
-- [[[vty-ref-osmomsc]]] Osmocom Project: OsmoMSC VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmomsc-vty-reference.pdf
-- [[[userman-osmohlr]]] Osmocom Project: OsmoHLR User Manual.
-  http://ftp.osmocom.org/docs/latest/osmohlr-usermanual.pdf
-- [[[vty-ref-osmohlr]]] Osmocom Project: OsmoHLR VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmohlr-vty-reference.pdf
-- [[[userman-osmopcu]]] Osmocom Project: OsmoPCU User Manual.
-  http://ftp.osmocom.org/docs/latest/osmopcu-usermanual.pdf
-- [[[vty-ref-osmopcu]]] Osmocom Project: OsmoPCU VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmopcu-vty-reference.pdf
-- [[[userman-osmonitb]]] Osmocom Project: OsmoNITB User Manual.
-  http://ftp.osmocom.org/docs/latest/osmonitb-usermanual.pdf
-- [[[vty-ref-osmonitb]]] Osmocom Project: OsmoNITB VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
-- [[[userman-osmosgsn]]] Osmocom Project: OsmoSGSN User Manual.
-  http://ftp.osmocom.org/docs/latest/osmosgsn-usermanual.pdf
-- [[[vty-ref-osmosgsn]]] Osmocom Project: OsmoSGSN VTY Reference Manual.
-  http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
+- [[[userman-osmobts]]] Osmocom Project: OsmoBTS User Manual.
+  http://ftp.osmocom.org/docs/latest/osmobts-usermanual.pdf
+- [[[vty-ref-osmobts]]] Osmocom Project: OsmoBTS VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmobts-trx-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmobts-sysmo-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmobts-lc15-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmobts-oc2g-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmobts-octphy-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmobts-virtual-vty-reference.pdf
+- [[[userman-osmocbc]]] Osmocom Project: OsmoCBC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmocbc-usermanual.pdf
+- [[[vty-ref-osmocbc]]] Osmocom Project: OsmoCBC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmocbc-vty-reference.pdf
+- [[[userman-osmogbproxy]]] Osmocom Project: OsmoGBProxy User Manual.
+  http://ftp.osmocom.org/docs/latest/osmogbproxy-usermanual.pdf
+- [[[vty-ref-osmogbproxy]]] Osmocom Project: OsmoGBPRoxy VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmogbproxy-vty-reference.pdf
 - [[[userman-osmoggsn]]] Osmocom Project: OpenGGSN User Manual.
   http://ftp.osmocom.org/docs/latest/osmoggsn-usermanual.pdf
 - [[[vty-ref-osmoggsn]]] Osmocom Project: OsmoGGSN VTY Reference Manual.
   http://ftp.osmocom.org/docs/latest/osmoggsn-vty-reference.pdf
+- [[[userman-osmohlr]]] Osmocom Project: OsmoHLR User Manual.
+  http://ftp.osmocom.org/docs/latest/osmohlr-usermanual.pdf
+- [[[vty-ref-osmohlr]]] Osmocom Project: OsmoHLR VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmohlr-vty-reference.pdf
+- [[[userman-osmohnbgw]]] Osmocom Project: OsmoHNBGW User Manual.
+  http://ftp.osmocom.org/docs/latest/osmohnbgw-usermanual.pdf
+- [[[vty-ref-osmohnbgw]]] Osmocom Project: OsmoHNBGW VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmohnbgw-vty-reference.pdf
+- [[[userman-osmomgw]]] Osmocom Project: OsmoMGW User Manual.
+  http://ftp.osmocom.org/docs/latest/osmomgw-usermanual.pdf
+- [[[vty-ref-osmomgw]]] Osmocom Project: OsmoMGW VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmomgw-vty-reference.pdf
+- [[[userman-osmomsc]]] Osmocom Project: OsmoMSC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmomsc-usermanual.pdf
+- [[[vty-ref-osmomsc]]] Osmocom Project: OsmoMSC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmomsc-vty-reference.pdf
+- [[[userman-osmonitb]]] Osmocom Project: OsmoNITB User Manual.
+  http://ftp.osmocom.org/docs/latest/osmonitb-usermanual.pdf
+- [[[vty-ref-osmonitb]]] Osmocom Project: OsmoNITB VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmonitb-vty-reference.pdf
+- [[[userman-osmopcu]]] Osmocom Project: OsmoPCU User Manual.
+  http://ftp.osmocom.org/docs/latest/osmopcu-usermanual.pdf
+- [[[vty-ref-osmopcu]]] Osmocom Project: OsmoPCU VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmopcu-vty-reference.pdf
+- [[[userman-osmosgsn]]] Osmocom Project: OsmoSGSN User Manual.
+  http://ftp.osmocom.org/docs/latest/osmosgsn-usermanual.pdf
+- [[[vty-ref-osmosgsn]]] Osmocom Project: OsmoSGSN VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmosgsn-vty-reference.pdf
+- [[[userman-osmosipconnector]]] Osmocom Project: OsmoSIPconnector User Manual.
+  http://ftp.osmocom.org/docs/latest/osmosipconnector-usermanual.pdf
+- [[[vty-ref-osmosipconnector]]] Osmocom Project: OsmoSIPconnector VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmosipconnector-vty-reference.pdf
+- [[[userman-osmosmlc]]] Osmocom Project: OsmoSMLC User Manual.
+  http://ftp.osmocom.org/docs/latest/osmosmlc-usermanual.pdf
+- [[[vty-ref-osmosmlc]]] Osmocom Project: OsmoSMLC VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmosmlc-vty-reference.pdf
+- [[[userman-osmostp]]] Osmocom Project: OsmoSTP User Manual.
+  http://ftp.osmocom.org/docs/latest/osmostp-usermanual.pdf
+- [[[vty-ref-osmostp]]] Osmocom Project: OsmoSTP VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmostp-vty-reference.pdf
+- [[[userman-osmotrx]]] Osmocom Project: OsmoTRX User Manual.
+  http://ftp.osmocom.org/docs/latest/osmotrx-usermanual.pdf
+- [[[vty-ref-osmotrx]]] Osmocom Project: OsmoTRX VTY Reference Manual.
+  http://ftp.osmocom.org/docs/latest/osmotrx-uhd-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmotrx-lms-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmotrx-ipc-vty-reference.pdf
+  http://ftp.osmocom.org/docs/latest/osmotrx-usrp1-vty-reference.pdf
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
   (U)SIM application toolkit; Stage 2
   http://www.3gpp.org/DynaReport/23048.htm
