@@ -307,3 +307,29 @@ routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup)
 routing-key RCONTEXT DPC ssn SSN
 routing-key RCONTEXT DPC si (aal2|bicc|b-isup|h248|isup|sat-isup|sccp|tup) ssn SSN
 ----
+
+==== M3UA without Routing Context IE / Routing Context '0'
+
+As per the M3UA specification, the use of the routing context IE is
+optional as long as there is only one AS within an ASP.  As soon as
+there are multiple different AS within one ASP, the routing context IE
+is mandatory, as it is the only clue to differentiate which of the ASs a
+given message belongs to.
+
+In the Osmocom M3UA implementation, it is generally assumed that a
+routing context IE is always used, for the sake of clarity.
+
+However, the routing context ID of '0' has the special meaning of _do
+not encode a routing context IE on transmit_.
+
+So if you configure an application like OsmoBSC to use routing context
+0, then no routing context IE will be included in outbound M3UA
+messages.
+
+This special interpretation of '0' within the Osmocom M3UA
+implementation however means that we can not represent M3UA with a
+routing context IE that actually contains '0' as a numeric identifier.
+
+So you only have the following options:
+* Using M3UA with routing context (1..N)
+* Using M3UA without routing context (0)
