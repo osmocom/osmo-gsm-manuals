@@ -166,7 +166,7 @@ Messages on DATA interface may have different header formats, defined by a
 version number, which can be negotiated on the control interface. By default,
 the Transceiver will use the legacy header version (0).
 
-The header format negotiation can be initiated by the BTS using 'SETFORMAT'
+The header format negotiation can be initiated by the BTS using `SETFORMAT`
 command. If the requested version is not supported by the transceiver, status
 code of the response message should indicate a preferred (basically, the latest)
 version. The format of this message is the following:
