@@ -1,3 +1,28 @@
+osmo-gsm-manuals-dev (1.1.0) unstable; urgency=medium
+
+  [ Harald Welte ]
+  * bibliography: Add more user manuals
+  * bibliography: https everywhere.
+  * cs7-config: Describe special meaning of M3UA routing context '0'
+
+  [ Vadim Yanitskiy ]
+  * glossary.adoc: add brief definitions of AQPSK and VAMOS
+  * TRXC: use monospace formatting (the backticks) for 'SETFORMAT'
+  * TRXC: add missing description of the 'SETTSC' command
+  * TRXC: add proposal for multiple Training Sequences
+  * TRXC: introduce VAMOS enabled channel combinations
+  * TRXD: fix optional padding length: bits vs bytes
+  * TRXD: cosmetic: clarify soft-/hard-bits on packet diagrams
+  * TRXD: clarify the meaning of field 'PWR' in Downlink messages
+  * TRXD: use different coding for AQPSK in the 'MTC' field
+  * TRXD: reserve a combination for Access Bursts on PACCH
+  * TRXD: rework description of the 'Training Sequence Code' field
+  * TRXD: clarify description of NOPE / IDLE indications
+  * TRXD: more information on PDU versioning and some highlights
+  * logging: add documentation for 'systemd-journal' target
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Tue, 23 Feb 2021 12:59:20 +0100
+
 osmo-gsm-manuals-dev (1.0.0) unstable; urgency=medium
 
   [ Daniel Willmann ]
