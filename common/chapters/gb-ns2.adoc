@@ -1,0 +1,186 @@
+== Gb/NS Network Service
+
+'libosmogb' is part of the libosmocore.git repository and implements the
+Gb interface protocol stack consisting of the NS and BSSGP layers. It
+is used in a variety of Osmocom projects, including OsmoSGSN, OsmoPCU
+and OsmoGbProxy.
+
+NOTE: <<3gpp-ts-48-016>> specifies Network Service
+
+[[gb_variants]]
+=== Gb interface variants
+
+There are multiple variants of the Gb interface. This
+section tries to provide an overview into what those variants are, how
+they differ from each other.
+
+The two peers involved in any Gb interface must always be in agreement
+about the specific Gb interface variant before they are able to
+connect.
+
+The following variants are supported by Osmocom:
+
+* Gb-over-Frame-Relay over E1/T1
+* Gb-over-IP "ip.access style"
+* Gb-over IP 3GPP static configuration
+* Gb-over-IP 3GPP auto-configuration
+
+[[gb-fr]]
+==== Gb over Frame Relay over E1/T1
+
+Historically, this is the first Gb interface that was specified as part
+of GSM Release 97 when GPRS was first introduced.
+
+Like all other terrestrial GSM interfaces, it uses circuit-switched
+technology from the PDH/ISDN family of systems: E1 or T1 lines as per
+ITU-T G.703 / G.704.
+
+GSM TS 08.16 and later <<3gpp-ts-48-016>> specify that Frame Relay (FR)
+shall be used as transport layer between the E1/T1 bit-stream and the
+NS-level Gb messages.
+
+Two peer entities such as a GPRS BSS and a SGSN are interconnected by a
+NS-VCG (Virtual Connection Group) consisting of any number of NS-VCs
+(Virtual Connections).
+
+Each NS-VC in turn operates over a Frame Relay Permanent Virtual Circuit
+(PVC), identified by its DLCI (Data Link Connection Identifier).
+
+The protocol stacking is BSSGP/NS/FR/E1.
+
+
+===== FR Driver Support
+
+The Osmocom NS/FR implementation currently requires the individual Frame Relay
+Links to be exposed as Linux kernel HDLC net-devices. The Osmocom NS
+implementation has to be instructed which `hdlcX` network devices it
+shall use for each NS-VC, and which DLCIs to use on them.
+
+The Linux kernel Frame Relay LMI support (which only implements the user
+role anyway) is not used. Instead, the ITU-T Q.933 LMI is implemented
+as part of the Osmocom NS code in libosmogb. Osmocom NS code configres
+the `hdlcX` device to match the correct mode (fr) and lmi (none).
+This is equivalent to the user-space command `sethdlc hdlcX fr lmi none`.
+ The net-devices will be also brought _up_ by the Osmocom NS code equivalent to
+ `ip link set hdlcX up` command.
+
+As the Osmocom Gb implementation uses AF_PACKET sockets on those
+`hdlcX` network interfaces, the respective program must be running with
+`CAP_NET_RAW` capability.
+
+[[gb-gre-fr]]
+==== Gb over Frame Relay encapsulated in GRE/IP
+
+This is a variant of the Gb-over-FR specified above. However, an
+external router (e.g. certain ancient Cisco routers) is used to take the
+Frame Relay frames from the physical E1/T1 TDM circuit and wrap them
+into the GRE encapsulation as per IETF RFC 2784.
+
+NOTE: GRE/IP has been removed from Osmocom NS code.
+
+[[gb-ip-access]]
+==== Gb over IP "ip.access style"
+
+This is a non-standard variant of Gb which is not found in the GSM/3GPP
+specifications.
+
+It uses an UDP/IP based transport layer, while not yet implementing the
+IP-SNS that is normally required by a true 3GPP Gb over IP interface
+described further below. Hence, this variant resembles an intermediate
+state where a Gb interface originally designed for Frame Relay is used
+over IP without any of the IP-specific procedures specified by 3GPP.
+
+The major difference to 3GPP Gb over IP specified below are:
+
+* No support for the IP-SNS and its SNS-SIZE, SNS-ADD, SNS-DELETE,
+  SNS-WEIGHT procedures.
+* Use of the NS-RESET, NS-BLOCK and NS-UNBLOCK procedures which are
+  normally forbidden over an IP network.
+
+The protocol stacking is BSSGP/NS/UDP/IP.
+
+[[gb-ip-sns]]
+==== Gb over IP 3GPP static and auto-configuration
+
+This is the only official, 3GPP-standardized way of speaking a Gb
+interface over IP based transport.
+
+It features the IP Sub-Network Service (IP-SNS) which allows either
+static configuration or dynamic configuration.
+The static configuration requires to specify the NSE and related NS-VC
+configuration via VTY similiar to Gb-over-FR.
+
+===== Gb over IP 3GPP auto-configuration
+
+The auto-configuration allow to dynamically exchange information about
+IP endpoints (IP+port tuples) between the Gb interface peers.
+This means that normally only one initial IP endpoint needs to be configured.
+All additional IP endpoints and their relative weight for load distribution are then negotiated via the
+IP-SNS auto-configuration procedure.
+
+The major differences of this true IP based Gb compared to any of the
+above are:
+
+* No use of the NS-RESET, NS-BLOCK or NS-UNBLOCK procedures.
+* Ability to use some NS-VCs only for signaling (data_weight=0) or only
+  for user plane traffic (signaling_weight=0). This helps with SGSNs
+  that have an internal control/user plane separation architecture.
+
+Once the IP endpoints of the peers are known to each other, A full mesh
+of NS-VCs between all BSS endpoints and all SGSN endpoints is
+established.
+
+<<fig-gb-sns-nsvcs>> below illustrates a deployment with two IP
+endpoints on both the BSS (PCU) and the SGSN, as well as the resulting
+four NS-VCs established between them.
+
+[[fig-gb-sns-nsvcs]]
+.IP sub-network relationship between NS-VCs and NS-VLs (from 3GPP TS 48.016)
+image::./common/images/gb-ip-nsvc.pdf[]
+
+The sequence of messages in an IP-SNS enabled Gb interface bring-up can
+be seen in <<fig-ip-sns-sequence>>. Here we have a PCU/BSS with a
+single IP endpoint and a SGSN with two IP endpoints, which results in
+only two NS-VC being established.
+
+Furthermore, for each of the cells in the BSS/PCU, we can see the
+BVC-RESET procedure for its corresponding PTP BVC.
+
+[[fig-ip-sns-sequence]]
+.Initialization of Gb interface using IP-SNS procedures
+[mscgen]
+----
+include::gb-ip-sns.msc[]
+----
+
+=== General structure
+
+The general structure of the configuration is split into 3 parts
+
+* binds (NS-VL)
+* nse (NS-E)
+* timeouts
+
+==== bind (NS-VL)
+
+A bind represent a NS-VL. A bind has a specific type (IP/UDP or FR)
+and a unique name.
+
+==== NS-E
+
+A NSE node represents a NS Entity. A NSE is either persistent or dynamic.
+A persistent NSE is configured by VTY. A dynamic NSE is created on-demand
+without any VTY node. The SGSN/GbProxy creates dynamic NSE when a BSS connects
+to the SGSN (see accept-ipaccess).
+The PCU creates a dynamic NSE when it receives the configuration from BTS/BSC.
+
+==== NS-VC
+
+A NS-VC is always bound to a NSE and the bind (NS-VL). The NSVC can be either
+persistent or dynamic.
+
+
+=== VTY
+
+This section describes the VTY commands to inspect or interact with the NS.
+

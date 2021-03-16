@@ -1,0 +1,172 @@
+=== Gb/NS configuration
+
+This section describes the configuration that libosmogb exposes via the
+VTY and is valid for OsmoSGSN and OsmoGbProxy.
+
+==== Gb over Frame Relay over E1/T1
+
+The Gb over Frame Relay over E1/T1 requires:
+
+* a hdlc interface
+* a frame relay role (fr or frnet)
+* the DLCI
+
+.Example: Gb over Frame Relay configuration #1
+----
+ns
+ bind fr sitea1 <1>
+  fr hdlc1 frnet <2>
+ nse 2001 <3>
+  nsvci fr sitea1 dlci 16 nsvci 11
+----
+<1> a Gb-over-FR bind with the name sitea1
+<2> connect the hdlc1 device with the role frnet to sitea1
+<3> one NSE (2001) with a single NS-VCI 11 on sitea1 with DLCI 16
+
+.Example: Gb over Frame Relay configuration #2
+----
+ns
+ bind fr sitea1 <1>
+  fr hdlc1 frnet <2>
+ bind fr sitea2
+  fr hdlc2 frnet
+ bind fr sitea3
+  fr hdlc3 frnet
+ bind fr sitea4
+  fr hdlc4 frnet
+ bind fr siteb1
+  fr hdlc5 frnet
+ bind fr siteb2
+  fr hdlc6 frnet
+ bind fr sitec1
+  fr hdlc7 frnet
+ bind fr sitec2
+  fr hdlc8 frnet
+ nse 2001 <3>
+  nsvci fr sitea1 dlci 16 nsvci 11
+  nsvci fr sitea2 dlci 17 nsvci 12
+  nsvci fr sitea3 dlci 18 nsvci 13
+  nsvci fr sitea4 dlci 19 nsvci 14
+ nse 2002 <4>
+  nsvci fr siteb5 dlci 20 nsvci 15
+  nsvci fr siteb6 dlci 21 nsvci 16
+ nse 2003 <5>
+  nsvc fr sitec7 dlci 22 nsvci 17
+  nsvc fr sitec8 dlci 23 nsvci 18
+----
+<1> a Gb-over-FR bind with the name sitea1
+<2> connect the hdlc1 device with the role frnet to sitea1
+<3> one NSE (2001) with four NS-VCI (11..14) on sitea1..4 with their respective DLCI
+<4> another NSE (2002) with two NS-VCI (15..16) on siteb1..2 with their respective DLCI
+<5> another NSE (2003) with two NS-VCI (17..18) on sitec1..2 with their respective DLCI
+
+
+==== Gb over IP "ip.access style"
+
+The Gb over IP "ip.access style" can be used with a dynamic configuration or with a
+static configuration
+
+The static configuration requires to configure all endpoints on the BSS and SGSN.
+In constrast the dynamic configuration allows the SGSN to have only a reduced configuration.
+
+===== Gb over IP "ip.access style" dynamic configuration
+
+.Example: Gb over IP/UDP ip.access style dynamic configuration (SGSN)
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.1.1 23000 <2>
+  accept-ipaccess <3>
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.1.1:23000
+<3> accept unknown BSS of ip.access style
+
+.Example: Gb over IP/UDP "ip.access style" dynamic configuration (GbProxy as BSS)
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.0.1 23000 <2>
+ nse 1001 <3>
+  nsvc ipa ran1 10.100.1.1 23000 nsvci 1001
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.1.1:23000
+<3> accept unknown BSS of ip.access style
+
+NOTE: The OsmoPCU supports ip.access style Gb/NS but doesn't support this vty configuration because
+it's receiving the configuration from the BTS/BSC.
+
+===== Gb over IP "ip.access style" static configuration
+
+.Example: Gb over IP/UDP "ip.access style" dynamic configuration (SGSN)
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.0.1 23000 <2>
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.0.1:23000
+
+.Example: Gb over IP/UDP "ip.access style" dynamic configuration (GbProxy as BSS)
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.0.1 23000 <2>
+ nse 1001 <3>
+  nsvc ipa ran1 10.100.1.1 23000 nsvci 1001
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.0.1:23000
+<3> NSE 1001 with nsvc 1001 as ip.access style
+
+NOTE: The OsmoPCU supports "ip.access style" Gb/NS but doesn't support this vty configuration because
+it's receiving the configuration from the BTS/BSC.
+
+
+==== Gb over IP 3GPP static configuration
+
+A static IP/UDP configuration without SNS as specified by 3GPP 48.016.
+
+.Example: Gb over IP/UDP static configuration BSS/SGSN
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.0.1 23000 <2>
+ nse 1001 <3>
+  nsvc udp ran1 10.100.1.1 23000 signalling-weight 2 data-weight 2
+  nsvc udp ran1 10.100.1.2 23000 <4>
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.0.1:23000
+<3> add NSE 1001 with 2 NSVC
+<4> short configuration with default signalling and data weight of 1
+
+==== Gb over IP 3GPP auto configuration as BSS
+
+IP/UDP auto-configuration with initial endpoints to an SGSN.
+The auto-configuration will use the first bind to connect to the
+first endpoint. If this fails Osmocom will iterate over all endpoints and binds to find
+a working combination.
+
+.Example: Gb over IP/UDP auto-configuration as BSS
+----
+ns
+ bind udp ran1 <1>
+  listen 10.100.0.1 23000 <2>
+ bind udp ran2
+  listen 10.100.0.2 23000
+ bind udp ran3
+  listen 10.100.0.3 23000
+ nse 1001 <3>
+  ip-sns-bind ran1 <4>
+  ip-sns-bind ran2
+  ip-sns-endpoint 10.100.1.1 <5>
+  ip-sns-endpoint 10.100.1.2
+----
+<1> create a IP/UDP bind with name ran1
+<2> bind to 10.100.0.1:23000
+<3> add NSE 1001 with 2 initial SNS endpoints
+<4> add ran1 to the list of available endpoints
+<5> add 10.100.1.1 as initial endpoint
+

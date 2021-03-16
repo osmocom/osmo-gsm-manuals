@@ -1,0 +1,36 @@
+==== Gb/NS Timer configuration
+
+The NS protocol features a number of configurable timers.
+
+.List of configurable NS timers
+|===
+|tns-block|(un)blocking timer timeout (secs)
+|tns-block-retries|(un)blocking timer; number of retries
+|tns-reset|reset timer timeout (secs)
+|tns-reset-retries|reset timer; number of retries
+|tns-test|test timer timeout (secs)
+|tns-alive|alive timer timeout (secs)
+|tns-alive-retries|alive timer; number of retries
+|tsns-prov|SNS provision timeout (secs) used by all SNS auto configuration procedures.
+|tsns-size-retries|SNS Size procedure; number of retries
+|tsns-config-retries|SNS Config procedure; number of retries
+|===
+
+All timer can be configured by vty configuration
+
+.Example of timeouts
+----
+ns
+ timer tns-block 3
+ timer tns-block-retries 3
+ timer tns-reset 3
+ timer tns-reset-retries 3
+ timer tns-test 30
+ timer tns-alive 3
+ timer tns-alive-retries 10
+ timer tsns-prov 10
+ timer tsns-size-retries 3
+ timer tsns-config-retries 3
+----
+
+// FIXME: ladder diagrams for every timer
