@@ -405,7 +405,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(0)
-	4:	RES
+	4:	RFU
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -423,7 +423,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(1)
-	4:	RES
+	4:	RFU
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -442,7 +442,7 @@ padding existence is completely dropped.
 	node_height = 40
 
 	0-3:	VER(1)
-	4:	RES
+	4:	RFU
 	5-7:	TN
 	8-39:	FN
 	40-47:	RSSI
@@ -458,9 +458,9 @@ TRXD header version, common for both `TRX -> L1` and `L1 -> TRX` directions.
 TN: 3 bits::
 Timeslot number.
 
-RES: 1 bit::
-Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
-to (0..15), in case anybody would need to transfer UMTS bursts.
+RFU: variable bit-length::
+Reserved for Future Use.  The sending side of the PDU shall set all bits to
+{bit-zero};  the receiving side shall ignore `RFU` fields.
 
 FN: 32 bits (4 bytes)::
 GSM frame number, big endian.
@@ -570,7 +570,7 @@ the TSC set indicated by the preceding bits.
 	node_height = 40
 
 	0-3:	VER
-	4:	RES
+	4:	RFU
 	5-7:	TN
 	8-39:	FN
 	40-47:	PWR
@@ -584,9 +584,8 @@ TRXD header version, common for both `TRX -> L1` and `L1 -> TRX` directions.
 TN: 3 bits::
 Timeslot number.
 
-RES: 1 bit::
-Reserved, shall be 0. It can be used in the future to extend the TDMA TN range
-to (0..15), in case anybody would need to transfer UMTS bursts.
+RFU: variable bit-length::
+Reserved for Future Use, all bits shall be set to low (`0`).
 
 FN: 32 bits (4 bytes)::
 GSM frame number, big endian.
