@@ -477,7 +477,7 @@ value is computed from the training sequence of each burst, where the "ideal"
 training sequence is compared to the actual training sequence and the result
 expressed in centiBels.
 
-Soft-bits: 148 bytes for GSM, 444 bytes for EDGE::
+Soft-bits: 148 x N bytes (variable length, N defined by modulation type)::
 Contains the uplink burst. Unlike the downlink bursts, the uplink bursts are
 designated using the soft-bits notation, so the receiver can indicate its
 assurance from 0 to -127 that a given bit is 1, and from 0 to +127 that a given
@@ -525,23 +525,23 @@ also have several synchronization sequences.
 
 .Modulation and TS set number
 ----
-+-----------------+---------------------------------------+
-| 7 6 5 4 3 2 1 0 | bit numbers (value range)             |
-+-----------------+---------------------------------------+
-| . 0 0 X X . . . | GMSK, 4 TS sets (0..3)                |
-+-----------------+---------------------------------------+
-| . 0 1 0 X . . . | 8-PSK, 2 TS sets (0..1)               |
-+-----------------+---------------------------------------+
-| . 0 1 1 0 . . . | GMSK, Access Burst (see note)         |
-+-----------------+---------------------------------------+
-| . 0 1 1 1 . . . | RFU (Reserved for Future Use)         |
-+-----------------+---------------------------------------+
-| . 1 0 0 X . . . | 16QAM, 2 TS sets (0..1)               |
-+-----------------+---------------------------------------+
-| . 1 0 1 X . . . | 32QAM, 2 TS sets (0..1)               |
-+-----------------+---------------------------------------+
-| . 1 1 X X . . . | AQPSK (Downlink), 4 TS sets (0..3)    |
-+-----------------+---------------------------------------+
++-----------------+---------------------------------------+--------------+
+| 7 6 5 4 3 2 1 0 | Description                           | Burst length |
++-----------------+---------------------------------------+--------------+
+| . 0 0 X X . . . | GMSK, 4 TS sets (0..3)                |   148 x 1    |
++-----------------+---------------------------------------+--------------+
+| . 0 1 0 X . . . | 8-PSK, 2 TS sets (0..1)               |   148 x 3    |
++-----------------+---------------------------------------+--------------+
+| . 0 1 1 0 . . . | GMSK, Access Burst (see note)         |   148 x 1    |
++-----------------+---------------------------------------+--------------+
+| . 0 1 1 1 . . . | RFU (Reserved for Future Use)         |   -------    |
++-----------------+---------------------------------------+--------------+
+| . 1 0 0 X . . . | 16QAM, 2 TS sets (0..1)               |   148 x 4    |
++-----------------+---------------------------------------+--------------+
+| . 1 0 1 X . . . | 32QAM, 2 TS sets (0..1)               |   148 x 5    |
++-----------------+---------------------------------------+--------------+
+| . 1 1 X X . . . | AQPSK (Downlink), 4 TS sets (0..3)    |   148 x 2    |
++-----------------+---------------------------------------+--------------+
 ----
 
 NOTE: A radio block on PDCH is carried by the sequence of four Normal Bursts.
@@ -591,6 +591,6 @@ Contains the relative (to the full-scale amplitude) transmit power *reduction*
 in dB.  The absolute value is set on the control interface, so the resulting
 power is calculated as follows: `full_scale - (absolute_red + relative_red)`.
 
-Hard-bits: 148 bytes for GSM, 444 bytes for EDGE::
+Hard-bits: 148 x N bytes (variable length, N defined by modulation type)::
 Contains the downlink burst. Each hard-bit (1 or 0) of the burst is represented
 using one byte (0x01 or 0x00 respectively).
