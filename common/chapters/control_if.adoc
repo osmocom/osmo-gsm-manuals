@@ -188,7 +188,7 @@ Another implementation is in `scripts/osmo_rate_ctr2csv.py` which will retrieve 
 for a given Osmocom program and output it in csv format. This can be used to periodically (using systemd timer
 for example) retrieve data to build KPI and evaluate how it changes over time.
 
-Internally it uses "+rate_ctr.*+" variable described in <<ctrl_common_var>> to get the list of counter groups
+Internally it uses "+rate_ctr.*+" variable described in <<ctrl_common_vars>> to get the list of counter groups
 and than request all the counters in each group. Applications interested in individual metrics can request it
 directly using `rate_ctr2csv.py` as an example.
 

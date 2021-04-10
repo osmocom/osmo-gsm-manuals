@@ -45,7 +45,7 @@ So in order to estimate the loss of a coaxial cable, you need to
 . determine the frequency at which you will use the cable, as determined
   by the GSM frequency band of your BTS.  Make sure you use the highest
   frequency that might occur, which is typically the upper end of the
-  transmit band, see <<gsm-bands>>
+  transmit band, see <<rf-gsm-bands>>
 . determine the attenuation of your cable per 100m at the given
   frequency (check the cable data sheet)
 . scale that value by the actual length of the cable

@@ -81,6 +81,8 @@
   https://ftp.osmocom.org/docs/latest/osmotrx-lms-vty-reference.pdf
   https://ftp.osmocom.org/docs/latest/osmotrx-ipc-vty-reference.pdf
   https://ftp.osmocom.org/docs/latest/osmotrx-usrp1-vty-reference.pdf
+- [[[3gpp-ts-23-041]]] 3GPP TS 23.041: Technical realization of
+  Cell Broadcast Service (CBS)
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
   (U)SIM application toolkit; Stage 2
   https://www.3gpp.org/DynaReport/23048.htm
@@ -160,7 +162,7 @@
   system for telecommunication application providers
   https://www.etsi.org/deliver/etsi_ts/101200_101299/101220/12.00.00_60/ts_101220v120000p.pdf
 
-- [[[ietf-rfc768]]] IETF RFC 768: Internet Protocol
+- [[[ietf-rfc791]]] IETF RFC 791: Internet Protocol
   https://tools.ietf.org/html/rfc791
 - [[[ietf-rfc793]]] IETF RFC 793: Transmission Control Protocol
   https://tools.ietf.org/html/rfc793
