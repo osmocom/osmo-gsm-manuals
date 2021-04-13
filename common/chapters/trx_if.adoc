@@ -1,3 +1,7 @@
+// Common attributes (macros) used in this document
+:bit-zero: '0\'B
+:bit-one: '1\'B
+
 [[trx_if]]
 == TRX Manager UDP socket interface
 
@@ -504,7 +508,7 @@ is used in EDGE).
 +-----------------+---------------------------------------+
 | 7 6 5 4 3 2 1 0 | bit numbers (value range)             |
 +-----------------+---------------------------------------+
-| X . . . . . . . | IDLE / nope frame indication (0 or 1) |
+| X . . . . . . . | NOPE / IDLE frame indication (0 or 1) |
 +-----------------+---------------------------------------+
 | . X X X X . . . | Modulation, TS set number (see below) |
 +-----------------+---------------------------------------+
@@ -512,11 +516,12 @@ is used in EDGE).
 +-----------------+---------------------------------------+
 ----
 
-IDLE / nope frame indication::
-The bit number 7 (MSB) is set to high when either nothing has been detected, so
-the BTS scheduler keeps processing bursts without gaps, or during IDLE frames,
-so the current noise levels can be delivered.  Other bits are ignored, and should
-be set to low (`0`) in this case.  The field "Soft-bits" is omited.
+NOPE / IDLE frame indication (referred to as NOPE.ind)::
+The bit number 7 (MSB) shall be set to {bit-one} by the transceiver when either
+nothing has been detected, so the BTS scheduler keeps processing bursts without
+gaps, or during IDLE frames, so the current noise levels can be delivered.  In
+this case the remaining bits become meaningless and shall be set to {bit-zero}.
+The payload (`Soft-bits` or `Hard-bits`) is omited.
 
 Modulation and TS set number::
 GMSK has 4 sets of training sequences (see tables 5.2.3a-d), while 8-PSK (see
