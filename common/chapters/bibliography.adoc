@@ -126,6 +126,10 @@
 - [[[3gpp-ts-44-064]]] 3GPP TS 44.064: Mobile Station - Serving GPRS
   Support Node (MS-SGSN); Logical Link Control (LLC) Layer Specification
   https://www.3gpp.org/DynaReport/44064.htm
+- [[[3gpp-ts-45-002]]] 3GPP TS 45.002: Digital cellular telecommunications
+  system (Phase 2+) (GSM); GSM/EDGE Multiplexing and multiple access on the
+  radio path
+  https://www.3gpp.org/DynaReport/45002.htm
 - [[[3gpp-ts-48-008]]] 3GPP TS 48.008: Mobile Switching Centre - Base
   Station system (MSC-BSS) interface; Layer 3 specification
   https://www.3gpp.org/DynaReport/48008.htm
