@@ -28,7 +28,7 @@ clean:
 distclean: clean
 
 publish: $(UPLOAD_FILES)
-	rsync -avz -e "$(SSH_COMMAND)" $(UPLOAD_FILES) docs@rita.osmocom.org:web-files/latest/
+	rsync -avz -e "$(SSH_COMMAND)" $(UPLOAD_FILES) docs@ftp.osmocom.org:web-files/latest/
 
 # Install and uninstall targets
 # Notes about OSMO_GSM_MANUALS_NO_INSTALL:
