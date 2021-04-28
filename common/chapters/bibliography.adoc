@@ -166,6 +166,8 @@
   system for telecommunication application providers
   https://www.etsi.org/deliver/etsi_ts/101200_101299/101220/12.00.00_60/ts_101220v120000p.pdf
 
+- [[[ietf-rfc768]]] IETF RFC 768: User Datagram Protocol
+  https://tools.ietf.org/html/rfc768
 - [[[ietf-rfc791]]] IETF RFC 791: Internet Protocol
   https://tools.ietf.org/html/rfc791
 - [[[ietf-rfc793]]] IETF RFC 793: Transmission Control Protocol
