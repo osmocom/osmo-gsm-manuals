@@ -1,0 +1,3 @@
+=== QoS example for example manual
+
+Quite exemplary.

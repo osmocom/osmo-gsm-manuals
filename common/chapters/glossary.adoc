@@ -81,6 +81,8 @@ DHCP::
 downlink::
   Direction of messages / signals from the network core towards the
   mobile phone
+DSCP::
+  Diffrentiated Services Code Point (_IETF RFC 2474_ <<ietf-rfc2474>>
 DSP::
   Digital Signal Processor
 dvnixload::
@@ -264,6 +266,8 @@ PC::
   Point Code; an address in MTP
 PCH::
   Paging Channel on downlink Um interface; used by network to page an MS
+PCP::
+  Priority Code Point (_IEEE 802.1Q_ <<ieee-802.11>>)
 PCU::
   Packet Control Unit; used to manage Layer 2 of the GPRS radio interface
 PDCH::
@@ -354,6 +358,8 @@ TCP::
   Transmission Control Protocol; (_IETF RFC 793_ <<ietf-rfc793>>)
 TFTP::
   Trivial File Transfer Protocol; (_IETF RFC 1350_ <<ietf-rfc1350>>)
+TOS::
+  Type Of Service; bit-field in IPv4 header, now re-used as DSCP (_IETF RFC 791_ <<ietf-rfc791)
 TRX::
   Transceiver; element of a BTS serving a single carrier
 TS::
@@ -388,6 +394,8 @@ VCTCXO::
   Voltage Controlled, Temperature Compensated Crystal Oscillator;  a
   precision oscillator, superior to a classic crystal oscillator, but
   inferior to an OCXO
+VLAN::
+  Virtual LAN in the context of Ethernet (_IEEE 802.1Q_ <<ieee-802.1q>>)
 VLR::
   Visitor Location Register; volatile storage of attached subscribers in
   the MSC

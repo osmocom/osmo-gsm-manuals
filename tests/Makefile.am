@@ -4,6 +4,7 @@ EXTRA_DIST = test-usermanual-docinfo.xml \
 	vty \
 	test2-vty-reference.xml \
 	vty-test2 \
+	chapters \
 	$(NULL)
 
 # Do not install any of the test pdfs

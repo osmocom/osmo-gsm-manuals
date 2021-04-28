@@ -166,6 +166,9 @@
   system for telecommunication application providers
   https://www.etsi.org/deliver/etsi_ts/101200_101299/101220/12.00.00_60/ts_101220v120000p.pdf
 
+- [[[ieee-802.1q]]] IEEE 802.1Q: Bridges and Bridged Networks
+  https://ieeexplore.ieee.org/document/6991462
+
 - [[[ietf-rfc768]]] IETF RFC 768: User Datagram Protocol
   https://tools.ietf.org/html/rfc768
 - [[[ietf-rfc791]]] IETF RFC 791: Internet Protocol
@@ -178,6 +181,9 @@
   https://tools.ietf.org/html/rfc1350
 - [[[ietf-rfc2131]]] IETF RFC 2131: Dynamic Host Configuration Protocol
   https://tools.ietf.org/html/rfc2131
+- [[[ietf-rfc2474]]] IETF RFC 2474: Definition of the Differentiated Services Field (DS Field) in the IPv44
+  and IPv6 Headers
+  https://tools.ietf.org/html/rfc2474
 - [[[ietf-rfc2719]]] IETF RFC 2719: Signal Transport over IP
   https://tools.ietf.org/html/rfc2719
 - [[[ietf-rfc3331]]] IETF RFC 3331: Message Transfer Part 2 User Adaptation Layer
