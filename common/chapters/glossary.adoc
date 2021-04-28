@@ -77,12 +77,12 @@ dBm::
   deci-Bel (milliwatt); unit of measurement for signal strength of radio
   signals
 DHCP::
-  Dynamic Host Configuration Protocol (_IETF RFC 2131_ <<ietf-rfc2131>>
+  Dynamic Host Configuration Protocol (_IETF RFC 2131_ <<ietf-rfc2131>>)
 downlink::
   Direction of messages / signals from the network core towards the
   mobile phone
 DSCP::
-  Diffrentiated Services Code Point (_IETF RFC 2474_ <<ietf-rfc2474>>
+  Differentiated Services Code Point (_IETF RFC 2474_ <<ietf-rfc2474>>)
 DSP::
   Digital Signal Processor
 dvnixload::
@@ -359,7 +359,7 @@ TCP::
 TFTP::
   Trivial File Transfer Protocol; (_IETF RFC 1350_ <<ietf-rfc1350>>)
 TOS::
-  Type Of Service; bit-field in IPv4 header, now re-used as DSCP (_IETF RFC 791_ <<ietf-rfc791)
+  Type Of Service; bit-field in IPv4 header, now re-used as DSCP (_IETF RFC 791_ <<ietf-rfc791>>)
 TRX::
   Transceiver; element of a BTS serving a single carrier
 TS::
