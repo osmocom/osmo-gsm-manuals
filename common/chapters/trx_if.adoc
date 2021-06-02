@@ -398,6 +398,7 @@ The following versions are defined so far:
 ** Introduced the concept of burst batching (many bursts in one message);
 ** Changed the field ordering (facilitating aligned access);
 ** New field: batching indicator;
+** New field: shadow indicator;
 ** New field: TRX number;
 ** New field: SCPIR for VAMOS.
 
@@ -496,7 +497,7 @@ or the lack of signal during IDLE TDMA frames).
 	0-4:	RFU
 	5-7:	TN
 	8:	BATCH
-	9:	RFU
+	9:	SHADOW
 	10-15:	TRXN
 	16-23:	MTS
 	24-31:	RSSI
@@ -518,6 +519,9 @@ Reserved for Future Use.  The sending side of the PDU shall set all bits to
 
 BATCH: 1 bit::
 This bit indicates whether a batched PDU follows (see <<trx_if_pdu_batching>>).
+
+SHADOW: 1 bit::
+This bit indicates whether this is a _shadow PDU_ (see <<trx_if_pdu_vamos>>).
 
 TRXN: 6 bits::
 The transceiver (PHY channel) number this PDU is coming from.
@@ -823,27 +827,29 @@ the Power Imbalance Ratio between `V0` and `V1`.
 In the Uplink direction though, one or even both of the two bursts may be lost
 (e.g. due to high noise figures), so they shall always be sent in two separate
 PDUs.  The missing bursts shall be substituted by NOPE indications, so it's
-always a pair of _batched PDUs_.  The `MTS` field shall indicate the use of
-`GMSK` modulation.
+always a pair of _batched PDUs_.  First PDU in a pair is called _primary PDU_,
+the second is called _shadow PDU_.  This is additionally indicated by the
+`SHADOW` field, which is set to {bit-zero} and {bit-one}, respectively.  The
+`MTS` field shall indicate the use of `GMSK` modulation if the burst is present.
 
 .Example: Uplink datagram containing batched VAMOS PDUs (both present)
 ----
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+--------+----------------+----------+----------------------------------------+
-| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V0 (148 bytes)           |
-+--------+----------------+----------+----------------------------------------+
-| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V1 (148 bytes)           |
-+--------+----------------+----------+----------------------------------------+
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+----------+----------+------------------------------+
+| TRXN=N | TDMA FN=F TN=T | SHADOW=0 | Mod=GMSK | Soft-bits for V0 (148 bytes) |
++--------+----------------+----------+----------+------------------------------+
+| TRXN=N | TDMA FN=F TN=T | SHADOW=1 | Mod=GMSK | Soft-bits for V1 (148 bytes) |
++--------+----------------+----------+----------+------------------------------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ----
 
 .Example: Uplink datagram containing batched VAMOS PDUs (one lost)
 ----
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+--------+----------------+----------+----------------------------------------+
-| TRXN=N | TDMA FN=F TN=T | Mod=GMSK | Soft-bits for V0 (148 bytes)           |
-+--------+----------------+----------+----------------------------------------+
-| TRXN=N | TDMA FN=F TN=T | NOPE.ind |
-+--------+----------------+----------+
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--------+----------------+----------+----------+------------------------------+
+| TRXN=N | TDMA FN=F TN=T | SHADOW=0 | Mod=GMSK | Soft-bits for V0 (148 bytes) |
++--------+----------------+----------+----------+------------------------------+
+| TRXN=N | TDMA FN=F TN=T | SHADOW=1 | NOPE.ind |
++--------+----------------+----------+----------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ----
