@@ -1,0 +1,9 @@
+digraph G {
+	DISABLED -> RESET [label="transport layer available"];
+	RESET -> BLOCKED [label="reset ack"];
+	BLOCKED -> UNBLOCKED [label="unblock"];
+	UNBLOCKED -> BLOCKED  [label="block"];
+	BLOCKED -> RESET [label="test procedure timeout"];
+	UNBLOCKED -> RESET [label="test procedure timeout"];
+}
+

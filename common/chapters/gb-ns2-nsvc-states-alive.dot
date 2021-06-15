@@ -1,0 +1,6 @@
+
+digraph G {
+	DISABLED -> ALIVE;
+	ALIVE -> RECOVERING [label="test procedure timeout"];
+	RECOVERING -> ALIVE [label="test procedure success"];
+}
