@@ -76,9 +76,6 @@ for SCCP-level message exchange between all the connected programs.
 
 === Connect to STP Instance
 
-By default, an STP instance is assumed to listen on the default M3UA port
-(2905) on the local host (127.0.0.1).
-
 Establishing an SCCP/M3UA link towards a remote STP instance can be configured
 as:
 
@@ -92,6 +89,19 @@ cs7 instance 0
 ----
 
 Be aware that such an `asp` needs to be linked to an `as`, see <<as_and_asp>>.
+
+By default, an STP instance is assumed to listen on the default M3UA port
+(2905) on the local host. That means in general `127.0.0.1` will be used as
+default remote SCTP address, and `::1` will be added to the SCTP association if
+IPv6 support is available on the system.
+
+NOTE: OsmoSTP listens by default on `::` if IPv6 is enabled on the system,
+and on `0.0.0.0` otherwise. Address `::` actually superseeds `0.0.0.0`, meaning
+it will listen on all IPv4 and IPv6 addresses available on the system.
+
+CAUTION: Some applications overwrite the default target remote address to
+be `localhost`. If IPv6 support is available on the system, `localhost` will
+usually resolve to `::1`, otherwise it will usually resolve to `127.0.0.1`.
 
 === Local Point-Code
 
