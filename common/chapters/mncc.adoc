@@ -53,7 +53,8 @@ any internal call switching, but delegate all call-control handling towards the
 external MNCC program connected via the MNCC socket.
 
 If you intend to operate {program-name} with external MNCC handler, you have
-to start it with the `-m` or `--mncc-sock` command line option.
+to disable the internal MNCC handler and specify the MNCC socket path in
+the configuration file.
 
 At the time of this writing, the only external application implementing the
 MNCC interface compatible with the Osmocom MNCC socket is `lcr`, the Linux Call
