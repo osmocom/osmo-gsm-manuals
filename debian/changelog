@@ -1,3 +1,37 @@
+osmo-gsm-manuals-dev (1.2.0) unstable; urgency=medium
+
+  [ Harald Welte ]
+  * add README.md to describe what this repo is about
+  * build: Switch from rita -> ftp.osmocom.org
+  * bibliography: Re-introduce RFC768 (UDP)
+  * Add new common chapter about QoS, IP DSCP and IEEE 802.1q PCP
+  * glossary: fix various typos I introduced.
+
+  [ Vadim Yanitskiy ]
+  * fix tests/Makefile.am: exclude file 'mgcp_extension_osmux.adoc'
+  * fix missing and/or non-existent linked references
+  * TRXD: clarify modulation specific length of Soft-/Hard-bits
+  * TRXD: rework description of the NOPE / IDLE frame indication
+  * TRXD: generalize description of the 'RFU' ('PAD') field
+  * TRXD: add documentation for TRXDv2 protocol
+  * TRXDv2: add primary/shadow classification for VAMOS PDUs
+  * mncc: do not mention deprecated -m / --mncc-sock options
+
+  [ Alexander Couzens ]
+  * common/chapters: extend gb/ns2 chapters
+
+  [ Neels Hofmeyr ]
+  * bib: add reference to 3GPP TS 45.002, for Training Sequence definitions
+
+  [ Oliver Smith ]
+  * port_numbers: add osmo-pcap-client, -server
+  * d/patches/build-for-debian8.patch: remove
+
+  [ Pau Espin Pedrol ]
+  * cs7-config.adoc: Improve doc on default SS7 SCTP addresses
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Tue, 16 Nov 2021 13:18:04 +0100
+
 osmo-gsm-manuals-dev (1.1.0) unstable; urgency=medium
 
   [ Harald Welte ]
