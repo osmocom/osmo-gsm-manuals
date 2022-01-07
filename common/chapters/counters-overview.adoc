@@ -126,3 +126,77 @@ OsmoBSC(config-stats)# enable
 
 Setting up a statsd server and configuring the visualization is beyond the
 scope of this document.
+
+=== Socket stats
+
+libosmocore provides features to monitor the status of TCP connections. This
+can be a helpful source of information when the links between network
+components are unreliable (e.g. satellite link between BTS and BSC).
+
+NOTE: This feature is only available for certain types of TCP connections. At
+the moment only RSL/OML connections between OsmoBSC and the connected BTSs can
+be monitored.
+
+==== Configuration
+
+The gathering of the TCP connection statistics is done via syscalls. This has
+to be taken into account for the configuration. Since syscalls are rather
+expensive and time consuming the overall performance of the application may
+suffer when many TCP connections are present. This may be the case for BSCs
+with a large number of BTSs connected to it.
+
+The statistics are gathered in batches per interval. A batch size of 5 would
+mean that only 5 TCP connections per interval are evaluated and the next 5
+connections in the next interval and so on.
+
+It is recommended to choose a large reporting interval and a reasonable small
+batch size to distribute the syscall load as even as possible.
+
+.Report statistics to statsd
+====
+----
+OsmoBSC> enable
+OsmoBSC# configure terminal
+stats-tcp interval 10 <1>
+stats-tcp batch-size 5 <2>
+----
+====
+
+<1> Set the gathering interval (sec.)
+<2> Set how many TCP sockets statistics to gather per interval.
+
+==== Generated stats items
+
+[options="header"]
+|===
+| Name | Description
+| tcp:unacked | unacknowledged packets.
+| tcp:lost | unacknowledged packets.
+| tcp:retrans | lost packets.
+| tcp:rtt | retransmitted packets.
+| tcp:rcv_rtt | roundtrip-time (receive).
+| tcp:notsent_bytes | bytes not yet sent.
+| tcp:rwnd_limited | time (usec) limited by receive window.
+| tcp:sndbuf_limited | Time (usec) limited by send buffer.
+| tcp:reord_seen | reordering events seen.
+|===
+
+The item group index is the file descriptor number. The item group name
+consists of a static prefix (e.g. "ipa-rsl"), followed by the IP addresses
+and ports of both peers.
+
+.VTY output of a stats item group of a TCP connection
+====
+----
+stats tcp (15)('ipa-rsl,r=10.9.1.143:38455<->l=10.9.1.162:3003'):
+ unacknowledged packets:        0
+ lost packets:        0
+ retransmitted packets:        0
+ roundtrip-time:      583
+ roundtrip-time (receive):        0
+ bytes not yet sent:        0
+ time (usec) limited by receive window:        0
+ Time (usec) limited by send buffer:        0
+ reordering events seen:        0
+----
+====
