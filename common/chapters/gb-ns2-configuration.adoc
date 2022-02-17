@@ -161,8 +161,8 @@ ns
  nse 1001 <3>
   ip-sns-bind ran1 <4>
   ip-sns-bind ran2
-  ip-sns-endpoint 10.100.1.1 <5>
-  ip-sns-endpoint 10.100.1.2
+  ip-sns-remote 10.100.1.1 23000 <5>
+  ip-sns-remote 10.100.1.2 23000
 ----
 <1> create a IP/UDP bind with name ran1
 <2> bind to 10.100.0.1:23000
