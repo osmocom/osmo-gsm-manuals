@@ -179,8 +179,3 @@ The PCU creates a dynamic NSE when it receives the configuration from BTS/BSC.
 A NS-VC is always bound to a NSE and the bind (NS-VL). The NSVC can be either
 persistent or dynamic.
 
-
-=== VTY
-
-This section describes the VTY commands to inspect or interact with the NS.
-
