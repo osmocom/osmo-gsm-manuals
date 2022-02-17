@@ -99,16 +99,7 @@ it's receiving the configuration from the BTS/BSC.
 
 ===== Gb over IP "ip.access style" static configuration
 
-.Example: Gb over IP/UDP "ip.access style" dynamic configuration (SGSN)
-----
-ns
- bind udp ran1 <1>
-  listen 10.100.0.1 23000 <2>
-----
-<1> create a IP/UDP bind with name ran1
-<2> bind to 10.100.0.1:23000
-
-.Example: Gb over IP/UDP "ip.access style" dynamic configuration (GbProxy as BSS)
+.Example: Gb over IP/UDP "ip.access style" static configuration (BSS & SGSN)
 ----
 ns
  bind udp ran1 <1>
