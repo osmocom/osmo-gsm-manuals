@@ -58,7 +58,7 @@ shall use for each NS-VC, and which DLCIs to use on them.
 
 The Linux kernel Frame Relay LMI support (which only implements the user
 role anyway) is not used. Instead, the ITU-T Q.933 LMI is implemented
-as part of the Osmocom NS code in libosmogb. Osmocom NS code configres
+as part of the Osmocom NS code in libosmogb. Osmocom NS code configures
 the `hdlcX` device to match the correct mode (fr) and lmi (none).
 This is equivalent to the user-space command `sethdlc hdlcX fr lmi none`.
  The net-devices will be also brought _up_ by the Osmocom NS code equivalent to
