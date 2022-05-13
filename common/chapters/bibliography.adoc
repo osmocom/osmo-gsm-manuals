@@ -141,6 +141,10 @@
   (GPRS); Base Station System (BSS) - Serving GPRS Support Node (SGSN);
   BSS GPRS protocol (BSSGP)
   https://www.3gpp.org/DynaReport/48018.htm
+- [[[3gpp-ts-48-049]]] 3GPP TS 48.049: Digital cellular communications system;
+  Base Station Controller - Cell Broadcast Centre (BSC-CBC) interface specification;
+  Cell Broadcast Service Protocol (CBSP)
+  https://www.3gpp.org/DynaReport/48049.htm
 - [[[3gpp-ts-48-056]]] 3GPP TS 48.056: Base Station Controller - Base
   Transceiver Station (BSC - BTS) interface; Layer 2 specification
   https://www.3gpp.org/DynaReport/48056.htm
