@@ -53,8 +53,14 @@ BSSGP::
   Base Station Subsystem Gateway Protocol (_3GPP TS 48.018_ <<3gpp-ts-48-018>>)
 BVCI::
   BSSGP Virtual Circuit Identifier
+CBC::
+  Cell Broadcast Centre; central entity of Cell Broadcast service
 CBCH::
   Cell Broadcast Channel; used to transmit Cell Broadcast SMS (SMS-CB)
+CBS::
+  Cell Broadcast Service
+CBSP::
+  Cell Broadcast Service Protocol (_3GPP TS 48.049_ <<3gpp-ts-48-049>>)
 CC::
   Call Control; Part of the GSM Layer 3 Protocol
 CCCH::
