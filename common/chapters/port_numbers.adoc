@@ -52,6 +52,12 @@ which protocol / interface.
 |TCP|4269|telnet (VTY)|osmo-e1d
 |TCP|4271|telnet (VTY)|osmo-smlc
 |TCP|4272|Control Interface|osmo-smlc
+|TCP|4273|telnet (VTY)|osmo-hnodeb
+|TCP|4274|Control Interface|osmo-hnodeb
+|TCP|4275|telnet (VTY)|osmo-upf
+|TCP|4276|Control Interface|osmo-upf
+|TCP|4277|telnet (VTY)|osmo-pfcp-tool
+|TCP|4278|Control Interface|osmo-pfcp-tool
 |UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
