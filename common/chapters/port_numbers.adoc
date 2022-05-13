@@ -55,6 +55,7 @@ which protocol / interface.
 |UDP|4729|GSMTAP|Almost every osmocom project
 |TCP|5000|A/IP|osmo-bsc, osmo-bsc_nat
 |UDP|23000|GPRS-NS over IP default port|osmo-pcu, osmo-sgsn, osmo-gbproxy
+|TCP|48049|BSC-CBC (CBSP) default port|osmo-bsc, osmo-cbc
 |===============
 ////
 ATTENTION: Keep this list in sync with all of:
