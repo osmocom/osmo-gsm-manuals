@@ -1,3 +1,27 @@
+osmo-gsm-manuals-dev (1.3.0) unstable; urgency=medium
+
+  [ Philipp Maier ]
+  * counters-overview: add documentation about socket statistics
+
+  [ Alexander Couzens ]
+  * common: gb-ns2: remove empty VTY chapter
+  * common: gb-ns2: update ip-sns configuration example
+  * common: gb-ns2: correct ip.access static configuration
+  * common: gb-ns2: fix typo in configures
+  * common: gb-ns2: add chapter Gb/NS maintenance
+
+  [ Harald Welte ]
+  * Add CBSP port number to default list of ports
+  * bibliography: Add reference to TS 48.049 (CBSP)
+  * glossary: add CBSP, CBC, CBS
+  * port_numbers: Add missing records for osmo-upf, pfcp-tool, hnodeb
+
+  [ Pau Espin Pedrol ]
+  * sigtran: Remove old comment about non-implemented stuff
+  * sigtran: Use caps in section header
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Tue, 28 Jun 2022 17:27:15 +0200
+
 osmo-gsm-manuals-dev (1.2.0) unstable; urgency=medium
 
   [ Harald Welte ]
