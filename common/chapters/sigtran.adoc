@@ -254,8 +254,8 @@ interfaced with the SS7 network by means of one of the SIGTRAN
 protocols.
 
 An Application Server can have one or more Application Server Processes
-associated with it.  This functionality (currently not implemented in
-Osmocom) can be used for load-balancing or fail-over scenarios.
+associated with it.  This functionality can be used for load-balancing or
+fail-over scenarios.
 
 ===== Application Server Process (ASP)
 
