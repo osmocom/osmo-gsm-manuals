@@ -380,7 +380,7 @@ M3UA connection implements.  3GPP specifies the following role:
 Osmocom (libosmo-sigtran) implements both the SGP and ASP roles, but not
 the IPSP role.
 
-==== traffic modes in SIGTRAN
+==== Traffic Modes in SIGTRAN
 
 Whenever an AS consists of multiple ASPs, the traffic mode expresses how
 messages are distributed between those ASPs.
