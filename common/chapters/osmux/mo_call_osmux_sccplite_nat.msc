@@ -18,7 +18,7 @@ msc {
 
 	# NAT: MGW/MSC Osmux endpoint
 	#bscnat -> bscnat	[label="MGCP CRCX *@mgw, X-Osmux: *"];
-	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 2, recvCID 5"];
+	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 2, MGW's local CID 5"];
 	#mgw_msc -> m_sc	[label="MGCP CRCX rtpbridge/1@mgw OK (MGW:1984, X-Osmux: 5)"];
 	bsc <- bscnat    [label="BSSAP ASSGN REQ (CIC:2)"];
 
@@ -48,7 +48,7 @@ msc {
 
 	# MSC configures BSC-MGW MSC-side of the endpoint through MGCP UDP forwarding
 	bscnat <- m_sc    [label="MGCP CRCX 1@mgw (MSC:3000)"];
-	bscnat box bscnat [label="Allocate new endpoint 2\nAllocate new recvCID 5\nBind to local Osmux Port (1984)\nBind to local RTP port 4000"];
+	bscnat box bscnat [label="Allocate new endpoint 2\nAllocate new MGW's local CID 5\nBind to local Osmux Port (1984)\nBind to local RTP port 4000"];
 	mgw_bsc <- bscnat [label="MGCP CRCX 2@mgw (MSC:1984, X-Osmux: 5)"];
 	mgw_bsc -> bscnat    [label="MGCP CRCX 2@mgw OK (MGW:1985, X-Osmux: 7)"];
 	bscnat -> m_sc    [label="MGCP CRCX 1@mgw OK (MGW:4000)"];

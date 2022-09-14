@@ -14,7 +14,7 @@ msc {
 
 	# Allocate MGW/MSC Osmux endpoint
 	m_sc -> mgw_msc	[label="MGCP CRCX rtpbridge/*@mgw, X-Osmux: *"];
-	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 1, recvCID 5"];
+	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 1, MGW's local CID 5"];
 	mgw_msc -> m_sc	[label="MGCP CRCX rtpbridge/1@mgw OK (MGW:1984, X-Osmux: 5)"];
 
 	bsc <- m_sc 	[label="BSSAP ASSGN REQ (3GPP AoIP, extension IE: Osmux CID 5)"];
@@ -37,7 +37,7 @@ msc {
 	...;
 
 	mgw_bsc <- bsc	[label="MGCP CRCX rtpbridge/2@mgw (MSC:1984, X-Osmux: 5)"];
-	mgw_bsc box mgw_bsc	[label="Bind to MGW-local Osmux Port (1985)\nConnect to MSC:1984\nAllocate new recvCID 7"];
+	mgw_bsc box mgw_bsc	[label="Bind to MGW-local Osmux Port (1985)\nConnect to MSC:1984\nAllocate new MGW's local CID 7"];
 	mgw_bsc -> bsc	[label="MGCP CRCX rtpbridge/2@mgw OK (MGW:1985, X-Osmux: 7)"];
 	...;
 

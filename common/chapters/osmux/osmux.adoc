@@ -50,13 +50,13 @@ connections alive.
 
 === CID allocation
 
-Each peer (BSC/MGW and MSC/MGW) allocates its own _recvCID_, and receives from
-the peer through the used GSM protocol the peer's _recvCID_, which becomes
-the local _sendCID_ for that connection.
+Each peer (BSC/MGW and MSC/MGW) allocates its own _local CID_, and receives from
+its peer a _remote CID_ (aka the peer's _local CID_) through the used GSM
+protocol. This _remote CID_ is then used to send Osmux frames to that peer.
 
 ----
-BSC/MGW(recvCID=Y,sendCID=?)<-X--MSC/MGW(recvCID=X,sendCID=?)
-BSC/MGW(recvCID=Y,sendCID=X)--Y->MSC/MGW(recvCID=X,sendCID=Y)
+BSC/MGW(localCID=Y,remoteCID=?)<-X--MSC/MGW(localCID=X,remoteCID=?)
+BSC/MGW(localCID=Y,remoteCID=X)--Y->MSC/MGW(localCID=X,remoteCID=Y)
 ----
 
 This way each peer is responsible for allocating and managing their own local
@@ -75,13 +75,13 @@ localPort>` tuple, allowing for 256 Osmux CIDs per BSC and hence call legs per
 BSC. Each of the peers could actually have more than one Osmux socket towards
 the other peer, by using a pool of ports or IP addresses, so there's really not
 limit if required as long as there's a way to infer the initially negotiated
-`<srcIP, srcPort, dstIP, dstPort, sendCID>` tuple from the received audio
+`<srcIP, srcPort, dstIP, dstPort, remoteCID>` tuple from the received audio
 packets.
 
 However, due to some constrains from in between NATs explained in section above,
 BSC/MGW IP address and port are not a priory known, and could change between
 different connections coming from it. As a result, it is difficult to infer the
-entire tuple, so for now MGW needs to allocate its Osmux _recvCID_ in a clever
+entire tuple, so for now MGW needs to allocate its Osmux _local CID_ in a clever
 way, in order to be able to identify the full tuple from it.
 
 Hence, currently OsmoMGW CID allocation implementation shares CID between all

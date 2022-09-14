@@ -19,11 +19,11 @@ their respective response messages.
 
 In request messages, the value part of `X-Osmux` specifies the CID to be used by
 OsmoMGW to _send_ Osmux frames to the remote peer for that connection, also
-known as _sendCID_.
+known as the MGW's _remote CID_ or the peer's _local CID_.
 
 In response messages, the value part of `X-Osmux` specifies the CID where
 OsmoMGW expect to _receive_ Osmux frames from the remote peer for that
-connection, also known as _recvCID_.
+connection, also known as the MGW's _local CID_ or the peer's _remote CID_.
 
 .Example: `X-Osmux` format with a known CID 3.
 ----
@@ -39,12 +39,12 @@ X-Osmux: *
 
 If the MGCP client is willing to use Osmux for a given connection, it shall
 specify so during `CRCX` time, and not later. If at `CRCX` time the MGCP client
-doesn't yet know the _sendCID_, it can use an astersik (*) and provide
-_sendCID_ later within `MDCX` messages.
+doesn't yet know the MGW's _remote CID_, it can use an astersik (*) and provide
+_remote CID_ later within `MDCX` messages.
 
 All subsequent `MDCX` messages sent towards an Osmux connection must contain the
-original _sendCID_ sent during `CRCX`. The same way, all `MDCX` response shall
-contain the _recvCID_ sent during `CRCX`.
+original MGW's _remote CID_ sent during `CRCX`. The same way, all `MDCX` response shall
+contain the _local CID_ sent during `CRCX`.
 
 The other required connection address parameters, such as IP address, port, and
 codecs, are negotiated through MGCP and SDP as usual, but in this case the IP
@@ -72,7 +72,7 @@ a=rtpmap:112 AMR/8000/1
 a=ptime:20
 ----
 
-.Example: response to `CRCX` containing the <<recvCID>>
+.Example: response to `CRCX` containing the MGW's _local CID_
 ----
 200 189 OK
 I: 07E41584

@@ -12,7 +12,7 @@ msc {
 
 	# Allocate MGW/MSC Osmux endpoint
 	m_sc -> mgw_msc	[label="MGCP CRCX *@mgw, X-Osmux: *"];
-	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 1, recvCID 5"];
+	mgw_msc box mgw_msc	[label="Bind to MGW-local Osmux Port (1984)\nAllocate new endpoint 1, MGW's local CID 5"];
 	mgw_msc -> m_sc	[label="MGCP CRCX rtpbridge/1@mgw OK (MGW:1984, X-Osmux: 5)"];
 
 	bsc <- m_sc     [label="BSSAP ASSGN REQ (CIC:1)"];
@@ -39,7 +39,7 @@ msc {
 
 	# MSC configures BSC-MGW MSC-side of the endpoint through MGCP UDP forwarding
 	mgw_bsc <- m_sc    [label="MGCP CRCX 1@mgw (MSC:1984, X-Osmux: 5)"];
-	mgw_bsc box mgw_bsc   [label="Bind to BTS-local Osmux Port (1985)\nAllocate new recvCID 7"];
+	mgw_bsc box mgw_bsc   [label="Bind to BTS-local Osmux Port (1985)\nAllocate new MGW's local CID 7"];
 	mgw_bsc -> m_sc    [label="MGCP CRCX 1@mgw OK (MGW:1985, X-Osmux: 7)"];
 	mgw_bsc <- m_sc    [label="MGCP MDCX 1@mgw (recvonly) "];
 	mgw_bsc box mgw_bsc   [label="Connect Osmux socket to remote (MSC) Osmux Port"];
