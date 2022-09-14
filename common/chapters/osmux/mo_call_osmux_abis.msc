@@ -1,0 +1,54 @@
+# MO-call with Osmux enable on 3GPP AoIP
+msc {
+	hscale=2;
+	ms [label="MS"], bts [label="OsmoBTS"], bsc[label="OsmoBSC"], mgw_bsc[label="OsmoMGW(bsc)"], m_sc[label="MSC"], mgw_msc[label="OsmoMGW(msc)"];
+
+	bsc <- m_sc 	[label="BSSMAP RESET (with extension IE: Osmux Support)"];
+	bsc -> m_sc 	[label="BSSMAP RESET ACK (with extension IE: Osmux Support)"];
+	...;
+	ms box mgw_msc	[label="We assume a SDCCH is already established"];
+	...;
+
+	ms -> bsc	[label="DTAP CM Service Request"];
+	bsc -> m_sc	[label="Complete Layer 3 Information DTAP CM Service Request"];
+
+	# Allocate MGW/MSC Osmux endpoint
+	m_sc -> mgw_msc	[label="MGCP CRCX rtpbridge/*@mgw, X-Osmux: *"];
+	mgw_msc box mgw_msc	[label="Bind to MGW-local RTP Port (5000)\nAllocate new endpoint 1"];
+	mgw_msc -> m_sc	[label="MGCP CRCX rtpbridge/1@mgw OK (MGW:5000)"];
+
+	bsc <- m_sc 	[label="BSSAP ASSGN REQ"];
+	bts <- bsc 	[label="RSL CHAN ACT"];
+	bts -> bsc 	[label="RSL CHAN ACT ACK"];
+	ms <- bsc      [label="Assignment Command"];
+	ms -> bsc      [label="Assignment Complete"];
+	...;
+
+	# connect BTS RTP with BSC-MGW RTP
+	bsc -> mgw_bsc	[label="MGCP CRCX rtpbridge/*@mgw, X-Osmux: *"];
+	mgw_bsc box mgw_bsc	[label="Bind to MGW-local Osmux Port (1984)\n\nAllocate new endpoint 2, MGW's local CID 5"];
+	bsc <- mgw_bsc	[label="MGCP CRCX rtpbridge/2@mgw OK (MGW:1984, X-Osmux: 5)"];
+	bts <- bsc	[label="IPA CRCX (Extension IE Osmux-CID 5)"];
+	bts box bts	[label="Bind to BTS-local Osmux Port (1985), Allocate new BTS's local CID 7"];
+	bts -> bsc	[label="IPA CRCX ACK (BTS:1985, Extension IE Osmux-CID 7)"];
+	bsc -> mgw_bsc	[label="MGCP MDCX rtpbridge/2@mgw (BTS:1985, X-Osmux: 7)"];
+	mgw_bsc box mgw_bsc	[label="\nConnect to BTS:1985 MGW's remote CID 7"];
+	bsc <- mgw_bsc	[label="MGCP CRCX rtpbridge/2@mgw OK (MGW:1984, X-Osmux: 5)"];
+	...;
+
+	mgw_bsc <- bsc	[label="MGCP CRCX rtpbridge/2@mgw (MSC:5000)"];
+	mgw_bsc box mgw_bsc	[label="Bind to MGW-local RTP Port (2000)\nConnect to MSC:5000"];
+	mgw_bsc -> bsc	[label="MGCP CRCX rtpbridge/2@mgw OK (MGW:2000)"];
+	...;
+
+	bsc -> m_sc	[label="BSSAP ASSGN CMPL (3GPP AoIP MGW:2000)"];
+	m_sc box m_sc	[label="Connect remote RTP to MGW addr from ASSGN CMPL"];
+	m_sc -> mgw_msc	[label="MGCP MDCX rtpbridge/1@mgw (MGW:2000)"];
+	m_sc <- mgw_msc	[label="MGCP MDCX rtpbridge/1@mgw OK"];
+	...;
+
+	mgw_bsc <=> mgw_msc	[label="RTP Audio MGW:2000 MSC:5000"];
+	bts <=> mgw_bsc	[label="Osmux Audio BTS:1985 MGW:1984, CID(uplink):5, CID(downlink):7"];
+	ms <=> bts	[label="Um Audio (bidirectional)"];
+	ms <-> m_sc	[label="DTAP CC ALERTING"];
+}

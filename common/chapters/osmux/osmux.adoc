@@ -18,6 +18,11 @@ multiplex payload audio streams from call legs between OsmoBSC and OsmoMSC (or
 OsmoBSCNAT). The MGW attached those components need of course also be aware of
 `Osmux` existence in order to properly set up the audio data plane.
 
+Under some specific circumstances, the operator may decide to set up the network
+with a bandwidth-limited (e.g. satellite) link between BTS and BSC. Hence, use of
+the `Osmux` protocol is also possible between an Osmux capable BTS (like
+OsmoBTS) and OsmoBSC (and its co-located MGW).
+
 === Osmux and NAT
 
 It is quite usual for satellite based links to use NATs, which means any or both
@@ -139,3 +144,18 @@ include::mo_call_osmux_sccplite_nat.msc[]
 ----
 
 include::mgcp_extension_osmux.adoc[]
+
+=== Abis setup with Osmux
+
+[[fig-network-osmux-aoip]]
+.Sample node diagram of Osmux enabled in the Abis interface
+[graphviz]
+----
+include::network_osmux_abis.dot[]
+----
+
+.MO-call with Osmux enabled on Abis
+[mscgen]
+----
+include::mo_call_osmux_abis.msc[]
+----

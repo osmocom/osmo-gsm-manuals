@@ -1,0 +1,32 @@
+digraph G {
+	rankdir = LR;
+	subgraph cluster_RAN {
+		OsmoBTS1 [label="OsmoBTS"];
+		OsmoBTS2 [label="OsmoBTS"];
+		OsmoBSC;
+		OsmoMGW [label="OsmoMGW\n(for BSC)"];
+
+		OsmoBTS1 -> OsmoBSC [label="Abis/IP", dir="both"];
+		OsmoBTS2 -> OsmoBSC [label="Abis/IP", dir="both"];
+		OsmoBSC -> OsmoMGW [label="MGCP", dir="both"];
+		{ rank = same; OsmoBSC; OsmoMGW }
+
+		OsmoBTS1 -> OsmoMGW [label="Osmux", dir="both", color=red];
+		OsmoBTS2 -> OsmoMGW [label="RTP", dir="both"];
+
+		label = "RAN";
+	}
+	subgraph cluster_CN {
+		OsmoMGW1 [label="OsmoMGW\n(for MSC)"];
+		OsmoMSC [label="MSC\ne.g. OsmoMSC"];
+		Core [label="Other CN Elements"];
+		OsmoMSC -> Core [label="MAP/ISUP/SIP/GSUP", dir="both"];
+		OsmoMSC -> OsmoMGW1 [label="MGCP", dir="both"];
+		{ rank = same; OsmoMSC; OsmoMGW1 }
+		OsmoMGW -> OsmoMGW1 [label="RTP", dir="both"];
+		OsmoMGW1 -> Core [label="RTP", dir="both"];
+		label = "CN";
+	}
+
+	OsmoBSC -> OsmoMSC [label="3GPP AoIP\nvia SIGTRAN/STP", dir="both"];
+}
