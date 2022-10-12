@@ -45,13 +45,31 @@ Osmux), discover the real public IP address and port of the peer (BSC/MGW). From
 that point on, the BSC/MGW punched a hole in the NAT (its connection table is
 updated) and MSC/MGW is able to send data back to it on that connection.
 
-Moreover, NATs tend to drop connections from their connection tables after some
-inactivity time, meaning a peer may receive notice about the other end not being
-available while it actually is. This means the GSM network needs to be
-configured in a way to ensure inactivity periods are short enough that this
-cannot occur. That's the reason why OsmoMGW provides the `osmux dummy` VTY
-command to enable sending dummy packets from time to time to keep the
-connections alive.
+In order to make use of the features above, OsmoMGW must be made aware
+explicitly through VTY configuration that its peers are located behind a NAT.
+This is done through the `osmux peer-behind-nat (on|off)` VTY commands.
+
+If OsmoMGW itself is behind a NAT, it must use the VTY config `rtp keep-alive`
+(used for both RTP and Osmux) to at least the value `once`, in order for it to
+punch the hole in its NAT so that its peer can know where to send packets back
+to it.
+
+Another characteristic of NATs is that they tend to drop connections from their
+connection tables after some inactivity time, meaning a peer may receive notice
+about the other end not being available while it actually is. This means the GSM
+network needs to be configured in a way to ensure inactivity periods are short
+enough that this cannot occur.
+
+Hence, if OsmoMGW is behind a NAT, it is actually desirable to have the VTY
+config `rtp keep-alive` configured with the `<1-120>` value in order to force
+transmission of dummy packets ever few seconds.
+
+Osmux implementations such as OsmoMGW also come with the `osmux dummy` VTY
+command to enable sending dummy AMR payloads to the peer even if no real data
+was received (for instance if DTX is used). This is useful under some specific
+satellite links which were proven to work unreliably if the total throughput in
+use over the link changes over time. This way throughput resources are kept
+pre-allocated until they are needed again (audio is received again).
 
 === CID allocation
 
