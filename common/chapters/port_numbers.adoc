@@ -51,6 +51,7 @@ which protocol / interface.
 |TCP|4268|telnet (VTY)|osmo-uecups
 |SCTP|4268|UECUPS|osmo-uecups
 |TCP|4269|telnet (VTY)|osmo-e1d
+|TCP|4270|telnet (VTY)|osmo-isdntap
 |TCP|4271|telnet (VTY)|osmo-smlc
 |TCP|4272|Control Interface|osmo-smlc
 |TCP|4273|telnet (VTY)|osmo-hnodeb
