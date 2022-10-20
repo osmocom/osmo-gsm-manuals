@@ -57,7 +57,7 @@ no description is set, the domain name will be used.
 
 === MGW pool management
 
-The MNGW pool is fully runtime-manageable. The only limitation
+The MGW pool is fully runtime-manageable. The only limitation
 is that an MGCP-Client can not be restarted or removed as long as it is serving
 calls (see also: <<mgw_pooling_blocking>>).
 
