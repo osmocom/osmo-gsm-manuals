@@ -11,8 +11,8 @@ The load distribution is managed in such a way that when a new call is placed,
 the pool will automatically assign the call to the MGW with the lowest load.
 
 MGW pooling is recommended for larger RAN or CN installations. For small networks
-and lab installations the classic method with one MGW per BSC offers sufficient
-performance.
+and lab installations the classic method with one MGW per {program-name} offers
+sufficient performance.
 
 === MGW pool VTY configuration
 
