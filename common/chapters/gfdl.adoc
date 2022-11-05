@@ -246,7 +246,7 @@ l. Preserve all the <<invariant-sections>> of the Document,
    unaltered in their text and in their titles.  Section numbers
    or the equivalent are not considered part of the section titles.
 m. Delete any section Entitled ``Endorsements''.  Such a section
-   may not be included in the <<modified-vesion>>.
+   may not be included in the <<modified-version>>.
 n. Do not retitle any existing section to be Entitled ``Endorsements''
    or to conflict in title with any <<invariant-sections>>.
 o. Preserve any Warranty Disclaimers.
