@@ -1,0 +1,70 @@
+=== Running as a systemd service
+
+Most modern GNU/Linux distributions use `systemd` to manage processes.
+We provide an example systemd service unit file in the
+`contrib/systemd/` sub-directory of the source code.
+
+Please see your distribution documentation and/or the generic systemd
+user manuals for more in-depth information.
+
+The included systemd service unit file assumes your configuration file
+is stored in `/etc/osmocom/`, but feel free to adjust this according to
+your local environment.
+
+This service unit file is also what is used (and installed) by the
+official dpkg and rpm packages published by Osmocom.  For more
+information, see
+https://osmocom.org/projects/cellular-infrastructure/wiki/Binary_Packages
+
+On a system utilizing this systemd service unit, you can use the
+following standard commands:
+
+==== Starting a service
+
+.Example shell command to start the osmo-bsc service
+----
+# systemctl start osmo-bsc
+----
+==== Stopping a service
+
+.Example shell command to stop the osmo-bsc service
+----
+# systemctl stop osmo-bsc
+----
+
+==== Enabling a service for automatic start on boot
+
+.Example shell command to enable the osmo-bsc service
+----
+# systemctl enable osmo-bsc
+----
+
+NOTE: This will only affect service starting at the next system
+boot; it will not start the service if it is not running right now.
+
+==== Disabling a service from automatic start on boot
+
+.Example shell command to disable the osmo-bsc service
+----
+# systemctl disable osmo-bsc
+----
+
+
+==== Checking current status of a service
+
+.Example shell command to check the status of osmo-e1d
+----
+# systemctl status osmo-e1d
+● osmo-e1d.service - Osmocom E1 Interface Daemon
+     Loaded: loaded (/etc/systemd/system/osmo-e1d.service; enabled; vendor preset: enabled)
+     Active: active (running) since Tue 2022-11-01 13:12:54 CET; 4 days ago
+   Main PID: 629 (osmo-e1d)
+      Tasks: 2 (limit: 4673)
+     Memory: 2.0M
+        CPU: 6min 8.464s
+     CGroup: /system.slice/osmo-e1d.service
+             └─629 /usr/local/bin/osmo-e1d -c /etc/osmocom/osmo-e1d.cfg
+
+Nov 03 19:22:56 divo osmo-e1d[629]: Thu Nov  3 19:22:56 2022 DE1D usb.c:734 (I0) GPS antenna status ch>
+Nov 03 19:23:00 divo osmo-e1d[629]: Thu Nov  3 19:23:00 2022 DE1D usb.c:734 (I0) GPS antenna status
+----
