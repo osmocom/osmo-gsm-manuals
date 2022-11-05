@@ -1,0 +1,68 @@
+== Installation
+
+This section is a general section providing a high-level overview how to
+install Osmocom software on your GNU/Linux system.
+
+It is important that you choose one of the options outlined below.
+Trying to mix some packages from a distribution with some packages from
+osmocom.org while building some other parts from source is likely asking
+for troubles that could be avoided if you stick to all osmocom software
+from either one of those sources, without mixing + matching.
+
+=== Official Osmocom Binary Packages
+
+The Osmocom project packages most of its software as binary packages for
+a variety of GNU/Linux distributions, both in `rpm` and `dpkg` package
+formats.
+
+For the most up-to-date information, please check out the related wiki
+page at https://osmocom.org/projects/cellular-infrastructure/wiki/Binary_Packages
+
+At the time of this writing there are two main flavours:
+
+* the `latest` feed (containing the latest tagged version of each
+  program). See https://osmocom.org/projects/cellular-infrastructure/wiki/Latest_Builds
+* the `nightly` feed (containing automatic nightly builds of each
+  program). See https://osmocom.org/projects/cellular-infrastructure/wiki/Nightly_Builds
+
+=== Distribution Binary Packages
+
+Your GNU/Linux distribution may contain packages of Osmocom software.  If you use those
+packages, please look for any distributions-specific information on how those packages
+might deviate from upstream, such as for example on Debian GNU/Linux the files located in
+`/usr/share/doc/osmo-*/README.Debian`.
+
+Please note that Distribution packages usually lag behind the official
+_upstream_ packages the Osmocom project releases.  It is a matter of
+personal preference or policy which packages you use.
+
+
+=== Building from source code
+
+All of Osmocom is Open Source software, so of course the full source
+code of the related software is released, and you are free to download,
+build, explore it and hack on it.
+
+The official location for all osmocom source code is at https://gitea.osmocom.org/
+
+However, if you are just a normal user and not a developer familiar with
+classic C development on GNU/Linux, we *strongly recommend* you to use
+some of the binary package options indicated above.
+
+If you know your way around git, make, autotools, pkg-config, etc. by all
+means, go ahead, don't be discouraged.  We just want to avoid normal
+users from having to work with unfamiliar tools and wasting time on
+getting software to build, rather than actually using it.
+
+Some general (possibly outdated) instructions on how to build Osmocom
+software from source can be found at
+https://osmocom.org/projects/cellular-infrastructure/wiki/Build_from_Source
+
+In general, the usual approach is to
+
+* start with `libosmocore` and all the required librarires and build
+  them in order until you have the full chain of dependencies in place.
+  As a final step, build the actual application you want to use.
+* perform `autoreconf -fi`, `./confiugre` and `make install` for each of
+  the projects.  Check the `./configure --help` output to see which
+  optional compile-time features you might want to enable or disable.
