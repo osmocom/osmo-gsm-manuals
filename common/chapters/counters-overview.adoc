@@ -124,8 +124,12 @@ OsmoBSC(config-stats)# enable
 <4> IP address of the statsd server.
 <5> UDP port of the statsd server. Statsd by default listens to port 8125.
 
-Setting up a statsd server and configuring the visualization is beyond the
-scope of this document.
+You can use Netdata (https://learn.netdata.cloud/) as a statsd server which does not require special configuration
+to show rate counters.
+By default all the rate counters will be exposed to the StatsD plugin (listening on 127.0.0.1:8125) and displayed on the
+Netdata dashboard available via: http://localhost:19999
+The list of available charts which includes all the rate counters reported via statsD is available through:
+http://localhost:19999/api/v1/charts
 
 === Socket stats
 
