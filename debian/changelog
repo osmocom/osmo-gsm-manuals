@@ -1,3 +1,29 @@
+osmo-gsm-manuals-dev (1.4.0) unstable; urgency=medium
+
+  [ Pau Espin Pedrol ]
+  * port_number.adoc: Add default osmux port
+  * osmux: Use local/remote CID terminology
+  * Document osmux use in Abis interface
+  * osmux: Improve NAT related documentation
+  * Copy mgwpool.adoc from osmo-bsc.git
+  * mgwpool.adoc: Fix typo
+  * mgwpool.adoc: Use {program-name} instead of BSC
+
+  [ Vadim Yanitskiy ]
+  * TRXD: further clarify meaning of Training / Synch. Sequence Code
+
+  [ Harald Welte ]
+  * port_numbers.adoc: Allocate VTY port number for osmo-isdntap
+  * add a documentation snippet for systemd services
+  * doc: Add a general chapter on installation of the Osmocom software
+  * gfdl.adoc: Fix cross-reference typo
+  * merge gb-ns2 "chapters" in one
+
+  [ Max ]
+  * rate counter: add StatsD note
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Tue, 07 Feb 2023 11:43:11 +0100
+
 osmo-gsm-manuals-dev (1.3.0) unstable; urgency=medium
 
   [ Philipp Maier ]
