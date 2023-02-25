@@ -50,7 +50,7 @@ existing code:
   BSSAP
 * introduction of an A interface in OsmoMSC (which so far offered Iu
   only)
-* port of the existing SUA-baesd IuCS and IuPS over to the SCCP User
+* port of the existing SUA-based IuCS and IuPS over to the SCCP User
   SAP of libosmo-sigtran.
 * Implementation of ETSI M3UA as preferred/primary transport layer for
   SCCP
