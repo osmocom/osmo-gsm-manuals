@@ -12,6 +12,8 @@ SYMLINKS = common build
 CLEAN_FILES += $(SYMLINKS)
 PDF_FILES = $(patsubst %.adoc,%.pdf,$(ASCIIDOC)) $(patsubst %.xml,%.pdf,$(VTY_REFERENCE))
 OSMO_REPOSITORY ?= osmo-gsm-manuals
+PUBLISH_REF ?= master
+PUBLISH_TEMPDIR = _publish_tmpdir
 
 # Prefix (Makefile.am sets this to configure's --prefix when including)
 prefix ?= /usr/local
@@ -28,7 +30,17 @@ clean:
 distclean: clean
 
 publish: $(UPLOAD_FILES)
-	rsync -avz -e "$(SSH_COMMAND)" $(UPLOAD_FILES) docs@ftp.osmocom.org:web-files/latest/
+        [ -n "$(OSMO_REPOSITORY)" && -n "$(PUBLISH_REF)" ] || exit 1
+        rm -rf "$(PUBLISH_TEMPDIR)"
+        mkdir -p "$(PUBLISH_TEMPDIR)/$(OSMO_REPOSITORY)/$(PUBLISH_REF)"
+        cp $(UPLOAD_FILES) "$(PUBLISH_TEMPDIR)/$(OSMO_REPOSITORY)/$(PUBLISH_REF)"
+        cd "$(PUBLISH_TEMPDIR)" && \
+            rsync \
+                -avzR \
+                -e "$(SSH_COMMAND)" \
+                "$(OSMO_REPOSITORY)" \
+                docs@ftp.osmocom.org:web-files/
+        rm -rf "$(PUBLISH_TEMPDIR)"
 
 # Install and uninstall targets
 # Notes about OSMO_GSM_MANUALS_NO_INSTALL:
