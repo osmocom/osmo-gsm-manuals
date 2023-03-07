@@ -11,7 +11,6 @@ UPLOAD_PATH ?= generic@sysmocom-downloads:documents
 SYMLINKS = common build
 CLEAN_FILES += $(SYMLINKS)
 PDF_FILES = $(patsubst %.adoc,%.pdf,$(ASCIIDOC)) $(patsubst %.xml,%.pdf,$(VTY_REFERENCE))
-OSMO_REPOSITORY ?= osmo-gsm-manuals
 PUBLISH_REF ?= master
 PUBLISH_TEMPDIR = _publish_tmpdir
 
@@ -49,6 +48,7 @@ publish: $(UPLOAD_FILES)
 # - installing manuals by default is fine, because Osmocom projects won't include
 #   the whole Makefile.common.inc unless --enable-manuals is passed to configure.
 install: $(PDF_FILES)
+	[ -n "$(OSMO_REPOSITORY)" ] || exit 1
 	if [ "$(OSMO_GSM_MANUALS_NO_INSTALL)" != "1" ]; then \
 		for i in $(PDF_FILES); do \
 			install -vDm644 "$$i" "$(DESTDIR)$(prefix)/share/doc/$(OSMO_REPOSITORY)-doc/$$i" || exit 1; \
@@ -56,6 +56,7 @@ install: $(PDF_FILES)
 	fi
 
 uninstall:
+	[ -n "$(OSMO_REPOSITORY)" ] || exit 1
 	if [ "$(OSMO_GSM_MANUALS_NO_INSTALL)" != "1" ]; then \
 		for i in $(PDF_FILES); do \
 			rm -v "$(DESTDIR)$(prefix)/share/doc/$(OSMO_REPOSITORY)-doc/$$i"; \

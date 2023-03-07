@@ -34,6 +34,7 @@ include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.asciidoc.inc
 
 VTY_REFERENCE = test-vty-reference.xml test2-vty-reference.xml
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.vty-reference.inc
+OSMO_REPOSITORY = osmo-gsm-manuals
 include $(OSMO_GSM_MANUALS_DIR)/build/Makefile.common.inc
 
 
