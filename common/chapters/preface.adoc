@@ -1,7 +1,7 @@
 == Foreword
 
 Digital cellular networks based on the GSM specification were designed
-in the late 1980ies and first deployed in the early 1990ies in Europe.
+in the late 1980s and first deployed in the early 1990s in Europe.
 Over the last 25 years, hundreds of networks were established globally
 and billions of subscribers have joined the associated networks.
 

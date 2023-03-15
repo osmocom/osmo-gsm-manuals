@@ -18,7 +18,7 @@ specification is <<3gpp-ts-23-041>>.
 === Use Cases
 
 Cell Broadcast was used for various different use cases primarily in
-the 1990ies and early 2000s, including
+the 1990s and early 2000s, including
 
 * advertisement of the GPS position of the cell tower you're currently camping on
 * advertisement of the calling codes of your current "home zone", i.e. a

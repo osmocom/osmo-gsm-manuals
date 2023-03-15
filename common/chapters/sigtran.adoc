@@ -33,7 +33,7 @@ On top of the Physical Layer is the Message Transfer Part (MTP).
 === Message Transfer Part (MTP)
 
 MTP is the lower layer of the SS7 protocol stack.  It is comprised of
-two sub-layes, called MTP2 and MTP3.
+two sub-layers, called MTP2 and MTP3.
 
 Nodes in a MTP network are addressed by their unique PC (Point Code).
 
@@ -54,7 +54,7 @@ Linkset exist both for load sharing as well as for fail over purposes.
 ==== Point Codes
 
 The length of point codes depends on the particular MTP dialect that
-is used.  In the 1980ies, when international telephony signaling
+is used.  In the 1980s, when international telephony signaling
 networks were established, most countries had their own national
 dialects with certain specifics.
 
@@ -210,7 +210,7 @@ to the network, such as HLR or MSC) were attached to the existing old
 SS7 backbone by means as SUA and M3UA.  Over time, even the links of
 the actual network backbone networks became more and more IP based.
 
-In order to replace existing TDM-based SS7 links/liksets with SIGTRAN,
+In order to replace existing TDM-based SS7 links/linksets with SIGTRAN,
 the M2UA or M2PA variants are used as a kind of drop-in replacement
 for physical links.
 
@@ -334,7 +334,7 @@ stackings) operates on top of both IPv4 and IPv6.  As the entire
 underlying IP transport is transparent to the SS7/SCCP applications,
 there is no restriction on whether to use SIGTRAN over IPv4 or IPv6.
 
-==== SCTP multi-homing in SIGTARN
+==== SCTP multi-homing in SIGTRAN
 
 SCTP, unlike more traditional IP L4 protocols (TCP, UDP) doesn't work
 based on a _connection_ between source IP:port and Destination IP:port.

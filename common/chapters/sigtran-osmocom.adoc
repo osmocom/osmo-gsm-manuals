@@ -38,7 +38,7 @@ Protocol.
 ==== The present (2017)
 
 In 2017, sysmocom was tasked with implementing a 3GPP AoIP compliant A
-interface.  This meant that lot of things had to change in the
+interface.  This meant that a lot of things had to change in the
 existing code:
 
 * removal of the existing hard-wired SCCPlite/IPA code from OsmoBSC
@@ -112,7 +112,7 @@ the corresponding xUA Server (<<xua-server>>) must be configured with
 `accept-asp-connections dynamic-permitted`.
 
 To enable dynamic registration of routing keys via RKM, the
-corresponding SS7 Instance (<<ss7-instance>>) must be confgured with
+corresponding SS7 Instance (<<ss7-instance>>) must be configured with
 `xua rkm routing-key-allocation dynamic-permitted`.
 
 This is of course highly insecure and can only be used in trusted,
@@ -349,7 +349,7 @@ An AS has the following properties:
 |Recovery Timeout|Duration of the AS T(r) recovery timer.  During this time,
                   outgoing messages are queued. If the AS is ACTIVE
                   before timer expiration, the queue is drained.  At
-                  expriation, the queue is flushed.
+                  expiration, the queue is flushed.
 |State|Application Server State (Down, Inactive, Active, Pending)
 |ASPs|Which ASPs are permitted to transfer traffic for this AS
 |====
@@ -360,7 +360,7 @@ An Application Server Process corresponds to a given SCTP (or TCP)
 connection.  From the STP/SG (Server) point-of-view, those are
 incoming connections from Application Servers such as the BSCs.  From
 the ASP (Client) Point of view, it has one `osmo_ss7_asp` object for
-each outbound SIGTARN connection.
+each outbound SIGTRAN connection.
 
 An ASP has the following properties:
 
