@@ -24,11 +24,6 @@ $(SYMLINKS):
 upload: $(UPLOAD_FILES)
 	rsync -avz $(UPLOAD_FILES) $(UPLOAD_PATH)/
 
-clean:
-	-rm -rf $(CLEAN_FILES)
-
-distclean: clean
-
 # Publish to https://ftp.osmocom.org/docs/
 publish: $(UPLOAD_FILES)
 	[ -n "$(OSMO_REPOSITORY)" ] || exit 1
@@ -64,3 +59,8 @@ uninstall:
 			rm -v "$(DESTDIR)$(prefix)/share/doc/$(OSMO_REPOSITORY)-doc/$$i"; \
 		done; \
 	fi
+
+clean:
+	-rm -rf $(CLEAN_FILES)
+
+distclean: clean
