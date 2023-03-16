@@ -20,6 +20,7 @@ prefix ?= /usr/local
 $(SYMLINKS):
 	ln -s $(OSMO_GSM_MANUALS_DIR)/$@ $@
 
+# Publish to $UPLOAD_PATH
 upload: $(UPLOAD_FILES)
 	rsync -avz $(UPLOAD_FILES) $(UPLOAD_PATH)/
 
@@ -28,6 +29,7 @@ clean:
 
 distclean: clean
 
+# Publish to https://ftp.osmocom.org/docs/
 publish: $(UPLOAD_FILES)
 	[ -n "$(OSMO_REPOSITORY)" ] || exit 1
 	rm -rf "$(PUBLISH_TEMPDIR)"
