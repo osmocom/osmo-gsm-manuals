@@ -9,8 +9,9 @@
 SSH_COMMAND = ssh -o 'UserKnownHostsFile=$(OSMO_GSM_MANUALS_DIR)/build/known_hosts' -p 48
 UPLOAD_PATH ?= generic@sysmocom-downloads:documents
 SYMLINKS = common build
-CLEAN_FILES += $(SYMLINKS)
+CLEAN_FILES += $(SYMLINKS) $(SHRINK_MARKER)
 PDF_FILES = $(patsubst %.adoc,%.pdf,$(ASCIIDOC)) $(patsubst %.xml,%.pdf,$(VTY_REFERENCE))
+SHRINK_MARKER = generated/.pdf_shrink_marker
 PUBLISH_REF ?= master
 PUBLISH_TEMPDIR = _publish_tmpdir
 
@@ -20,12 +21,17 @@ prefix ?= /usr/local
 $(SYMLINKS):
 	ln -s $(OSMO_GSM_MANUALS_DIR)/$@ $@
 
+# Reduce pdf size by storing the embedded images with less quality (SYS#6380)
+shrink: $(SHRINK_MARKER)
+$(SHRINK_MARKER): $(UPLOAD_FILES)
+	build/shrink-pdfs.sh $(UPLOAD_FILES)
+
 # Publish to $UPLOAD_PATH
-upload: $(UPLOAD_FILES)
+upload: shrink
 	rsync -avz $(UPLOAD_FILES) $(UPLOAD_PATH)/
 
 # Publish to https://ftp.osmocom.org/docs/
-publish: $(UPLOAD_FILES)
+publish: shrink
 	[ -n "$(OSMO_REPOSITORY)" ] || exit 1
 	rm -rf "$(PUBLISH_TEMPDIR)"
 	mkdir -p "$(PUBLISH_TEMPDIR)/$(OSMO_REPOSITORY)/$(PUBLISH_REF)"
