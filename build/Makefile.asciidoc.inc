@@ -38,7 +38,14 @@ CLEAN_FILES += $(ASCIIDOC_PDF) $(ASCIIDOC_NAME:%=%.html)
 UPLOAD_FILES += $(ASCIIDOC_PDF)
 
 ABS_SRCDIR := $(or $(abs_srcdir),$(shell realpath $(srcdir)))
-ASCIIDOC_OPTS := -f $(BUILDDIR)/mscgen-filter.conf -f $(BUILDDIR)/diag-filter.conf -f $(BUILDDIR)/docinfo-releaseinfo.conf -a srcdir='$(ABS_SRCDIR)' -a commondir='$(COMMONDIR)'
+ASCIIDOC_OPTS := \
+	-f $(BUILDDIR)/mscgen-filter.conf \
+	-f $(BUILDDIR)/diag-filter.conf \
+	-f $(BUILDDIR)/docinfo-releaseinfo.conf \
+	-f $(BUILDDIR)/graphviz-filter.conf \
+	-a srcdir='$(ABS_SRCDIR)' \
+	-a commondir='$(COMMONDIR)' \
+	$(NULL)
 DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
 
 ifeq (,$(BUILD_RELEASE))
