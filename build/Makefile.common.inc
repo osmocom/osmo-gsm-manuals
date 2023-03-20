@@ -24,7 +24,7 @@ $(SYMLINKS):
 # Reduce pdf size by storing the embedded images with less quality (SYS#6380)
 shrink: $(SHRINK_MARKER)
 $(SHRINK_MARKER): $(UPLOAD_FILES)
-	build/shrink-pdfs.sh $(UPLOAD_FILES)
+	$(OSMO_GSM_MANUALS_DIR)/build/shrink-pdfs.sh $(UPLOAD_FILES)
 
 # Publish to $UPLOAD_PATH
 upload: shrink
