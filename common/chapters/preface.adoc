@@ -293,7 +293,7 @@ may have.
 
 If you don't have a support package / contract, you have the option of
 using the resources put together by the Osmocom community
-at http://projects.osmocom.org/, checking out the wiki and
+at https://projects.osmocom.org/, checking out the wiki and
 the mailing-list for community-based assistance.  Please always
 remember, though:  The community has no obligation to help you, and you
 should address your requests politely to them.  The information (and

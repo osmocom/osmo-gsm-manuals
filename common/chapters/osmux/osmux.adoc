@@ -9,7 +9,7 @@ optimizations, eg. message batching and trunking, can result in significant cost
 reduction.
 
 Full reference document for the osmux protocol can be found here:
-http://ftp.osmocom.org/docs/latest/osmux-reference.pdf
+https://ftp.osmocom.org/docs/latest/osmux-reference.pdf
 
 In Osmocom satellite based GSM networks, the satellite link is envisioned to be
 in between the BSS and the core network, that is, between the BSC and the MSC
