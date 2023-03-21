@@ -300,3 +300,8 @@ should address your requests politely to them.  The information (and
 software) provided at osmocom.org is put together by volunteers for
 free.  Treat them like a friend whom you're asking for help, not like a
 supplier from whom you have bought a service.
+
+If you would like to obtain professional/commercial support on Osmocom
+CNI, you can always reach out to sales@sysmocom.de to discuss your
+support needs. Purchasing support from sysmocom helps to cover the
+ongoing maintenance of the Osmocom CNI software stack.
