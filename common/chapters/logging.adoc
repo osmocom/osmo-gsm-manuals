@@ -200,9 +200,16 @@ the incoming log messages will push out the oldest messages available in the buf
 
 ==== Logging via gsmtap
 
-When debugging complex issues it's handy to be able to reconstruct exact chain of events. This is enabled by using GSMTAP
-log output where frames sent/received over the air are intersperced with the log lines. It also simplifies the bug handling
-as users don't have to provide separate .pcap and .log files anymore - everything will be inside self-contained packet dump.
+GSMTAP is normally a pseudo-header format that enables the IP-transport of GSM (or other telecom) protocols
+that are not normally transported over IP.  For example, the most common situation is to enable GSMTAP in
+OsmoBTS or OsmoPCU to provide GSM-Um air interface capture files over IP, so they can be analyzed in
+wireshark.
+
+GSMTAP logging is now a method how Osmocom software can also encapsulate its own log output in GSMTAP frames.
+We're not trying to re-invent rsyslog here, but this is very handy When debugging complex issues.  It enables
+the reader of the pcap file containing GSMTAP logging together with other protocol traces to reconstruct exact
+chain of events.  A single pcap file can then contain both the log output of any number of Osmocom programs in
+the same timeline of the messages on various interfaces in and out of said Osmocom programs.
 
 It's configured as follows:
 ----
@@ -229,6 +236,15 @@ OsmoBSC# configure terminal
 OsmoBSC(config)# log stderr
 OsmoBSC(config-log)# logging level force-all fatal
 ----
+
+NOTE: Every time you generate GSMTAP messages and send it to a unicast (non-broadcast/multicast) IP address,
+please make sure that the destination IP address actually has a socket open on the specified port, or drops
+the packets in its packet filter.  If unicast GSMTAP messages arrive at a closed destination UDP port, the
+operating system will likely generate ICMP port unreachable messages.  Those ICMP messages in turn will, when
+arriving at the source (the host on which you run the Osmocom software sending GSMTAP), suppress generation
+of further GSMTAP messages for some time, resulting in incomplete files.  In case of doubt, either send GSMTAP
+to multicast IP addresses, or run something like `nc -l -u -p 4729 > /dev/null` on the destination host to
+open the socket at the GSMTAP port and discard anything arriving at it.
 
 ==== Logging to a file
 
