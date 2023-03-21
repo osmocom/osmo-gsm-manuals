@@ -77,7 +77,7 @@ the so-called PCP (Priority Code Point) field in the IEEE 802.1q (VLAN)
 header.
 
 NOTE:: This means that PCP functionality requires the use of IEEE 802.q
-VLAN. You cannot use PCP without VLAN
+VLAN. You cannot use PCP without VLAN.
 
 The Linux kernel assigns IEEE 802.1q PCP bits based on a _mapping_
 between the _priority_ and the PCP value.  Each VLAN network device
@@ -148,7 +148,7 @@ follows:
 
 . configure the osmocom program to set the DSCP value
 . use the default DSCP -> priority mapping, if possible
-. configure an egrees QoS map to map from priority to PCP
+. configure an egress QoS map to map from priority to PCP
 
 If the desired combination of DSCP + PCP cannot be achieved that way,
 due to the rather static default kernel mapping table, one needs to go
@@ -156,6 +156,6 @@ one step further:
 
 . configure the osmocom program to set the DSCP value
 . use packet filter rules to set the priority based on DSCP
-. configure an egrees QoS map to map from priority to PCP
+. configure an egress QoS map to map from priority to PCP
 
 include::{srcdir}/chapters/qos-example.adoc[]

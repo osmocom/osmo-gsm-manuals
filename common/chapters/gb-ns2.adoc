@@ -249,7 +249,7 @@ The Gb over IP "ip.access style" can be used with a dynamic configuration or wit
 static configuration
 
 The static configuration requires to configure all endpoints on the BSS and SGSN.
-In constrast the dynamic configuration allows the SGSN to have only a reduced configuration.
+In contrast the dynamic configuration allows the SGSN to have only a reduced configuration.
 
 ===== Gb over IP "ip.access style" dynamic configuration
 

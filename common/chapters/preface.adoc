@@ -117,13 +117,13 @@ operator'', but it is about a collaborative, open development model.  It
 is about sharing ideas and code, but also about sharing the effort of
 software development and maintenance.
 
-If your organization is benefitting from using Osmocom software, please
+If your organization is benefiting from using Osmocom software, please
 consider ways how you can contribute back to that community.  Such
 contributions can be many-fold, for example
 
 * sharing your experience about using the software on the public mailing
   lists, helping to establish best practises in using/operating it,
-* providing qualified bug reports, work-arounds
+* providing qualified bug reports, workarounds
 * sharing any modifications to the software you may have made, whether
   bug fixes or new features, even experimental ones
 * providing review of patches

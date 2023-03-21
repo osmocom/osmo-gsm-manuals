@@ -66,7 +66,7 @@ calls (see also: <<mgw_pooling_blocking>>).
 The VTY implements a 'show mgw-pool' command that lists the currently configured
 MGW pool members, their status and call utilization. The following snippet shows
 an output example run on OsmoBSC, but it should be also available on other
-applications supporting the MGW pooling VTY featues:
+applications supporting the MGW pooling VTY features:
 
 ----
 OsmoBSC> show mgw-pool
@@ -88,7 +88,7 @@ To add a new MGCP-Client to the pool, the 'mgw' node is used. Like with the
 However it is still possible to assign any number from 0-255. The enumeration
 also may contain gaps. The following snippet shows an output example run on
 OsmoBSC, but it should be also available on other applications supporting the
-MGW pooling VTY featues:
+MGW pooling VTY features:
 
 ----
 OsmoBSC> enable
@@ -163,7 +163,7 @@ It should be noted that MGCP a protocol is used via UDP, the connect only
 happens locally to forward the UDP datagrams properly. Also (unless a reset
 endpoint is configured like in the example config above) there will be no
 immediate interaction with the MGW. However, the log should at least confirm
-the the connect worked and the MGCP client has been created successfully.
+the connect worked and the MGCP client has been created successfully.
 
 ----
 Mon Aug  2 17:15:00 2021 DLMGCP mgcp_client.c:788 MGCP client: using endpoint domain '@mgw'

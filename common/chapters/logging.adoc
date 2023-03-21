@@ -32,7 +32,7 @@ Each sub-system of the program in question typically logs its messages as a
 different category, allowing fine-grained control over which log
 messages you will or will not see.  For example, in OsmoBSC, there are
 categories for the protocol layers `rsl`, `rr`, `mm`,
-`cc` and many others.  To get a a list of categories interactively
+`cc` and many others.  To get a list of categories interactively
 on the vty, type: `logging level ?`
 
 [[log_levels]]

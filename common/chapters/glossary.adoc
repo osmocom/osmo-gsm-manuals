@@ -136,7 +136,7 @@ GSMTAP::
   GSM tap; pseudo standard for encapsulating GSM protocol layers over
   UDP/IP for analysis
 GSUP::
-  Generic ubscriber Update Protocol.  Osmocom-specific alternative to TCAP/MAP
+  Generic Subscriber Update Protocol.  Osmocom-specific alternative to TCAP/MAP
 GT::
   Global Title; an address in SCCP
 GTP::

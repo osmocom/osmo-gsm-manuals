@@ -60,9 +60,9 @@ https://osmocom.org/projects/cellular-infrastructure/wiki/Build_from_Source
 
 In general, the usual approach is to
 
-* start with `libosmocore` and all the required librarires and build
+* start with `libosmocore` and all the required libraries and build
   them in order until you have the full chain of dependencies in place.
   As a final step, build the actual application you want to use.
-* perform `autoreconf -fi`, `./confiugre` and `make install` for each of
+* perform `autoreconf -fi`, `./configure` and `make install` for each of
   the projects.  Check the `./configure --help` output to see which
   optional compile-time features you might want to enable or disable.
