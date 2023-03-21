@@ -14,8 +14,8 @@ communications networks, which not only may cause civil claims by the
 operator of the interfered network, but is punishable as a crime under
 most jurisdictions.
 
-sysmocom disclaims any responsibility for illegal / unlicensed use of
-its products.
+sysmocom and/or the authors of the Osmocom software disclaim any
+responsibility for illegal / unlicensed use of its products.
 
 
 === Regulatory authorities by country
