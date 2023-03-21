@@ -56,10 +56,11 @@ If you intend to operate {program-name} with external MNCC handler, you have
 to disable the internal MNCC handler and specify the MNCC socket path in
 the configuration file.
 
-At the time of this writing, the only external application implementing the
-MNCC interface compatible with the Osmocom MNCC socket is `lcr`, the Linux Call
-Router. More widespread integration of external call routing is available via
-the OsmoSIPConnector.
+At the time of this writing, there are only two known open source applications implementing the
+MNCC interface compatible with the Osmocom MNCC socket:
+
+* historically `lcr`, the Linux Call Router (support for modern MNCC protocol versions may be missing)
+* `osmo-sip-connector`, the more up-to-date integration of external call routing by translating MNCC into a SIP trunk towards an external SIP PBX / switch.
 
 
 === DTMF considerations
