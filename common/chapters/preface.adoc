@@ -79,6 +79,10 @@ following key individuals and organizations, in no particular order:
 * Jan Luebbe, Stefan Schmidt, Daniel Willmann, Pablo Neira, Nico Golde,
   Kevin Redon, Ingo Albrecht, Alexander Huemer, Alexander Chemeris, Max
   Suraev, Tobias Engel, Jacob Erlbeck, Ivan Kluchnikov
+* NLnet Foundation, for providing funding for a number of individual work items
+  within the Osmocom universe, such as LTE support in OsmoCBC or GPRS/EGPRS
+  support for Ericsson RBS6000.
+* WaveMobile Ltd, for many years of sponsoring.
 
 May the source be with you!
 
