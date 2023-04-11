@@ -351,3 +351,153 @@ routing context IE that actually contains '0' as a numeric identifier.
 So you only have the following options:
 * Using M3UA with routing context (1..N)
 * Using M3UA without routing context (0)
+
+==== Example: Static Routing
+
+Osmocom SS7 supports dynamic routing key registration via M3UA Routing Key Management (RKM), allowing minimal SS7
+configuration. If all of your components support dynamic RKM, you should probably use it: see
+`accept-asp-connections dynamic-permitted` in osmo-stp.cfg.
+
+This chapter explains how to configure osmo-stp if dynamic RKM is not an option.
+
+In this example, let's connect osmo-bsc via osmo-stp to osmo-msc using only static SS7 routing.
+
+----
+ BSC        <--RK-1-->  STP         <--RK-3--> MSC
+ IP 1.1.1.1             IP 2.2.2.2             IP 3.3.3.3
+ M3UA 2905              M3UA 2905              M3UA 2905
+ PC 1.1.1                                      PC 3.3.3
+----
+
+Every one static route fanning out from STP gets assigned a distinct Routing Key -- a simple integer number. Above, the
+BSC's link has RK 1, the MSC's link has RK 3.
+
+For static routing, the M3UA port numbers must be fixed, i.e. there must be no `0` for a client's local port as in
+`asp foo 2905 0 m3ua`. Instead, you may use `asp foo 2905 2905 m3ua`.
+
+The BSC needs to configure:
+
+- its own point-code -- has to match the PC configured for the BSC in osmo-stp.cfg
+- the routing key -- has to match the RK assigned to BSC's PC in osmo-stp.cfg
+- the MSC's point-code -- has to match the PC in osmo-stp.cfg and osmo-msc.cfg
+- local and remote IP:ports for M3UA -- have to match the IP:ports in osmo-stp.cfg
+
+The MSC needs to configure:
+
+- its own point-code -- has to match the PC configured for the MSC in osmo-stp.cfg
+- the routing key -- has to match the RK assigned to MSC's PC in osmo-stp.cfg
+- local and remote IP:ports for M3UA -- have to match the IP:ports in osmo-stp.cfg
+
+The STP needs to configure:
+
+- all point-codes -- they have to match the PCs in osmo-bsc.cfg and osmo-msc.cfg
+- all routing keys -- they have to match the RKs used in osmo-bsc.cfg and osmo-msc.cfg
+- local and remote IP:ports for M3UA -- have to match the IP:ports in osmo-bsc.cfg and osmo-msc.cfg
+
+.osmo-bsc.cfg
+----
+cs7 instance 0
+ point-code 1.1.1
+
+ asp mybsc-0 2905 2905 m3ua
+  remote-ip 2.2.2.2
+  local-ip 1.1.1.1
+  sctp-role client
+ as mybsc0 m3ua
+  asp mybsc0-0
+  routing-key 1 1.1.1
+
+ sccp-address mymsc
+  routing-indicator PC
+  point-code 3.3.3
+
+msc 0
+ msc-addr mymsc
+----
+
+.osmo-stp.cfg
+----
+cs7 instance 0
+ xua rkm routing-key-allocation static-only
+ listen m3ua 2905
+  accept-asp-connections pre-configured
+  local-ip 2.2.2.2
+
+ # asp <name> <remote-port> <local-port|0> m3ua
+ asp mybsc-0 2905 2905 m3ua
+  remote-ip 1.1.1.1
+  local-ip 2.2.2.2
+ as mybsc m3ua
+  asp bsc-0
+  routing-key 1 1.1.1
+
+ asp mymsc-0 2905 2905 m3ua
+  remote-ip 3.3.3.3
+  local-ip 2.2.2.2
+ as mymsc m3ua
+  asp mymsc-0
+  routing-key 3 3.3.3
+
+ route-table system
+  update route 1.1.1 7.255.7 linkset mybsc
+  update route 3.3.3 7.255.7 linkset mymsc
+----
+
+.osmo-msc.cfg
+----
+cs7 instance 0
+ point-code 3.3.3
+
+ asp mymsc-0 2905 2905 m3ua
+  remote-ip 2.2.2.2
+  local-ip 3.3.3.3
+  sctp-role client
+ as mymsc0 m3ua
+  asp mymsc0-0
+  routing-key 3 3.3.3
+----
+
+For comparison, the same setup with dynamic routing key management is a lot shorter, especially at osmo-stp.cfg, and
+there is no need to manually configure point-codes and routing keys between STP and \{BSC,MSC}:
+
+.osmo-bsc.cfg
+----
+cs7 instance 0
+ point-code 1.1.1
+
+ asp mybsc-0 2905 0 m3ua
+  remote-ip 2.2.2.2
+  local-ip 1.1.1.1
+  sctp-role client
+ as mybsc0 m3ua
+  asp mybsc0-0
+
+ sccp-address mymsc
+  routing-indicator PC
+  point-code 3.3.3
+
+msc 0
+ msc-addr mymsc
+----
+
+.osmo-stp.cfg
+----
+cs7 instance 0
+ xua rkm routing-key-allocation dynamic-permitted
+ listen m3ua 2905
+  accept-asp-connections dynamic-permitted
+  local-ip 2.2.2.2
+----
+
+.osmo-msc.cfg
+----
+cs7 instance 0
+ point-code 3.3.3
+
+ asp mymsc-0 2905 0 m3ua
+  remote-ip 2.2.2.2
+  local-ip 3.3.3.3
+  sctp-role client
+ as mymsc0 m3ua
+  asp mymsc0-0
+----
