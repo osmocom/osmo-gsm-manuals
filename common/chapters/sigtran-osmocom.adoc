@@ -345,7 +345,7 @@ An AS has the following properties:
 |Description|More verbose description (for human user only)
 |Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
 |Routing Key|Routing Key (mostly Point Code) routed to this AS
-|Traffic Mode|Theoretically Broadcast, Load-Balance.  Currently only Override
+|Traffic Mode|Broadcast, Loadshare or Override
 |Recovery Timeout|Duration of the AS T(r) recovery timer.  During this time,
                   outgoing messages are queued. If the AS is ACTIVE
                   before timer expiration, the queue is drained.  At
