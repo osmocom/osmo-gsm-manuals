@@ -1,10 +1,10 @@
 Source: osmo-gsm-manuals-dev
 Section: devel
 Priority: optional
-Maintainer: Oliver Smith <osmith@sysmocom.de>
+Maintainer: Osmocom team <openbsc@lists.osmocom.org>
 Build-Depends: autotools-dev,
                dh-autoreconf,
-               debhelper (>= 9),
+               debhelper (>= 10),
                pkg-config,
 # All below also need to be in Depends
                asciidoc,
