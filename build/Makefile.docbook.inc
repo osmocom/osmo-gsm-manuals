@@ -34,9 +34,22 @@ INC_DIR ?= $(PWD)/generated
 %.xml-lint: %.xml
 	xmllint --xinclude --postvalid --noout $<
 
+GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
+GIT_DATE := $(shell $(OSMO_GSM_MANUALS_DIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
+ifeq (,$(BUILD_RELEASE))
+	REVNUMBER := DRAFT $(GIT_VERSION)
+else
+	REVNUMBER := $(GIT_VERSION)
+endif
+
 # Create a PDF file and lint it before
 # xslt path: find includes in both $(OSMO_GSM_MANUALS_DIR)/common/chapters and $(builddir)/generated
 %.pdf: %.xml %.xml-lint $(DOCBOOKS_DEPS) build common
+	set -x && \
+	export GIT_DATE="$(GIT_DATE)" && \
+	export REVNUMBER="$(REVNUMBER)" && \
+	export TEMPFILE="$(INC_DIR)/_temp_$(notdir $<)" && \
+	$(OSMO_GSM_MANUALS_DIR)/build/docbook-set-revhistory.py "$<" && \
 	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$(INC_DIR)" \
-		$(dblatex_quiet) -P draft.mode=no -o $@ $<
-
+		$(dblatex_quiet) -P draft.mode=no -o $@ "$$TEMPFILE" && \
+	rm $$TEMPFILE
