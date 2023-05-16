@@ -28,7 +28,7 @@ UPLOAD_FILES += $(DOCBOOKS_PDF)
 all: $(DOCBOOKS_PDF)
 
 # Allow the users to re-define the include directory
-INC_DIR ?= $(PWD)/generated
+INC_DIR ?= $(shell pwd)/generated
 
 # Lint the file
 %.xml-lint: %.xml
