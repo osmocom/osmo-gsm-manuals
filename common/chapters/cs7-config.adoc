@@ -50,6 +50,7 @@ cs7 instance 0
  point-code 0.23.1
  asp asp-clnt-OsmoMSC-A-Iu 2905 0 m3ua
   remote-ip 127.0.0.1
+  role asp
   sctp-role client
  as as-clnt-OsmoMSC-A-Iu m3ua
   asp asp-clnt-OsmoMSC-A-Iu
@@ -86,6 +87,8 @@ cs7 instance 0
   remote-ip 10.23.24.1
   # optional: local bind to a specific IP
   local-ip 10.9.8.7
+  role asp
+  sctp-role client
 ----
 
 Be aware that such an `asp` needs to be linked to an `as`, see <<as_and_asp>>.
@@ -235,6 +238,7 @@ cs7 instance 0
  asp my-asp 2905 0 m3ua
   # where to reach the STP:
   remote-ip 127.0.0.1
+  role asp
   sctp-role client
  as my-as m3ua
   asp my-asp
@@ -251,6 +255,8 @@ are not linked:
 cs7 instance 0
  asp my-asp 2905 0 m3ua
   remote-ip 127.0.0.1
+  role asp
+  sctp-role client
  as my-as m3ua
   routing-key 2 0.23.1
 ----
@@ -261,6 +267,8 @@ To *fix* above config, link the `asp` to an `as` by adding `asp my-asp`:
 cs7 instance 0
  asp my-asp 2905 0 m3ua
   remote-ip 127.0.0.1
+  role asp
+  sctp-role client
  as my-as m3ua
   asp my-asp
   routing-key 2 0.23.1
