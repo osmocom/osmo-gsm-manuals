@@ -8,7 +8,7 @@ machines. Until osmo-mgw includes multithreading support, it may also be used to
 scale-out to multiple cores on a single host.
 
 The load distribution is managed in such a way that when a new call is placed,
-the pool will automatically assign the call to the MGW with the lowest load.
+the pool will automatically assign the call to the available MGW with the lowest load.
 
 MGW pooling is recommended for larger RAN or CN installations. For small networks
 and lab installations the classic method with one MGW per {program-name} offers
@@ -72,11 +72,11 @@ applications supporting the MGW pooling VTY features:
 OsmoBSC> show mgw-pool
 % MGW-Pool:
 %  MGW 0:media-gw-0
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 1
 %  MGW 1:media-gw-1
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 0
 ----
@@ -96,6 +96,7 @@ OsmoBSC# configure terminal
 OsmoBSC(config)# network
 OsmoBSC(config-net)# mgw 2
 OsmoBSC(config-mgw)# ?
+  keepalive        Monitor if the MGCP link against MGW is still usable
   local-ip         local bind to connect to MGW from
   local-port       local port to connect to MGW from
   remote-ip        remote IP address to reach the MGW at
@@ -110,15 +111,15 @@ be used until its configuration finished by reconnecting it.
 ----
 % MGW-Pool:
 %  MGW 0:media-gw-0
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 2
 %  MGW 1:media-gw-1
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 3
 %  MGW 2:mgw <1>
-%   mgcp-client:   disconnected
+%   MGCP link:     disconnected,DOWN
 %   service:       unblocked
 %   ongoing calls: 0
 ----
@@ -146,33 +147,77 @@ ready to be used for new calls.
 OsmoBSC# show mgw-pool
 % MGW-Pool:
 %  MGW 0:media-gw-0
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 2
 %  MGW 1:media-gw-1
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 3
 %  MGW 2:mgw
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 0
 ----
 
 It should be noted that MGCP a protocol is used via UDP, the connect only
-happens locally to forward the UDP datagrams properly. Also (unless a reset
-endpoint is configured like in the example config above) there will be no
-immediate interaction with the MGW. However, the log should at least confirm
-the connect worked and the MGCP client has been created successfully.
+happens locally to forward the UDP datagrams properly (state printed in
+`mgcp-client: (dis)connected` above). Also (unless a reset endpoint is
+configured like in the example config above) there will be no immediate
+interaction with the MGW. However, the log should at least confirm the connect
+worked and the MGCP client has been created successfully.
 
 ----
 Mon Aug  2 17:15:00 2021 DLMGCP mgcp_client.c:788 MGCP client: using endpoint domain '@mgw'
 Mon Aug  2 17:15:00 2021 DLMGCP mgcp_client.c:908 MGCP GW connection: r=127.0.0.1:2427<->l=127.0.0.1:2727
 ----
 
-It is strongly advised to check the activity on the related MGW and to follow
-the log in order to see that the communication between {program-name} and the MGW is
-working correctly.
+For that reason, it is strongly advised to enable the `keepalive` feature in
+{program-name} to schedule periodical MGCP queries against the MGW, in order to
+make sure it is reachable (the state `MGCP link: UP|DOWN` printed above). See
+section <<mgw_pooling_keepalive>> below for more information.
+
+[[mgw_pooling_keepalive]]
+==== Monitor MGCP link (keepalive) / MGCP-Client
+
+The `keepalive` feature in {program-name} allows scheduling periodical queries
+on the MGCP layer in order to make sure it is reachable and hence obtain
+information on the state of the MGCP link. This is in turn used by the MGW Pool
+when picking an MGW from the pool: MGWs whose link is considered to be DOWN are
+skipped.
+
+The feature consists of:
+- A `keepalive request-interval` which will trigger a transmission of an MGCP
+AuditEndpoint command targeting endpoint with name `keepalive request-endpoint`.
+This interval is updated every time any message is transmitted in the MGCP link,
+meaning the MGCP AuditEndpoint message is only triggered if no message has been
+transmitted since `keepalive request-interval` seconds ago.
+- A `keepalive timeout` which upon triggering (because no message was received
+over that amount of time) will then consider the MGW to be non-reachable (link
+DOWN).
+
+The `keepalive` parameters are to be preferrably configured so that
+`"keepalive request-interval" * 2 < "keepalive timeout"`.
+
+Example VTY configuration of `keepalive` feature in {program-name}:
+----
+ mgw 0
+  ...
+  keepalive request-interval 20 <1>
+  keepalive request-endpoint null <2>
+  keepalive timeout 50 <3>
+----
+
+<1> Transmit an MGCP AuditEndpoint message to the MGW if no message has been
+sent to it over last 20 seconds
+<2> The MGCP AuditEndpoint targets the `null` endpoint. This is a special
+endpoint available at OsmoMGW for those purposes, but any available endpoint can
+be configured and used instead.
+<3> Consider the MGCP link to be DOWN if no message is received from the MGW
+over the last 50 seconds
+
+NOTE: The `keepalive` feature is disabled by default, and must be explicitly
+configured in order to enable it.
 
 [[mgw_pooling_blocking]]
 ==== Blocking an MGW / MGCP-Client
@@ -188,15 +233,15 @@ OsmoBSC# mgw 2 block
 OsmoBSC# show mgw-pool
 % MGW-Pool:
 %  MGW 0:media-gw-0
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 11
 %  MGW 1:media-gw-1
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 12
 %  MGW 2:mgw
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       blocked
 %   ongoing calls: 10
 ----
@@ -208,15 +253,15 @@ restarted or removed if necessary.
 OsmoBSC# show mgw-pool
 % MGW-Pool:
 %  MGW 0:media-gw-0
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 15
 %  MGW 1:media-gw-1
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       unblocked
 %   ongoing calls: 14
 %  MGW 2:mgw
-%   mgcp-client:   connected
+%   MGCP link:     connected,UP
 %   service:       blocked
 %   ongoing calls: 0
 ----
