@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+  ====================================================================
+  Replace inkscape by rsvg-convert to convert SVG graphics
+  https://sourceforge.net/p/dblatex/mailman/message/37005820/
+  ====================================================================
+-->
+<config xmlns="http://dblatex.sourceforge.net/config">
+  <imagedata>
+    <converter src="svg" dst="*" docformat="pdf">
+      <command>
+         rsvg-convert -a -f %(dst)s -o %(output)s %(input)s
+      </command>
+    </converter>
+  </imagedata>
+</config>
