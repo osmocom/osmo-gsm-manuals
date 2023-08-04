@@ -59,6 +59,12 @@ A2X_OPTS := -L --asciidoc-opts="$(ASCIIDOC_OPTS)" --dblatex-opts="$(DBLATEX_OPTS
 
 all: $(ASCIIDOC_PDF)
 
+# ln: a2x can't use a different output file. To support out-of-tree builds,
+# we create a symlink at $(builddir)/srcfile.adoc pointing at
+# $(srcdir)/srcfile.adoc. $< is the $(srcdir)/srcfile.adoc,
+# $(notdir) is like basename from coreutils, and $(builddir) is $PWD.
+# TEXINPUTS: find LaTeX includes like \includegraphics{./common/images/sysmocom.pdf}
+# in $(OSMO_GSM_MANUALS_DIR).
 $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(ASCIIDOC_DEPS) \
 		$(ASCIIDOCSTYLE) \
@@ -66,20 +72,10 @@ $(ASCIIDOC_PDF): %.pdf: %.adoc %-docinfo.xml \
 		$(COMMONDIR)/images/* \
 		build common
 
-	# a2x can't use a different output file. To support out-of-tree builds,
-	# we create a symlink at $(builddir)/srcfile.adoc pointing at
-	# $(srcdir)/srcfile.adoc. $< is the $(srcdir)/srcfile.adoc,
-	# $(notdir) is like basename from coreutils, and $(builddir) is $PWD.
 	if ! [ -f $(notdir $<) ]; then \
 		ln -s $< $(notdir $<); \
 	fi
 
-	# TEXINPUTS: find LaTeX includes like \includegraphics{./common/images/sysmocom.pdf}
-	# in $(OSMO_GSM_MANUALS_DIR).
-	@test -n "$(BUILD_RELEASE)" && echo -e "\n\n\
-	  NOTE: TO REMOVE DRAFT MODE, YOU NEED TO EDIT build/custom-dblatex.sty\n\
-	        and remove three lines starting with '% \"DRAFT\" on first page'\n" \
-	  || true
 	TEXINPUTS="$(OSMO_GSM_MANUALS_DIR)" \
 		a2x -vv $(A2X_OPTS) $(notdir $<)
 
@@ -88,23 +84,22 @@ check:
 		$(MAKE) $(ASCIIDOC_CHECKS); \
 	fi
 
+# ln: out-of-tree building: use a symlink to the output file like done in
+# the non-check build above, so the relative include paths work the same.
+# touch: Make absolutely sure that the %.check target is updated.
+# grep: Do print the WARNING output but return error if any was found
+# (grep -v would omit the WARNING output from the log).
 $(ASCIIDOC_CHECKS): %.check: %.adoc %-docinfo.xml \
 		$(ASCIIDOCSTYLE) \
 		$(COMMONDIR)/chapters/*.adoc \
 		$(ASCIIDOC_DEPS) \
 		build common
 
-	# out-of-tree building: use a symlink to the output file like done in
-	# the non-check build above, so the relative include paths work the
-	# same.
 	if ! [ -f $(notdir $<) ]; then \
 		ln -s $< $(notdir $<); \
 	fi
 
 	asciidoc -v $(ASCIIDOC_OPTS) $(notdir $<) > $(notdir $@) 2>&1
 
-	# Make absolutely sure that the %.check target is updated.
 	touch $(notdir $@)
-	# Do print the WARNING output but return error if any was found
-	# (grep -v would omit the WARNING output from the log).
 	@grep WARNING $(notdir $@) && exit 1 || exit 0
