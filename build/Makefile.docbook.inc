@@ -50,6 +50,11 @@ endif
 	export REVNUMBER="$(REVNUMBER)" && \
 	export TEMPFILE="$(INC_DIR)/_temp_$(notdir $<)" && \
 	$(OSMO_GSM_MANUALS_DIR)/build/docbook-set-revhistory.py "$<" && \
-	dblatex --xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$(INC_DIR)" \
-		$(dblatex_quiet) -P draft.mode=no -o $@ "$$TEMPFILE" && \
+	dblatex \
+		--config $(OSMO_GSM_MANUALS_DIR)/build/dblatex_config.xml \
+		--xslt-opts="--path $(realpath $(OSMO_GSM_MANUALS_DIR))/common/chapters:$(INC_DIR)" \
+		$(dblatex_quiet) \
+		-P draft.mode=no \
+		-o $@ \
+		"$$TEMPFILE" && \
 	rm $$TEMPFILE

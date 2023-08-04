@@ -46,7 +46,12 @@ ASCIIDOC_OPTS := \
 	-a srcdir='$(ABS_SRCDIR)' \
 	-a commondir='$(COMMONDIR)' \
 	$(NULL)
-DBLATEX_OPTS := -s $(ASCIIDOCSTYLE) -P draft.mode=yes -P draft.watermark=0
+DBLATEX_OPTS := \
+	--config $(OSMO_GSM_MANUALS_DIR)/build/dblatex_config.xml \
+	-s $(ASCIIDOCSTYLE) \
+	-P draft.mode=yes \
+	-P draft.watermark=0 \
+	$(NULL)
 
 ifeq (,$(BUILD_RELEASE))
 	REVNUMBER := DRAFT $(GIT_VERSION)
