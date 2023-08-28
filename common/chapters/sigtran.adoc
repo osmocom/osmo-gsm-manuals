@@ -358,6 +358,90 @@ associations it manages.  The user can achieve this by specifying
 multiple `local-ip` VTY commands within one `asp` (SCTP client role) or
 within one `listen m3ua 2905` (SCTP server role).
 
+==== SCTP Primary Address
+
+SCTP has the concept of "primary address" in an association. The primary address
+is a remote address selected from those announced by the peer, and it is the
+"active" one chosen to transmit user data. The other remote addresses, that are
+not used, are kept as backups. They are in general only used to transmit user
+data whenever the SCTP implementation decides to change the primary address, be
+it due to user policy configuration change or due to the previous primary link
+becoming unusable. Only confirmed remote addresses (through HEARTBEAT mechanism)
+are electable to be used as primary address.
+
+By default, the Linux kernel SCTP stack implementation will probably take the
+first remote address provided at connect() time in order to start the initial
+handshake, and continue with next provided remote addresses if the first one
+fails to confirm the handshake. The remote address which successfully confirmed
+the handshake is then used as a primary address (since it's likely the only
+confirmed so far), and will be kept until the link is considered down.
+
+Some deployment setups may have requirements on preferred links to be used when
+transmitting data (eg. network setups with primary and secondary paths). This
+can be accomplished by explicitly notifying the kernel to use one of the remote
+addresses through the SCTP_PRIMARY_ADDR sockopt, plus monitoring the address
+availability changes on the socket and re-enforcing the primary address when it
+becomes available again. This is supported in the Osmocom SIGTRAN stack by using
+the `primary` parameter in one of the `remote-ip` commands under the `asp` node:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  remote-ip 10.11.12.13
+  remote-ip 16.17.18.19 primary <1>
+  ...
+----
+<1> Use 16.17.18.19 as primary address for the SCTP association. User data will
+be in general transmitted over this path.
+
+==== SCTP Peer Primary Address
+
+The SCTP extension ASCONF (RFC5061) allows, when negotiated and supported by
+both peers, to dynamically announce to the peer the addition or deletion of IP
+addresses to the association. It also allows one peer announcing to the other
+peer the desired IP address it should be using as a primary address when sending
+data to it.
+
+In the Linux kernel SCTP stack, this is accomplished by setting the sockopt
+SCTP_SET_PEER_PRIMARY_ADDR, which will trigger an ASCONF SCTP message to the
+peer with the provided local IP address. This is supported in the Osmocom
+SIGTRAN stack by using the `primary` parameter in one of the `local-ip` commands
+under the `asp` node:
+
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  local-ip 10.11.12.13
+  local-ip 16.17.18.19 primary <1>
+  ...
+----
+<1> Announce 16.17.18.19 to the peer as the primary address to be used when
+transmitting user data to us.
+
+In order to be able to use this feature, the SCTP association peer must support
+the ASCONF extension. The extension support is negotiation during the INIT
+handshake of the association. Furthermore, for ASCONF features to work properly,
+the assoc also needs to announce/use the AUTH extension, as per RFC5061 section
+4.2.7. Otherwise, the peer receiving an SCTP INIT with
+`ExtensionFeatures=ASCONF,ASCONF_ACK`` but without AUTH, will reject the
+association with an ABORT since it's not complying with specifications (this
+behavior can be tweaked through sysctl "net.sctp.addip_noauth_enable").
+
+As of the time of writing this documentation (linux 6.4.12) and since basically
+ever, those extensions are runtime-disabled by default. They can be enabled per
+socket using the kernel sockopts SCTP_ASCONF_SUPPORTED and SCTP_AUTH_SUPPORTED,
+and that's what the Osmocom stack is currently doing for all SCTP sockets.
+However, those sockopts are farily new (linux v5.4), which means user running
+older kernels will see in the logs setting those sockopts fail, but connection
+will keep ongoing, simply without those features available (so setting `primary`
+in the configuration won't have any effect here).
+On those older kernels, if this feature is still desired, it can be used
+by means of enabling the SCTP extensions in all socket system-wide through sysctl:
+----
+net.sctp.auth_enable=1
+net.sctp.addip_enable=1
+----
+
 ==== SCTP role
 
 The _SCTP role_ defines which of the two L4 protocol roles SCTP assumes:
