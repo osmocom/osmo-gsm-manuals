@@ -1,3 +1,45 @@
+osmo-gsm-manuals-dev (1.5.0) unstable; urgency=medium
+
+  [ Max ]
+  * SIGTRAN: fix typo
+
+  [ Oliver Smith ]
+  * editorconfig: new file
+  * Change upload path to project/master/
+  * build/Makefile.common.inc: unset OSMO_REPOSITORY
+  * build/{diag,mscgen}-filter.conf: png -> svg
+  * build/graphviz-filter.conf: add config for svgs
+  * Cosmetic: build/Makefile.common.inc: add comments
+  * build/Makefile.common: move clean/distclean down
+  * build/Makefile.common: shrink pdfs before publish
+  * build/Makefile.common: full path for shrink script
+  * debian: set compat level to 10
+  * VTY references: set git version and date
+  * build/Makefile.docbook: fix INC_DIR for openbsc
+  * build/Makefile.asciidoc: print less clutter
+  * build: replace inkscape with rsvg-convert
+
+  [ Vilius Panevėžys ]
+  * Fix mistypes
+
+  [ Harald Welte ]
+  * chapters/*: Fix typos
+  * chapters/mncc: Update the wording to be less confusing and more up-to-date
+  * chapters/cell-broadcast: Bring up-to-date with reality
+  * chapters/logging: Expand documentation on GSMTAP logging
+  * chapters/preface: Thank NLnet and WaveMobile
+  * common/chapters: http -> https
+  * preface: indicate where to ask for commercial support
+  * chapters/spectrum: Extend disclaimer to Osmocom authors
+
+  [ Pau Espin Pedrol ]
+  * sigtran: Update supported xUA Traffic modes
+  * Write explicit role & sctp-role fields in ASP configurations
+  * mgwpool: Document keepalive feature
+  * sigtran: Document SCTP (peer) primary address configuration
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Tue, 12 Sep 2023 12:24:03 +0200
+
 osmo-gsm-manuals-dev (1.4.0) unstable; urgency=medium
 
   [ Pau Espin Pedrol ]
