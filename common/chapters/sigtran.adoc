@@ -442,6 +442,49 @@ net.sctp.auth_enable=1
 net.sctp.addip_enable=1
 ----
 
+==== SCTP INIT Parameters
+
+Several SCTP INIT parameters can be configured through VTY, which will be passed
+to the Linux Kernel SCTP stack and used whenever an association is being
+established.
+
+On the client side (see <<sctp_role>>), the parameters are configured in the `asp` node:
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  sctp-role client
+  sctp-param init num-ostreams 250 <1>
+  sctp-param init max-instreams 300 <2>
+  sctp-param init max-attempts 3 <3>
+  sctp-param init timeout 10000 <4>
+  ...
+----
+<1> The number of streams from the server to the client. This value is
+transmitted during SCTP INIT ACK packet.
+<2> Announce to the server that a maximum of up to 300 inbound SCTP streams are
+supported. This value is transmitted during SCTP INIT packet.
+<3> Initial SCTP handshake will be attempted 3 times before considering the
+connection failed.
+<4> Retransmit an SCTP INIT message after 10000 ms if no answer is received.
+
+On the server side (see <<sctp_role>>), the parameters are configured in the `listen` node:
+----
+cs7 instance 0
+ asp my-asp 2905 0 m3ua
+  sctp-role server
+ listen m3ua 2905
+  sctp-param init num-ostreams 250 <1>
+  sctp-param init max-instreams 300 <2>
+  ...
+----
+<1> Announce to the server that up to 250 outbound SCTP streams (server to
+client) may be requested. This value is transmitted during SCTP INIT packet, and
+should be equal or lower to the `max-instreams` value received from the client
+during SCTP INIT packet.
+<2> Announce to the server that a maximum of up to 300 inbound SCTP streams are
+supported. This value is transmitted during SCTP INIT ACK packet.
+
+[[sctp_role]]
 ==== SCTP role
 
 The _SCTP role_ defines which of the two L4 protocol roles SCTP assumes:
