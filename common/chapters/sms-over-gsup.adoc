@@ -1,0 +1,253 @@
+[[sms-over-gsup]]
+== SMS Exchange over GSUP
+
+=== Traditional SMS architecture
+
+SMS is a store-and-forward messaging service, not strictly real-time.
+Suppose that Alice sends SMS to Bob - but Bob's phone may be turned off
+or out of coverage when she sends her message, hence immediate delivery
+may not be possible.
+Furthermore, per SMS architecture defined in 3GPP TS 23.040,
+Alice _never_ sends SMS directly to Bob - instead when she thinks
+(according to her phone UI) that she is sending SMS to Bob,
+the following sequence actually takes place:
+
+* Alice's phone (GSM MS or UMTS UE) transfers a Mobile-Originated (MO)
+  Short Message (SM) to her cellular operator's Short Message Service
+  Center (SMSC) - call it SMSC-A.
+
+* SMSC-A looks at the destination phone number and routes the SM.
+  If Bob is a customer of the same MNO as Alice, SMSC-A may perform final
+  Mobile-Terminated (MT) delivery directly.
+  Alternatively, if Bob's phone number is served by a different MNO
+  (call it MNO-B), SMSC-A needs to transfer the SM into the custody
+  of MNO-B's SMSC (call it SMSC-B) which is then responsible for final
+  MT delivery.
+
+* Store-and-forward operation occurs at each hop in the chain of custody.
+  If the recipient's phone is out of service, the final SMSC holds the
+  SM until it can be delivered successfully.
+  Similarly, if SMSC-A decides that it needs to forward the message
+  to SMSC-B, but either SMSC-B or the inter-operator link is temporarily
+  down, SMSC-A will hold the message until it can hand it off.
+
+In this architecture each MNO's SMSC is its own network element, separate
+from MSC, SGSN, HLR, VLR and other network elements that are involved in
+provision of circuit-switched and packet-switched services - it is its own
+dedicated network element just for SMS.
+
+3GPP specs define a Short Message Relay Layer (SM-RL) for SMS transport
+from a mobile to the nearest SMSC (MO direction) or from an SMSC to a mobile
+(MT direction) - but they don't say much about the end-to-end path from
+Alice to Bob, leaving it to the discretion of SMSC implementors and
+inter-operator agreements.
+
+[[smsc_addresses]]
+==== SMSC addresses
+
+3GPP architecture supports network environments in which an MS may be
+able to send SMs to or receive SMs from one of many different SMSCs.
+To support such flexibility, SM-RL includes SMSC addressing: each SMSC
+is identified by an SC-address that looks like a phone number,
+typically corresponding to Global Titles in SS7 network architecture.
+When a GSM MS sends a Mobile-Originated SM, it has to name (by SC-address)
+the SMSC to which the SM is to be transferred, and every MT SM delivered
+to a GSM MS includes the identity (SC-address) of the SMSC that sent it.
+
+=== SMS support in Osmocom networks
+
+Osmocom CNI supports two ways of providing Short Message Service:
+
+* There is a built-in SMSC in OsmoMSC, which is the default option.
+  This option violates the traditional architecture in that the SC-address
+  indicated by the MS as SM-RL destination is ignored, and the built-in SMSC
+  immediately gets to routing messages by the final destination address -
+  but this approach is usually sufficient for most Osmocom deployments.
+
+* There is also a way to fully suppress OsmoMSC's internal SMSC and switch
+  to a model where OsmoMSC merely forwards SM-RL to external SMSCs.
+  This option implements the proper SMS architecture of 3GPP, and SMSC
+  addresses can be made to matter.
+
+In the traditional 3GPP architecture, the protocol that connects MSCs to SMSCs
+is SS7 MAP (Mobile Application Part).
+In Osmocom universe this MAP is replaced with GSUP - in all cases where a
+fully ``by the book'' MSC would speak MAP, OsmoMSC speaks GSUP instead.
+GSUP strives to provide the same logical model as MAP, but usually simplified
+for ease of implementation.
+
+To disable the built-in SMSC in OsmoMSC, specify `sms-over-gsup` under `msc`
+node in OsmoMSC configuration.
+Once this option is given, the internal SMSC ceases to function, and the
+behavior of the MSC with respect to SMS changes to:
+
+* Any time a GSM MS sends an MO SM at the Relay Layer (SM-RL), the message is
+  passed to MAP-mimicking GSUP, addressed to whichever SMSC the MS is
+  addressing.
+
+* Any SMSC in GSUP land can send MT SMs to any mobile subscriber, identified
+  by IMSI.
+
+=== Routing of SM-RL exchanges in GSUP land
+
+As of this writing, two approaches have been used in actual deployments:
+
+* In the first deployment of SMS-over-GSUP mechanism, OsmoHLR was excluded
+  from the deployed architecture, replaced with a proprietary translator from
+  GSUP to MAP.  Because SMS-related GSUP messages spoken by OsmoMSC are modeled
+  after corresponding MAP services, the result was an MSC that spoke standard
+  MAP and fit into the existing architecture of incumbent MNOs.
+
+* The second approach is intended for pure FOSS networks without any proprietary
+  components.  In this approach the GSUP connection from OsmoMSC goes to
+  OsmoHLR, following standard Osmocom architecture, but there is a new network
+  element (SMSC) which also speaks GSUP.  One or more GSUP-speaking SMSCs
+  connect to OsmoHLR, and OsmoHLR provides just enough routing to allow MO SMS
+  from MSCs to reach SMSCs, and to allow MT SMS from SMSCs to reach MSCs.
+
+==== OsmoHLR configuration
+
+In order to route MO SMS from MSCs to SMSCs, OsmoHLR needs to know two pieces
+of information:
+
+* What GSUP-speaking SMSCs exist and are reachable from this Core Network;
+
+* How SMSC identities are mapped between 3GPP-defined numeric SC-addresses
+  and Osmocom-defined IPA names.
+
+As already described in <<smsc_addresses>>, 3GPP architecture
+calls for every SMSC to be identified by a numeric SC-address that looks
+like a phone number.
+However, GSUP is an Osmocom-specific protocol (interface between modular
+software components), and in GSUP land every component (an HLR, an MSC,
+an SGSN, an SMSC or an EUSE for USSD) is identified by an alphanumeric string
+that (for historical reasons) is called an IPA name.
+Successful SM-RL communication requires a mapping between these two schemes:
+EF.SMSP on SIM cards is programmed with a certain numeric SC-address,
+GSM MS will send MO SMS to this SC-address, and OsmoMSC will pass the same
+to OsmoHLR - and then OsmoHLR needs to know how to map this SC-address to
+the IPA name of a GSUP peer to which it can forward these transactions.
+
+A two-level configuration scheme is implemented for SM-RL MO direction routing,
+modeled after the configuration scheme for EUSEs and USSD routes:
+
+* Each GSUP-speaking SMSC needs to be declared as an entity in its own right
+  with an `smsc entity NAME` entry under `hlr` configuration node; the name
+  given here is the IPA name of the SMSC.
+
+* A mapping from a 3GPP-standard numeric SC-address to a GSUP-speaking SMSC
+  is established with an entry of the form `smsc route NUMBER NAME`;
+
+* If you prefer to intentionally violate the classic layered architecture
+  of SMS, ignore the SC-address supplied by the MS (usually programmed on the
+  SIM) and divert all MO SMS to your own SMSC, just like OsmoMSC's built-in
+  SMSC does, you can do so with an `smsc default-route NAME` entry, giving
+  the IPA name of your SMSC.  This approach may be chosen by those who wish
+  to operate GSM networks in ``guest roaming'' mode, using alien SIM cards
+  without an actual roaming interconnection with the SIM-issuing operator,
+  and thus seeking to intercept all MO SMS even though the phone ``thinks''
+  that it is addressing its home operator's SMSC.
+
+Example configuration, obeying the spirit of 3GPP:
+
+----
+hlr
+ smsc entity My-SMSC
+ smsc route 42424242 My-SMSC
+----
+
+In this configuration the IPA name of your SMSC is My-SMSC, and the SC-address
+to reach this SMSC (needs to be programmed in EF.SMSP on the SIM) is 42424242.
+
+Alternative example configuration, ignoring SC-address from SIM/MS:
+
+----
+hlr
+ smsc entity My-SMSC
+ smsc default-route My-SMSC
+----
+
+All of this configuration applies only to routing of SM-RL messages in the MO
+direction from MSCs to SMSCs.
+In contrast, routing of SMS-over-GSUP messages through OsmoHLR in the MT
+direction from SMSCs to MSCs is configuration-less.
+
+=== Message flow scenarios
+
+==== MO SMS submission from an MS to an SMSC
+
+When a GSM MS sends an SMS-SUBMIT TPDU to the network, it _must_ address this
+SM-RL transaction to _some_ specific SMSC, identified by an SC-address.
+Standard phones take this SC-address from EF.SMSP record on the SIM,
+but most phone firmwares also provide an advanced settings menu where
+the user can manually change this SC-address, and if an MS implementation
+provides GSM 07.05 AT command interface for SMS, the external host (TE)
+can also specify the SC-address to which outgoing SMS should be sent.
+
+In Osmocom network implementation, the following message flow takes place:
+
+.Mobile-originated message submission
+["mscgen"]
+----
+include::gsup_mo_sms.msc[]
+----
+
+==== MT SMS delivery from an SMSC to an MS
+
+Whenever an external GSUP-speaking SMSC needs to send MT SMS to a subscriber,
+it needs to know that subscriber's IMSI.
+If the SMSC only knows the intended recipient's MSISDN but not the
+corresponding IMSI, a separate MSISDN to IMSI mapping operation
+(outside of GSUP) needs to be performed prior to SMS-over-GSUP MT delivery
+attempt.
+Once the IMSI is known, an actual MT delivery attempt can be made:
+
+.Mobile-terminated message delivery
+["mscgen"]
+----
+include::gsup_mt_sms.msc[]
+----
+
+Per 3GPP protocol specs, every MT SM delivered to an MS must include the
+SC-address of the SMSC that sent it.  In Osmocom SMS-over-GSUP implementation,
+the GSUP-speaking SMSC is responsible for inserting its numeric SC-address
+(however it wishes to identify itself to MT SMS recipients) into the
+MT-forwardSM-Req message it sends out; neither OsmoHLR nor OsmoMSC modify
+it in any way.
+
+==== Alerting SMSC that MS is ready to receive messages
+
+If an SMSC previously attempted to deliver MT SMS to an MS that was out
+of service, when that MS comes back online, it is desirable to alert the SMSC
+(RP-ALERT-SC abstract primitive of 3GPP TS 23.040 section 9.3.2.5)
+so that another delivery attempt can be made right away.
+Similarly, if a previous MT SMS delivery attempt failed because the MS
+was out of memory (SMS storage full), when that memory is cleared,
+the MS sends an RP-SM-MEMORY-AVAILABLE TPDU to the serving MSC,
+and the MSC is then responsible for alerting SMSCs which previously
+attempted MT SMS delivery.
+
+SMS-over-GSUP protocol definition includes a READY-FOR-SM-Req message
+to be sent out by OsmoMSC in both just-described scenarios; OsmoMSC
+currently sends this GSUP message in the case of RP-SMMA from MS,
+but not in the other case yet.
+
+In either case, which SMSC should this GSUP (or other network-internal)
+message be sent to?  3GPP specs call for a complex scheme where the HLR
+remembers which SMSCs have attempted and failed MT SMS delivery, and
+all of the listen SMSCs then get alerted.
+This scheme is currently deemed to be needlessly complex and needlessly
+difficult for Osmocom, hence a simpler scheme is implemented:
+whenever OsmoHLR receives a READY-FOR-SM-Req GSUP message from an MSC,
+this message is fanned out (copied) to every SMSC that has been declared
+with an `smsc entity NAME` entry under `hlr` configuration node.
+
+A noteworthy quirk of this scheme is that SMSC responses to this particular
+GSUP message are *not* forwarded back to the MSC: however many SMSCs there
+may be, the MSC expects exactly one response.
+When it fans out READY-FOR-SM-Req to SMSCs, OsmoHLR always returns
+a successful READY-FOR-SM-Res to the MSC - thus from the MSC's perspective,
+and from the perspective of the MS in the case of RP-SMMA,
+the operation always succeeds.
+
+FIXME: make a message sequence chart showing the just-described flow.

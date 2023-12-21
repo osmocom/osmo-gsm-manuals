@@ -81,6 +81,8 @@
   https://ftp.osmocom.org/docs/latest/osmotrx-lms-vty-reference.pdf
   https://ftp.osmocom.org/docs/latest/osmotrx-ipc-vty-reference.pdf
   https://ftp.osmocom.org/docs/latest/osmotrx-usrp1-vty-reference.pdf
+- [[[3gpp-ts-23-040]]] 3GPP TS 23.040: Technical realization of the
+  Short Message Service (SMS)
 - [[[3gpp-ts-23-041]]] 3GPP TS 23.041: Technical realization of
   Cell Broadcast Service (CBS)
 - [[[3gpp-ts-23-048]]] 3GPP TS 23.048: Security mechanisms for the
