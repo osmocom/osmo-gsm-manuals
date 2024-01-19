@@ -1091,7 +1091,7 @@ trivial to transform them.
 ==== IP Address
 
 The value part is encoded like in the Packet data protocol address IE defined
-in 3GPP TS 04.08, Chapter 10.5.6.4. PDP type organization must be set to
+in 3GPP TS 24.008, Chapter 10.5.6.4. PDP type organization must be set to
 'IETF allocated address'.
 
 [[gsup-ie-pdpinfo]]
@@ -1285,7 +1285,7 @@ IEI that shall be used for the encoding.
 [options="header",cols="15%,35%,50%"]
 |===
 |IEI|Info Element|Type / Encoding
-|0x01|IMSI|Mobile Identity, 3GPP TS 04.08 Ch. 10.5.1.4
+|0x01|IMSI|Mobile Identity, 3GPP TS 24.008 Ch. 10.5.1.4
 |0x02|Cause|<<gsup-ie-cause>>
 |0x03|Auth Tuple|<<gsup-ie-authtuple>>
 |0x04|PDP Info Compl|<<gsup-ie-empty>>
@@ -1351,7 +1351,7 @@ The semantics depend on the IEI and the context.
 ==== IMSI
 
 The IMSI is encoded like in octet 4-N of the Called Party BCD Number
-defined in 3GPP TS 04.08, 10.5.4.7.
+defined in 3GPP TS 24.008, 10.5.4.7.
 
 [packetdiag]
 ----
@@ -1377,7 +1377,7 @@ Number digit N-1' (N even), where N is the number of digits.
 ==== ISDN-AddressString / MSISDN / Called Party BCD Number
 
 The MSISDN is encoded as an ISDN-AddressString in 3GPP TS 09.02 and Called Party
-BCD Number in 3GPP TS 04.08. It will be stored by the SGSN or VLR and then passed as is
+BCD Number in 3GPP TS 24.008. It will be stored by the SGSN or VLR and then passed as is
 to the GGSN during the activation of the primary PDP Context.
 
 [packetdiag]
@@ -1479,7 +1479,7 @@ record.
 ==== Cause
 
 This IE shall be encoded according to the 'GMM Cause' as described in
-Chapter 10.5.5.14 of 3GPP TS 04.08.
+Chapter 10.5.5.14 of 3GPP TS 24.008.
 
 [[gsup-ie-ss-info]]
 ==== Supplementary Service Info
@@ -1491,7 +1491,7 @@ of Supplementary Services encoded according to GSM TS 04.80.
 [[gsup-ie-imei]]
 ==== IMEI
 
-The IMEI encoded as Called Party BCD Number in 3GPP TS 04.08.
+The IMEI encoded as Called Party BCD Number in 3GPP TS 24.008.
 
 [[gsup-ie-imei-result]]
 ==== IMEI Check Result
