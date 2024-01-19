@@ -1105,7 +1105,7 @@ This is a container for information elements describing a single PDP.
 |  |PDP Info IEI|<<gsup-iei>>|M|V|1
 |  |Length of PDP Info IE||M|V|1
 |10|PDP Context ID|<<gsup-ie-pdpctxid>>|C|TLV|3
-|11|PDP Type|<<gsup-ie-pdptype>>|C|TLV|4
+|11|PDP Address|<<gsup-ie-pdpaddress>>|C|TLV|4-24
 |12|Access Point Name|<<gsup-ie-apn>>|C|TLV|3-102
 |13|Quality of Service|<<gsup-ie-qos>>|O|TLV|1-20
 |14|PDP-Charging Characteristics|<<gsup-ie-charging>>|O|TLV|4
@@ -1113,11 +1113,14 @@ This is a container for information elements describing a single PDP.
 
 The conditional IE are mandantory unless mentioned otherwise.
 
-[[gsup-ie-pdptype]]
-==== PDP Type
+[[gsup-ie-pdpaddress]]
+==== PDP Address
 
-The PDP type value consists of 2 octets that are encoded like octet 4-5 of the
-End User Address (EUA) defined in 3GPP TS 29.060, 7.7.27.
+The value part is encoded like in the Packet data protocol address IE defined
+in 3GPP TS 24.008, Chapter 10.5.6.4.
+Hence this value also relates to End User Address (EUA) IE defined in 3GPP TS
+29.060, 7.7.27.
+The PDP type organization value must be set to 'IETF allocated address'.
 
 [packetdiag]
 ----
@@ -1127,21 +1130,24 @@ End User Address (EUA) defined in 3GPP TS 29.060, 7.7.27.
 
 	0-6:	PDP type IEI
 	7:	Res
-	8-15:	Length (2)
-	16-19:	Spare
-	20-23:	PDP type org
+	8-15:	Length
+	16-19:	PDP type org
+	20-23:	Spare
 	24-31:	PDP type number
+  32-191: Address (v4|v6|v4+v6)
 }
 ----
 
-The spare bits are left undefined. While 29.060 defines them as '1 1 1 1', there
-are MAP traces where these bits are set to '0 0 0 0'. So the receiver shall
-ignore these bits.
+The spare bits are left undefined. While 3GPP TS 29.060 7.7.27 defines them as
+'1 1 1 1', there are MAP traces where these bits are set to '0 0 0 0'. So the
+receiver shall ignore these bits.
 
 Examples:
 
-* IPv4: PDP type org: 1 (IETF), PDP type number: 0x21
-* IPv6: PDP type org: 1 (IETF), PDP type number: 0x57
+* IPv4: PDP type org: 1 (IETF), PDP type number: 0x21, 0 bytes address (dynamic addressing)
+* IPv4: PDP type org: 1 (IETF), PDP type number: 0x21, 4 bytes address
+* IPv6: PDP type org: 1 (IETF), PDP type number: 0x57, 16 bytes address
+* IPv6: PDP type org: 1 (IETF), PDP type number: 0x8D, 20 bytes address (v4+v6)
 
 [[gsup-ie-pdpctxid]]
 ==== PDP Context ID
@@ -1296,7 +1302,7 @@ IEI that shall be used for the encoding.
 |0x09|HLR Number|<<gsup-ie-hlr>>
 |0x0a|Message Class| <<gsup-ie-message-class>>
 |0x10|PDP Context ID|<<gsup-ie-pdpctxid>>
-|0x11|PDP Type|<<gsup-ie-pdptype>>
+|0x11|PDP Address|<<gsup-ie-pdptaddress>>
 |0x12|Access Point Name|<<gsup-ie-apn>>
 |0x13|QoS|<<gsup-ie-qos>>
 |0x14|PDP-Charging Characteristics|<<gsup-ie-charging>>
