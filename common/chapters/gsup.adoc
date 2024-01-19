@@ -1117,7 +1117,7 @@ The conditional IE are mandantory unless mentioned otherwise.
 ==== PDP Type
 
 The PDP type value consists of 2 octets that are encoded like octet 4-5 of the
-End User Address defined in 3GPP TS 09.60, 7.9.18.
+End User Address (EUA) defined in 3GPP TS 29.060, 7.7.27.
 
 [packetdiag]
 ----
@@ -1134,7 +1134,7 @@ End User Address defined in 3GPP TS 09.60, 7.9.18.
 }
 ----
 
-The spare bits are left undefined. While 09.60 defines them as '1 1 1 1', there
+The spare bits are left undefined. While 29.060 defines them as '1 1 1 1', there
 are MAP traces where these bits are set to '0 0 0 0'. So the receiver shall
 ignore these bits.
 
