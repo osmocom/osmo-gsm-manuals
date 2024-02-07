@@ -362,11 +362,16 @@ Direction: SGSN / VLR => HLR
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
 |26|AUTS|<<gsup-ie-auts>>|C|TLV|18
 |20|RAND|<<gsup-ie-rand>>|C|TLV|18
+|05|PDP info|<<gsup-ie-pdpinfo>>|C|TLV|2-N
 |===
 
 The conditional 'AUTS' and 'RAND' IEs are both present in case the SIM
 (via UE) requests an UMTS AKA re-synchronization procedure.  Either
 both optional IEs are present, or none of them.
+
+The conditional 'PDP Info' IE is only present in the CEAI interface used by the
+ePDG. It should contain the 'PDP Context ID', 'PDP Address' (dynamic addressing)
+and 'Access Point Name' IEs.
 
 [[gsup-msg-auth-info-err]]
 ==== Send Authentication Info Error
@@ -446,7 +451,7 @@ Direction: HLR => SGSN / VLR
 |08|MSISDN|<<gsup-ie-msisdn>>|O|TLV|0-9
 |09|HLR Number|<<gsup-ie-hlr>>|O|TLV|0-9
 |04|PDP info complete|<<gsup-ie-empty>>|O|TLV|2
-|05|PDP info|<<gsup-ie-pdpinfo>>|O|TLV|1-10
+|05|PDP info|<<gsup-ie-pdpinfo>>|O|TLV|2-N
 |===
 
 If the PDP info complete IE is present, the old PDP info list shall be cleared.
