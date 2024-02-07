@@ -349,6 +349,7 @@ Besides a numeric range, the 'presence' column may have 'M' (Mandatory), 'O'
 (Optional) or 'C' (Conditional). The 'format' column holds either 'V' (Value)
 or 'TLV' (Tag Length Value).
 
+[[gsup-msg-auth-info-req]]
 ==== Send Authentication Info Request
 
 Direction: SGSN / VLR => HLR
@@ -367,6 +368,7 @@ The conditional 'AUTS' and 'RAND' IEs are both present in case the SIM
 (via UE) requests an UMTS AKA re-synchronization procedure.  Either
 both optional IEs are present, or none of them.
 
+[[gsup-msg-auth-info-err]]
 ==== Send Authentication Info Error
 
 Direction: HLR => SGSN / VLR
@@ -379,6 +381,7 @@ Direction: HLR => SGSN / VLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-auth-info-res]]
 ==== Send Authentication Info Response
 
 Direction: HLR => SGSN / VLR
@@ -391,6 +394,7 @@ Direction: HLR => SGSN / VLR
 |03|Auth Tuple|<<gsup-ie-authtuple>>|0-5|TLV|36
 |===
 
+[[gsup-msg-auth-fail-rep]]
 ==== Authentication Failure Report
 
 Direction: SGSN / VLR => HLR
@@ -403,6 +407,7 @@ Direction: SGSN / VLR => HLR
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
 |===
 
+[[gsup-msg-upd-loc-req]]
 ==== Update Location Request
 
 Direction: SGSN / VLR => HLR
@@ -415,6 +420,7 @@ Direction: SGSN / VLR => HLR
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
 |===
 
+[[gsup-msg-upd-loc-err]]
 ==== Update Location Error
 
 Direction: HLR => SGSN / VLR
@@ -427,6 +433,7 @@ Direction: HLR => SGSN / VLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-upd-loc-res]]
 ==== Update Location Result
 
 Direction: HLR => SGSN / VLR
@@ -444,6 +451,7 @@ Direction: HLR => SGSN / VLR
 
 If the PDP info complete IE is present, the old PDP info list shall be cleared.
 
+[[gsup-msg-loc-cancel-req]]
 ==== Location Cancellation Request
 
 Direction: HLR => SGSN / VLR
@@ -457,6 +465,14 @@ Direction: HLR => SGSN / VLR
 |06|Cancellation type|<<gsup-ie-canctype>>|O|TLV|3
 |===
 
+[[gsup-msg-loc-cancel-err]]
+==== Location Cancellation Error
+
+Direction: SGSN / VLR => HLR
+
+TODO
+
+[[gsup-msg-loc-cancel-res]]
 ==== Location Cancellation Result
 
 Direction: SGSN / VLR => HLR
@@ -469,6 +485,7 @@ Direction: SGSN / VLR => HLR
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
 |===
 
+[[gsup-msg-purge-ms-req]]
 ==== Purge MS Request
 
 Direction: SGSN / VLR => HLR
@@ -482,6 +499,7 @@ Direction: SGSN / VLR => HLR
 |09|HLR Number|<<gsup-ie-hlr>>|M|TLV|0-9
 |===
 
+[[gsup-msg-purge-ms-err]]
 ==== Purge MS Error
 
 Direction: HLR => SGSN / VLR
@@ -494,6 +512,7 @@ Direction: HLR => SGSN / VLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-purge-ms-res]]
 ==== Purge MS Result
 
 Direction: HLR => SGSN / VLR
@@ -506,6 +525,7 @@ Direction: HLR => SGSN / VLR
 |07|Freeze P-TMSI|<<gsup-ie-empty>>|M|TLV|2
 |===
 
+[[gsup-msg-ins-sub-req]]
 ==== Insert Subscriber Data Request
 
 Direction: HLR => SGSN / VLR
@@ -525,6 +545,7 @@ Direction: HLR => SGSN / VLR
 
 If the PDP info complete IE is present, the old PDP info list shall be cleared.
 
+[[gsup-msg-ins-sub-err]]
 ==== Insert Subscriber Data Error
 
 Direction: SGSN / VLR => HLR
@@ -537,6 +558,7 @@ Direction: SGSN / VLR => HLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-ins-sub-res]]
 ==== Insert Subscriber Data Result
 
 Direction: SGSN / VLR => HLR
@@ -548,6 +570,7 @@ Direction: SGSN / VLR => HLR
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
 |===
 
+[[gsup-msg-del-sub-req]]
 ==== Delete Subscriber Data Request
 
 Direction: HLR => SGSN / VLR
@@ -561,6 +584,7 @@ Direction: HLR => SGSN / VLR
 |10|PDP Context ID|<<gsup-ie-pdpctxid>>|C|TLV|3
 |===
 
+[[gsup-msg-del-sub-err]]
 ==== Delete Subscriber Data Error
 
 Direction: SGSN / VLR => HLR
@@ -573,6 +597,7 @@ Direction: SGSN / VLR => HLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-del-sub-res]]
 ==== Delete Subscriber Data Result
 
 Direction: HLR => SGSN / VLR
@@ -584,6 +609,7 @@ Direction: HLR => SGSN / VLR
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
 |===
 
+[[gsup-msg-proc-supl-serv-req]]
 ==== Process Supplementary Service Request
 
 Direction: bidirectional
@@ -602,6 +628,7 @@ This message is used in both directions in case of USSD, because
 it is not known is it request or response without parsing
 the GSM 04.80 payload.
 
+[[gsup-msg-proc-supl-serv-err]]
 ==== Process Supplementary Service Error
 
 Direction: EUSE / HLR => MSC
@@ -616,6 +643,7 @@ Direction: EUSE / HLR => MSC
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-proc-supl-serv-res]]
 ==== Process Supplementary Service Response
 
 Direction: EUSE / HLR => MSC
@@ -634,6 +662,7 @@ The purpose of this message is not clear yet. Probably, it
 can be used to notify the MSC that a structured supplementary
 service is successfully activated or deactivated, etc.
 
+[[gsup-msg-mo-forwardsm-req]]
 ==== MO-forwardSM Request
 
 Direction: MSC / SGSN => SMSC (via HLR)
@@ -653,6 +682,7 @@ This message is used to forward MO short messages from MSC / SGSN to an SMSC.
 The corresponding MAP service is MAP-MO-FORWARD-SHORT-MESSAGE,
 see 3GPP TS 29.002, section 12.2.
 
+[[gsup-msg-mo-forwardsm-err]]
 ==== MO-forwardSM Error
 
 Direction: SMSC (via HLR) => MSC / SGSN
@@ -671,6 +701,7 @@ This message is used to indicate a negative result of an earlier
 MO short message delivery. The corresponding MAP service is
 MAP-MO-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.2.
 
+[[gsup-msg-mo-forwardsm-res]]
 ==== MO-forwardSM Result
 
 Direction: SMSC (via HLR) => MSC / SGSN
@@ -687,6 +718,7 @@ This message is used to indicate a successful result of an earlier
 MO short message delivery. The corresponding MAP service is
 MAP-MO-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.2.
 
+[[gsup-msg-mt-forwardsm-req]]
 ==== MT-forwardSM Request
 
 Direction: SMSC (via HLR) => MSC / SGSN
@@ -707,6 +739,7 @@ This message is used to forward MT short messages from an SMSC to MSC / SGSN.
 The corresponding MAP service is MAP-MT-FORWARD-SHORT-MESSAGE,
 see 3GPP TS 29.002, section 12.9.
 
+[[gsup-msg-mt-forwardsm-err]]
 ==== MT-forwardSM Error
 
 Direction: MSC / SGSN => SMSC (via HLR)
@@ -725,6 +758,7 @@ This message is used to indicate a negative result of an earlier
 MT short message delivery. The corresponding MAP service is
 MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
 
+[[gsup-msg-mt-forwardsm-res]]
 ==== MT-forwardSM Result
 
 Direction: MSC / SGSN => SMSC (via HLR)
@@ -741,6 +775,7 @@ This message is used to indicate a successful result of an earlier
 MT short message delivery. The corresponding MAP service is
 MAP-MT-FORWARD-SHORT-MESSAGE, see 3GPP TS 29.002, section 12.9.
 
+[[gsup-msg-ready-for-sm-req]]
 ==== READY-FOR-SM Request
 
 Direction: MSC / SGSN => SMSC (via HLR)
@@ -759,6 +794,7 @@ indicates memory available situation (see TS GSM 04.11, section 7.3.2).
 The corresponding MAP service is MAP-READY-FOR-SM,
 see 3GPP TS 29.002, section 12.4.
 
+[[gsup-msg-ready-for-sm-err]]
 ==== READY-FOR-SM Error
 
 Direction: SMSC (via HLR) => MSC / SGSN
@@ -777,6 +813,7 @@ This message is used to indicate a negative result of an earlier
 MO SMMA (Memory Available) indication. The corresponding MAP
 service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
 
+[[gsup-msg-ready-for-sm-res]]
 ==== READY-FOR-SM Result
 
 Direction: SMSC (via HLR) => MSC / SGSN
@@ -793,6 +830,7 @@ This message is used to indicate a successful result of an earlier
 MO SMMA (Memory Available) indication. The corresponding MAP
 service is MAP-READY-FOR-SM, see 3GPP TS 29.002, section 12.4.
 
+[[gsup-msg-check-imei-req]]
 ==== CHECK-IMEI Request
 
 Direction: VLR => EIR (via HLR)
@@ -805,6 +843,7 @@ Direction: VLR => EIR (via HLR)
 |50|IMEI|<<gsup-ie-imei>>|M|TLV|11
 |===
 
+[[gsup-msg-check-imei-err]]
 ==== CHECK-IMEI Error
 
 Direction: EIR (via HLR) => VLR
@@ -817,6 +856,7 @@ Direction: EIR (via HLR) => VLR
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
+[[gsup-msg-check-imei-res]]
 ==== CHECK-IMEI Result
 
 Direction: EIR (via HLR) => VLR
@@ -829,6 +869,7 @@ Direction: EIR (via HLR) => VLR
 |51|IMEI Check Result|<<gsup-ie-imei-result>>|M|TLV|3
 |===
 
+[[gsup-msg-e-prep-ho-req]]
 ==== E Prepare Handover Request
 
 Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
@@ -844,6 +885,7 @@ Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-prep-ho-err]]
 ==== E Prepare Handover Error
 
 Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
@@ -859,6 +901,7 @@ Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-prep-ho-res]]
 ==== E Prepare Handover Result
 
 Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
@@ -874,6 +917,7 @@ Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-prep-subs-ho-req]]
 ==== E Prepare Subsequent Handover Request
 
 Direction: MSC-B=MSC-I => MSC-A (via HLR)
@@ -889,6 +933,7 @@ Direction: MSC-B=MSC-I => MSC-A (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-prep-subs-ho-err]]
 ==== E Prepare Subsequent Handover Error
 
 Direction: MSC-A => MSC-B=MSC-I (via HLR)
@@ -904,6 +949,7 @@ Direction: MSC-A => MSC-B=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-prep-subs-ho-res]]
 ==== E Prepare Subsequent Handover Result
 
 Direction: MSC-A => MSC-B=MSC-I (via HLR)
@@ -919,6 +965,7 @@ Direction: MSC-A => MSC-B=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-snd-end-sig-req]]
 ==== E Send End Signal Request
 
 Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
@@ -934,6 +981,7 @@ Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-snd-end-sig-err]]
 ==== E Send End Signal Error
 
 Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
@@ -949,6 +997,7 @@ Direction: MSC-A=MSC-I => MSC-B=MSC-T (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-snd-end-sig-res]]
 ==== E Send End Signal Result
 
 Direction: MSC-A => MSC-B=MSC-I (via HLR)
@@ -964,6 +1013,7 @@ Direction: MSC-A => MSC-B=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-proc-acc-sig-req]]
 ==== E Process Access Signalling Request
 
 Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
@@ -979,6 +1029,7 @@ Direction: MSC-B=MSC-T => MSC-A=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-forw-acc-sig-req]]
 ==== E Forward Access Signalling Request
 
 Direction: MSC-A => MSC-B=MSC-I (via HLR)
@@ -994,6 +1045,7 @@ Direction: MSC-A => MSC-B=MSC-I (via HLR)
 |62|AN-APDU|<<gsup-ie-an-apdu>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-close]]
 ==== E Close
 
 Direction: MSC-A => MSC-B (via HLR)
@@ -1008,11 +1060,13 @@ Direction: MSC-A => MSC-B (via HLR)
 |61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
 |===
 
+[[gsup-msg-e-abort]]
 ==== E Abort
 
 This message was added to GSUP for the inter-MSC handover. But so far it is not
 used yet.
 
+[[gsup-msg-e-routing-err]]
 ==== E Routing Error
 
 Direction: GSUP Server (HLR) => GSUP Client (MSC)
@@ -1037,41 +1091,55 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 
 [options="header",cols="10%,90%"]
 |===
-|Type|Description
-|0x04|Update Location Request
-|0x05|Update Location Error
-|0x06|Update Location Result
-|0x08|Send Authentication Info Request
-|0x09|Send Authentication Info Error
-|0x0a|Send Authentication Info Result
-|0x0b|Authentication Failure Report
-|0x0c|Purge MS Request
-|0x0d|Purge MS Error
-|0x0e|Purge MS Result
-|0x10|Insert Subscriber Data Request
-|0x11|Insert Subscriber Data Error
-|0x12|Insert Subscriber Data Result
-|0x14|Delete Subscriber Data Request
-|0x15|Delete Subscriber Data Error
-|0x16|Delete Subscriber Data Result
-|0x1c|Location Cancellation Request
-|0x1d|Location Cancellation Error
-|0x1e|Location Cancellation Result
-|0x20|Supplementary Service Request
-|0x21|Supplementary Service Error
-|0x22|Supplementary Service Result
-|0x24|MO-forwardSM Request
-|0x25|MO-forwardSM Error
-|0x26|MO-forwardSM Result
-|0x28|MT-forwardSM Request
-|0x29|MT-forwardSM Error
-|0x2a|MT-forwardSM Result
-|0x2c|READY-FOR-SM Request
-|0x2d|READY-FOR-SM Error
-|0x2e|READY-FOR-SM Result
-|0x30|CHECK-IMEI Request
-|0x31|CHECK-IMEI Error
-|0x32|CHECK-IMEI Result
+|Type|Name|Description
+|0x04|Update Location Request|<<gsup-msg-upd-loc-req>>
+|0x05|Update Location Error|<<gsup-msg-upd-loc-err>>
+|0x06|Update Location Result|<<gsup-msg-upd-loc-res>>
+|0x08|Send Authentication Info Request|<<gsup-msg-auth-info-req>>
+|0x09|Send Authentication Info Error|<<gsup-msg-auth-info-err>>
+|0x0a|Send Authentication Info Result|<<gsup-msg-auth-info-res>>
+|0x0b|Authentication Failure Report|<<gsup-msg-auth-fail-rep>>
+|0x0c|Purge MS Request|<<gsup-msg-purge-ms-reqs>>
+|0x0d|Purge MS Error|<<gsup-msg-purge-ms-err>>
+|0x0e|Purge MS Result|<<gsup-msg-purge-ms-res>>
+|0x10|Insert Subscriber Data Request|<<gsup-msg-ins-sub-req>>
+|0x11|Insert Subscriber Data Error|<<gsup-msg-ins-sub-err>>
+|0x12|Insert Subscriber Data Result|<<gsup-msg-ins-sub-res>>
+|0x14|Delete Subscriber Data Request|<<gsup-msg-del-sub-req>>
+|0x15|Delete Subscriber Data Error|<<gsup-msg-del-sub-err>>
+|0x16|Delete Subscriber Data Result|<<gsup-msg-del-sub-res>>
+|0x1c|Location Cancellation Request|<<gsup-msg-loc-cancel-req>>
+|0x1d|Location Cancellation Error|<<gsup-msg-loc-cancel-err>>
+|0x1e|Location Cancellation Result|<<gsup-msg-loc-cancel-res>>
+|0x20|Supplementary Service Request|<<gsup-msg-proc-supl-serv-req>>
+|0x21|Supplementary Service Error|<<gsup-msg-proc-supl-serv-err>>
+|0x22|Supplementary Service Result|<<gsup-msg-proc-supl-serv-res>>
+|0x24|MO-forwardSM Request|<<gsup-msg-mo-forwardsm-req>>
+|0x25|MO-forwardSM Error|<<gsup-msg-mo-forwardsm-err>>
+|0x26|MO-forwardSM Result|<<gsup-msg-mo-forwardsm-res>>
+|0x28|MT-forwardSM Request|<<gsup-msg-mt-forwardsm-req>>
+|0x29|MT-forwardSM Error|<<gsup-msg-mt-forwardsm-err>>
+|0x2a|MT-forwardSM Result|<<gsup-msg-mt-forwardsm-res>>
+|0x2c|READY-FOR-SM Request|<<gsup-msg-ready-for-sm-req>>
+|0x2d|READY-FOR-SM Error|<<gsup-msg-ready-for-sm-err>>
+|0x2e|READY-FOR-SM Result|<<gsup-msg-ready-for-sm-res>>
+|0x30|CHECK-IMEI Request|<<gsup-msg-check-imei-req>>
+|0x31|CHECK-IMEI Error|<<gsup-msg-check-imei-err>>
+|0x32|CHECK-IMEI Result|<<gsup-msg-check-imei-res>>
+|0x34|E Prepare Handover Request|<<gsup-msg-e-prep-ho-req>>
+|0x35|E Prepare Handover Error|<<gsup-msg-e-prep-ho-err>>
+|0x36|E Prepare Handover Result|<<gsup-msg-e-prep-ho-res>>
+|0x38|E Prepare Subsequent Handover Request|<<gsup-msg-e-prep-subs-ho-req>>
+|0x39|E Prepare Subsequent Handover Error|<<gsup-msg-e-prep-subs-ho-err>>
+|0x3a|E Prepare Subsequent Handover Result|<<gsup-msg-e-prep-subs-ho-res>>
+|0x3c|E Send End Signal Request|<<gsup-msg-e-snd-end-sig-req>>
+|0x3d|E Send End Signal Error|<<gsup-msg-e-snd-end-sig-err>>
+|0x3e|E Send End Signal Result|<<gsup-msg-e-snd-end-sig-res>>
+|0x40|E Process Access Signalling Request|<<gsup-msg-e-proc-acc-sig-req>>
+|0x44|E Forward Access Signalling Request|<<gsup-msg-e-forw-acc-sig-req>>
+|0x47|E Close|<<gsup-msg-e-close>>
+|0x4B|E Abort|<<gsup-msg-e-abort>>
+|0x4E|E Routing Error|<<gsup-msg-e-routing-err>>
 |===
 
 The category of the message is indicated by the last two bits of the type.
