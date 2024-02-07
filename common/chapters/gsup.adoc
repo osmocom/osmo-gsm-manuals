@@ -1041,9 +1041,9 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 |0x04|Update Location Request
 |0x05|Update Location Error
 |0x06|Update Location Result
-|0x08|Send Auth Info Request
-|0x09|Send Auth Info Error
-|0x0a|Send Auth Info Result
+|0x08|Send Authentication Info Request
+|0x09|Send Authentication Info Error
+|0x0a|Send Authentication Info Result
 |0x0b|Authentication Failure Report
 |0x0c|Purge MS Request
 |0x0d|Purge MS Error
