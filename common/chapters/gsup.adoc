@@ -1379,6 +1379,7 @@ IEI that shall be used for the encoding.
 |0x12|Access Point Name|<<gsup-ie-apn>>
 |0x13|QoS|<<gsup-ie-qos>>
 |0x14|PDP-Charging Characteristics|<<gsup-ie-charging>>
+|0x15|PCO|<<gsup-ie-pco>>
 |0x20|RAND|<<gsup-ie-rand>>
 |0x21|SRES|<<gsup-ie-sres>>
 |0x22|Kc|<<gsup-ie-kc>>
@@ -1527,6 +1528,12 @@ used by the SGSN or VLR when activating a PDP context.
 }
 ----
 
+[[gsup-ie-pco]]
+==== Protocol Configuration Options (PCO)
+
+This encodes the Protocol Configuration Options (PCO) of 3GPP TS 29.060 clause
+7.7.31, which are the same as those specified in 3GPP TS 24.008 10.5.6.3. It
+will be used by the ePDG during the PDP Context activation.
 
 [[gsup-ie-hlr]]
 ==== HLR Number encoded as 3GPP TS 09.02 ISDN-AddressString
