@@ -1088,6 +1088,53 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 |31|Session State|<<gsup-ie-session-state>>|O|TLV|3
 |===
 
+[[gsup-msg-epdg-tunnel-req]]
+==== ePDG Tunnel Request
+
+Direction: GSUP Client (strongswan) => GSUP Server (ePDG)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|15|PCO|<<gsup-ie-pco>>|O|TLV|1-...
+|28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|O|TLV|2-...
+|===
+
+[[gsup-msg-epdg-tunnel-err]]
+==== ePDG Tunnel Error
+
+Direction: GSUP Server (ePDG) => GSUP Client (strongswan)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|02|Cause|<<gsup-ie-cause>>|M|TLV|3
+|===
+
+[[gsup-msg-epdg-tunnel-res]]
+==== ePDG Tunnel Result
+
+Direction: GSUP Server (ePDG) => GSUP Client (strongswan)
+
+[options="header",cols="5%,45%,20%,10%,10%,10%"]
+|===
+|IEI|IE|Type|Presence|Format|Length
+|  |Message Type|<<gsup-ie-msgtype>>|M|V|1
+|01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
+|04|PDP info complete|<<gsup-ie-empty>>|M|TLV|2
+|05|PDP info|<<gsup-ie-pdpinfo>>|M|TLV|2-N
+|15|PCO|<<gsup-ie-pco>>|O|TLV|1-...
+|28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
+|60|Source Name|<<gsup-ie-source-name>>|O|TLV|2-...
+|===
 
 === Information Elements
 
@@ -1145,6 +1192,9 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 |0x47|E Close|<<gsup-msg-e-close>>
 |0x4B|E Abort|<<gsup-msg-e-abort>>
 |0x4E|E Routing Error|<<gsup-msg-e-routing-err>>
+|0x50|ePDG Tunnel Request|<<gsup-msg-epdg-tunnel-req>>
+|0x51|ePDG Tunnel Error|<<gsup-msg-epdg-tunnel-err>>
+|0x52|ePDG Tunnel Result|<<gsup-msg-epdg-tunnel-res>>
 |===
 
 The category of the message is indicated by the last two bits of the type.
