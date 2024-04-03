@@ -20,7 +20,7 @@ BUILDDIR = $(OSMO_GSM_MANUALS_DIR)/build
 COMMONDIR = $(OSMO_GSM_MANUALS_DIR)/common
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
-GIT_DATE := $(shell $(OSMO_GSM_MANUALS_DIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at" ../.`)
+GIT_DATE := $(shell $(OSMO_GSM_MANUALS_DIR)/build/unix-time-to-fmt.py `git log -n 1 "--pretty=%at"`)
 
 # prepend the document name with the version numbe suffix
 #DOCS_VER = $(foreach P, $(ASCIIDOC_NAME), $(P)-v$(shell xmllint --recover --xpath "//revnumber[position()=last()]/text()" $(P)-docinfo.xml 2>/dev/null))
