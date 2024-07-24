@@ -1,3 +1,26 @@
+osmo-gsm-manuals-dev (1.6.0) unstable; urgency=medium
+
+  [ Pau Espin Pedrol ]
+  * sigtran: Document SCTP INIT VTY parameters
+  * Update spec reference s/TS 04.08/TS 24.008/
+  * gsup.adoc: Update spec reference s/TS 09.60/TS 29.060/
+  * gsup: Convert PDP-Type IE to PDP-Address IE
+  * gsup.adoc: Fix typo
+  * gsup.adoc: Fix Authentication Info message naming in table
+  * gsup.adoc: Add links to section of each message type in table
+  * gsup.adoc: Add conditional 'PDP Info' IE to Auth Info Req
+  * gsup: Introduce a new PCO IE
+  * gsup: Document ePDG Tunnel Req/Res/Err
+
+  [ Oliver Smith ]
+  * build/Makefile.asciidoc: fix GIT_DATE
+  * Cosmetic: build/Makefile.asciidoc: remove comments
+
+  [ Neels Hofmeyr ]
+  * add static SS7 routing example to cs7-config.adoc
+
+ -- Oliver Smith <osmith@sysmocom.de>  Wed, 24 Jul 2024 10:32:07 +0200
+
 osmo-gsm-manuals-dev (1.5.0) unstable; urgency=medium
 
   [ Max ]
