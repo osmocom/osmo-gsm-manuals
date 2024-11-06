@@ -644,9 +644,9 @@ Direction: EUSE / HLR => MSC
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |30|Session ID|<<gsup-ie-session-id>>|M|TLV|6
 |31|Session State|<<gsup-ie-session-state>>|M|TLV|3
-|02|Cause|<<gsup-ie-cause>>|M|TLV|3
 |===
 
 [[gsup-msg-proc-supl-serv-res]]
@@ -1082,11 +1082,11 @@ Direction: GSUP Server (HLR) => GSUP Client (MSC)
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
+|30|Session ID|<<gsup-ie-session-id>>|O|TLV|6
+|31|Session State|<<gsup-ie-session-state>>|O|TLV|3
 |0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |60|Source Name|<<gsup-ie-source-name>>|M|TLV|2-...
 |61|Destination Name|<<gsup-ie-destination-name>>|M|TLV|2-...
-|30|Session ID|<<gsup-ie-session-id>>|O|TLV|6
-|31|Session State|<<gsup-ie-session-state>>|O|TLV|3
 |===
 
 [[gsup-msg-epdg-tunnel-req]]
@@ -1099,9 +1099,9 @@ Direction: GSUP Client (strongswan) => GSUP Server (ePDG)
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
-|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |15|PCO|<<gsup-ie-pco>>|O|TLV|1-...
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |60|Source Name|<<gsup-ie-source-name>>|O|TLV|2-...
 |===
 
@@ -1115,8 +1115,8 @@ Direction: GSUP Server (ePDG) => GSUP Client (strongswan)
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
-|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |02|Cause|<<gsup-ie-cause>>|M|TLV|3
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |===
 
 [[gsup-msg-epdg-tunnel-res]]
@@ -1129,11 +1129,11 @@ Direction: GSUP Server (ePDG) => GSUP Client (strongswan)
 |IEI|IE|Type|Presence|Format|Length
 |  |Message Type|<<gsup-ie-msgtype>>|M|V|1
 |01|IMSI|<<gsup-ie-imsi>>|M|TLV|2-10
-|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |04|PDP info complete|<<gsup-ie-empty>>|M|TLV|2
 |05|PDP info|<<gsup-ie-pdpinfo>>|M|TLV|2-N
 |15|PCO|<<gsup-ie-pco>>|O|TLV|1-...
 |28|CN Domain|<<gsup-ie-cndomain>>|O|TLV|3
+|0a|Message Class|<<gsup-ie-message-class>>|M|TLV|3
 |60|Source Name|<<gsup-ie-source-name>>|O|TLV|2-...
 |===
 
