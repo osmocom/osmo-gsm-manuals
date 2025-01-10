@@ -227,3 +227,13 @@
   License.  https://www.gnu.org/licenses/agpl-3.0.en.html
 - [[[freeswitch_pbx]]] FreeSWITCH SIP PBX
   https://freeswitch.org
+
+- [[[tw-ts-001]]] TW-TS-001: Enhanced RTP transport of FR and EFR codec frames
+  in an IP-based GSM RAN
+  https://www.freecalypso.org/specs/tw-ts-001-v010100.txt
+- [[[tw-ts-002]]] TW-TS-002: Enhanced RTP transport of HRv1 codec frames
+  in an IP-based GSM RAN
+  https://www.freecalypso.org/specs/tw-ts-002-v010100.txt
+- [[[tw-ts-003]]] TW-TS-003: BSSMAP extension for selection of enhanced RTP
+  transport formats
+  https://www.freecalypso.org/specs/tw-ts-003-v010002.txt
