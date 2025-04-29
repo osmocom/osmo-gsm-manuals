@@ -169,6 +169,9 @@
 - [[[etsi-ts101220]]] ETSI TS 101 220: Smart Cards; ETSI numbering
   system for telecommunication application providers
   https://www.etsi.org/deliver/etsi_ts/101200_101299/101220/12.00.00_60/ts_101220v120000p.pdf
+- [[[etsi-ts102671]]] ETSI TS 102 671: Smart Cards; Machine to Machine UICC;
+  Physical and logical characteristics
+  https://www.etsi.org/deliver/etsi_ts/102600_102699/102671/18.01.00_60/ts_102671v180100p.pdf
 
 - [[[ieee-802.1q]]] IEEE 802.1Q: Bridges and Bridged Networks
   https://ieeexplore.ieee.org/document/6991462
