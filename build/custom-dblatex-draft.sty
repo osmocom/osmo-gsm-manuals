@@ -20,6 +20,10 @@
 \usepackage{alltt}
 \usepackage{upquote}
 
+% "DRAFT" on first page
+\definecolor{LtGrey}{rgb}{0.875,0.875,0.875}
+\AddToShipoutPicture*{ \AtTextCenter{ \makebox(0,0)[c]{\resizebox{\textwidth}{!}{ \rotatebox{45}{\textsf{\textbf{\color{LtGrey}DRAFT}}}}} } }
+
 \def\Company{sysmocom - s.f.m.c. GmbH}
 
 \def\DBKcover{

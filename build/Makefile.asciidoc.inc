@@ -27,7 +27,7 @@ ASCIIDOC_NAME = $(patsubst %.adoc,%,$(ASCIIDOC))
 ASCIIDOC_PDF = $(ASCIIDOC_NAME:%=%.pdf)
 ASCIIDOC_CHECKS = $(ASCIIDOC_NAME:%=%.check)
 
-ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex.sty
+ASCIIDOCSTYLE ?= $(BUILDDIR)/custom-dblatex-draft.sty
 
 CLEAN_FILES += $(ASCIIDOC_NAME:%=%__*.png) $(ASCIIDOC_NAME:%=%__*.svg) $(ASCIIDOC_CHECKS)
 CLEAN_FILES += $(ASCIIDOC_PDF) $(ASCIIDOC_NAME:%=%.html)
