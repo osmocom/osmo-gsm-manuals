@@ -1510,6 +1510,10 @@ The MSISDN is encoded as an ISDN-AddressString in 3GPP TS 09.02 and Called Party
 BCD Number in 3GPP TS 24.008. It will be stored by the SGSN or VLR and then passed as is
 to the GGSN during the activation of the primary PDP Context.
 
+The length of the BCD content specifies how many subsequent octets contain BCD data
+(it does *not* indicate the number of digits). This length must be less than the total
+length of the IE content. Any octets following the BCD content shall be ignored.
+
 [packetdiag]
 ----
 {
@@ -1519,9 +1523,7 @@ to the GGSN during the activation of the primary PDP Context.
 	0-6:	PDP type IEI
 	7:	Res
 	8-15:	Length of IE content
-	16-19:	NPI
-	20-22:	TON
-	23:	ext
+	16-23:	Length of BCD content
 	24-27:	Digit 1
 	28-31:	Digit 2
 	32-35:	Digit ...
@@ -1628,6 +1630,7 @@ of Supplementary Services encoded according to GSM TS 04.80.
 ==== IMEI
 
 The IMEI encoded as Called Party BCD Number in 3GPP TS 24.008.
+This IE has the same format as described in <<gsup-ie-msisdn>>.
 
 [[gsup-ie-imei-result]]
 ==== IMEI Check Result
