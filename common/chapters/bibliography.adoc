@@ -184,7 +184,7 @@
   https://tools.ietf.org/html/rfc793
 - [[[ietf-rfc1035]]] IETF RFC 1035: Domain Names - Implementation and Specification
   https://tools.ietf.org/html/rfc1035
-- [[[ietf-rfc1350]]] IETF RFC 1350: Trivial File Transfer Protool
+- [[[ietf-rfc1350]]] IETF RFC 1350: Trivial File Transfer Protocol
   https://tools.ietf.org/html/rfc1350
 - [[[ietf-rfc2131]]] IETF RFC 2131: Dynamic Host Configuration Protocol
   https://tools.ietf.org/html/rfc2131
@@ -201,7 +201,7 @@
   https://tools.ietf.org/html/rfc3596
 - [[[ietf-rfc3868]]] IETF RFC 3868: SCCP User Adaptation Layer
   https://tools.ietf.org/html/rfc3868
-- [[[ietf-rfc4165]]] IETF RFC 4165: Message Transfer Part 2 Peer-to-Peeer Adaptation Layer
+- [[[ietf-rfc4165]]] IETF RFC 4165: Message Transfer Part 2 Peer-to-Peer Adaptation Layer
   https://tools.ietf.org/html/rfc4165
 - [[[ietf-rfc4251]]] IETF RFC 4251: The Secure Shell (SSH) Protocol Architecture
   https://tools.ietf.org/html/rfc4251
