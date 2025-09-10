@@ -381,10 +381,15 @@ An ASP has the following properties:
 
 === Osmocom SS7 Routes
 
-An Osmocom SS7 Route routes traffic with a matching destination point
-code and point code mask (similar to IP Address + Netmask) towards a
-specified SS7 Linkset or Application Server.  The Linkset or
+An Osmocom SS7 Route holds information to route traffic with a matching
+destination point code and point code mask (similar to IP Address + Netmask)
+towards a specified SS7 Linkset or Application Server.  The Linkset or
 Application Servers are identified by their name.
+
+Routes are inserted in a routing table, where they are ordered first based
+on prefix mask length (longest prefix first) and then on priority (lowest value first).
+As a result, more specific routes (eg. a single Point Code) will match and
+be used before more generic ones (eg. a subnet).
 
 .Major Attributes of an Osmocom SS7 Application Server Process
 [options="header",cols="25%,75%"]
@@ -393,8 +398,16 @@ Application Servers are identified by their name.
 |Point Code|Destination Point Code for this route
 |Mask|Destination Mask for this route (like an IP netmask)
 |Linkset/AS Name|Destination Linkset or AS, identified by name
+|Priority|Priority of the route in the routing table; lower value means higher priority
 |====
 
+The `show cs7 instance <0-15> route` command can be used on the
+VTY to obtain the list of routes inserted in the system routing table.
+
+The `show cs7 instance <0-15> route-lookup <DPC> from <OPC> sls <SLS>` command
+can be used on the VTY to test and debug routing of specific traffic on the
+currently running routing table, similar to what `ip route get` linux command
+does in the IP world.
 
 === Osmocom SCCP Instances
 
