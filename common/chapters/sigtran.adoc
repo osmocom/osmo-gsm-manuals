@@ -419,7 +419,7 @@ cs7 instance 0
 transmitting user data to us.
 
 In order to be able to use this feature, the SCTP association peer must support
-the ASCONF extension. The extension support is negotiation during the INIT
+the ASCONF extension. The extension support is negotiated during the INIT
 handshake of the association. Furthermore, for ASCONF features to work properly,
 the assoc also needs to announce/use the AUTH extension, as per RFC5061 section
 4.2.7. Otherwise, the peer receiving an SCTP INIT with
@@ -430,7 +430,8 @@ behavior can be tweaked through sysctl "net.sctp.addip_noauth_enable").
 As of the time of writing this documentation (linux 6.4.12) and since basically
 ever, those extensions are runtime-disabled by default. They can be enabled per
 socket using the kernel sockopts SCTP_ASCONF_SUPPORTED and SCTP_AUTH_SUPPORTED,
-and that's what the Osmocom stack is currently doing for all SCTP sockets.
+and that's what the Osmocom stack is currently doing for all its SCTP sockets.
+
 However, those sockopts are farily new (linux v5.4), which means user running
 older kernels will see in the logs setting those sockopts fail, but connection
 will keep ongoing, simply without those features available (so setting `primary`
