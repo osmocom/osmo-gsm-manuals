@@ -1276,7 +1276,7 @@ Examples:
 ==== PDP Context ID
 
 The PDP type context ID IE consists of a single integer byte wrapped in
-a TLV.
+a TLV. Values for PDP Context ID start at 1 (0 is reserved).
 
 [packetdiag]
 ----
