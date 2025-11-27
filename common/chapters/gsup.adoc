@@ -363,6 +363,7 @@ Direction: SGSN / VLR => HLR
 |26|AUTS|<<gsup-ie-auts>>|C|TLV|18
 |20|RAND|<<gsup-ie-rand>>|C|TLV|18
 |05|PDP info|<<gsup-ie-pdpinfo>>|C|TLV|2-N
+|2a|Current RAT Type|<<gsup-ie-current-rat-type>>|O|TLV|3
 |===
 
 The conditional 'AUTS' and 'RAND' IEs are both present in case the SIM
@@ -1735,6 +1736,20 @@ handover. See 3GPP TS 44.018 10.5.2.31 for reference.
 
 This IE indicates why an event is happening on the BSSAP interface. See 3GPP TS
 48.008 3.2.2.5 for reference.
+
+[[gsup-ie-current-rat-type]]
+==== Current RAT Type
+
+This IE contains the current RAT Type.
+
+.Current RAT Type values
+[options="header",cols="15%,85%"]
+|===
+|Type|Description
+|0x01|GERAN
+|0x02|UTRAN
+|0x03|EUTRAN
+|===
 
 [[gsup-ie-cause-sm]]
 ==== Session Management Cause
