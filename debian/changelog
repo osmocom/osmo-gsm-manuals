@@ -1,3 +1,23 @@
+osmo-gsm-manuals-dev (1.7.0) unstable; urgency=medium
+
+  [ Harald Welte ]
+  * bibliography: Add ETS TS 102 671 (MFF2)
+  * fix various typos (thanks Denis)
+
+  [ Oliver Smith ]
+  * Add separate asciidoc style file without draft
+  * GSUP: PDP Context ID: start at 1
+  * GSUP: add missing Current RAT Type IE
+
+  [ Andreas Eversberg ]
+  * Corrected description of MSISDN IE and IMEI IE coding
+
+  [ Pau Espin Pedrol ]
+  * sigtran.adoc: small fixes and improvements
+  * sigtran-osmocom.adoc: Improve route section
+
+ -- Pau Espin Pedrol <pespin@sysmocom.de>  Wed, 03 Dec 2025 16:07:46 +0100
+
 osmo-gsm-manuals-dev (1.6.1) unstable; urgency=medium
 
   [ Mychaela N. Falconia ]
