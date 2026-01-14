@@ -288,6 +288,7 @@ at the GSMTAP port and discard anything arriving at it.  If the GSMTAP recording
 local address, upon creation of the GSMTAP log target, an attempt will be made to create a dummy sink socket
 to avoid such problems automatically.
 
+[[logging_file]]
 ==== Logging to a file
 
 As opposed to Logging to the VTY, logging to files is persistent and
@@ -300,15 +301,29 @@ To configure a new log file, enter the following sequence of commands:
 ----
 OsmoBSC> enable
 OsmoBSC# configure terminal
-OsmoBSC(config)# log file /path/to/my/file
+OsmoBSC(config)# log file /path/to/my/file <1>
 OsmoBSC(config-log)#
 ----
+<1> Configure a file logging target writing to /path/to/my/file
 
 This leaves you at the config-log prompt, from where you can set the
 detailed configuration for this log file.  The available commands at
 this point are identical to configuring logging on the VTY, they include
 `logging filter`, `logging level` as well as `logging color`
 and `logging timestamp`.
+
+The file logging target will by default use a synchronous non-blocking I/O
+write. If writing cannot be performed synchronously (would block), the message
+is stored in a workqueue where asynchronous write (driven by poll event loop)
+will be performed at a later stage. The file logging target can be configured
+during the VTY `log file` VTY command to perform blocking I/O with the
+`blocking-io` parameter. This I/O mode should not be used in any osmocom program
+driven by an event loop (which includes any program using a VTY), since it may
+block the thread for an unspecified (potentially long or even infinite) amount
+of time and hence prevent the event loop to run and process events. This I/O
+mode should only be used under specific circumstances, like debugging a crash,
+in which case it's interesting to get the logging output to the UDP socket and
+hence recorded before the program crashes.
 
 TIP: Don't forget to use the `copy running-config startup-config` (or
 its short-hand `write file`) command to make your logging configuration
@@ -440,3 +455,7 @@ OsmoBSC# configure terminal
 OsmoBSC(config)# log stderr
 OsmoBSC(config-log)#
 ----
+
+The stderr logging target can be configured during the VTY `log stderr` VTY
+command to perform blocking I/O with the `blocking-io` parameter. See
+<<logging_file>> for more information.
