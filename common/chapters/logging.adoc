@@ -440,6 +440,25 @@ In this example, logging messages will be pre-processed by libosmocore before
 being passed to systemd.  No additional fields will be attached, except the
 logging level (`PRIORITY`).  This mode is similar to _syslog_ and _stderr_.
 
+NOTE: systemd-journal logging target uses libsystemd, which implements _Native
+Journal Protocol_ (_AF_UNIX _DATAGRAM_ socket). That socket is internally
+configured in synchronous blocking I/O mode, which means transmitting a big
+amount of messages or text over it in a short amount of time (before
+systemd-journald has time to read it) could potentially block the osmocom
+program's thread issuing the logging. libsystemd currently sets the _AF_UNIX_
+socket `SO_SNDBUF` to 8MB. In Linux, the `SO_SNDBUF` value being set on the
+socket will be trimmed by the kernel to a maximum allowed by sysctl
+`net.core.wmem_max`. Hence, if you want to be on a safer side minimizing
+dropping messages or blocking the process (depending on the I/O mode set), make
+sure sysctl `net.core.wmem_max` on your system is set to `8388608` (8MB) or
+more. Besides, the kernel limits the amount of messages queued in _AF_UNIX_
+sockets to value set in sysctl `net.unix.max_dgram_qlen`, so you may also want
+to increase that one to be on the safe side if planning to log with a high
+frequency.
+
+NOTE: Linux Kernel used to have a `net.core.wmem_max` of `212992`(208KB) until
+recently (2025, a6d4f25888b83b8300aef28d9ee22765c1cc9b34), where it was
+increased to `4194304` (4MB) .
 
 ==== Logging to stderr
 
