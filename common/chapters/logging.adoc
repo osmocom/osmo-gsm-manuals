@@ -215,27 +215,67 @@ It's configured as follows:
 ----
 OsmoBSC> enable
 OsmoBSC# configure terminal
-OsmoBSC(config)# log gsmtap 192.168.2.3
+OsmoBSC(config)# log gsmtap 192.168.2.3 <1>
 OsmoBSC(config-log)#
 ----
+<1> Configure a GSMTAP logging target recording to 192.168.2.3
 
 The hostname/ip argument is optional: if omitted the default 127.0.0.1 will be used. The log strings inside GSMTAP are already
 supported by Wireshark. Capturing for `port 4729` on appropriate interface will reveal log messages including source file
 name and line number as well as application. This makes it easy to consolidate logs from several different network components
 alongside the air frames. You can also use Wireshark to quickly filter logs for a given subsystem, severity, file name etc.
 
+The GSMTAP logging target also has different implementation I/O modes, which can
+be configured during the VTY "log gmstap" VTY command:
+
+nonblocking-io::
+	Use non-blocking, synchronous I/O. This is the default mode. It will set
+	the GSMTAP source socket as non-blocking, and attempt synchronous write
+	to the UDP socket, discarding a message if the UDP socket's send buffer
+	is full during write.
+blocking-io::
+	Use blocking, synchronous I/O. It will use the GSMTAP source socket in
+	blocking mode, and attempt synchronous write to the UDP socket, blocking
+	the entire thread if the UDP socket's send buffer is full during write.
+	This I/O mode should not be used in any osmocom program driven by an
+	event loop (which includes any program using a VTY), since it may block
+	the thread for an unspecified (potentially long or even infinite)
+	amount of time and hence prevent the event loop to run and process
+	events. This I/O mode should only be used under specific circumstances,
+	like debugging a crash, in which case it's interesting to get the
+	logging output to the UDP socket and hence recorded before the program
+	crashes.
+wq::
+	Workqueue mode: Use non-blocking, asynchronous I/O. It will set the
+	GSMTAP source socket as non-blocking, and attempt asynchronous write to
+	the UDP socket by means of a work queue driven by the process poll event
+	loop, delaying writing to the UDP socket until there's enough free space
+	in its send buffer. Since the workqueue has a maximum size, messages
+	will be discarded similar to _nonblocking-io_ once the UDP socket's send
+	buffer *and* the GSMTAP log target workqueue are full. This I/O mode
+	provides some extra buffering space in the userspace workqueue, at the
+	expense of extra overhead and delay to transmit messages asynchronously
+	waiting for POLLOUT event from the UDP socket.
+
+In any of the I/O modes above, the UDP socket send buffer size of the GSMTAP log
+target influences where messages may be dropped (_nonblocking-io_|_wq_) or the
+process blocked (_blocking-io_) whenever a high number of messages or test are
+transmitted in a short time. For that reason, the GSMTAP log target will attempt
+to set the `SO_SNDBUF` sockopt of the UDP socket to 4MB. In Linux, the
+`SO_SNDBUF` value being set on the socket will be trimmed by the kernel to a
+maximum allowed by sysctl `net.core.wmem_max`. Hence, if you want to be on a
+safer side minimizing dropping messages or blocking the process (depending on
+the I/O mode set), make sure sysctl `net.core.wmem_max` on your system is set to
+`4194304` (4MB) or more.
+
+NOTE: Linux Kernel used to have a `net.core.wmem_max` of `212992`(208KB) until
+recently (2025, a6d4f25888b83b8300aef28d9ee22765c1cc9b34), where it was
+increased to `4194304` (4MB) .
+
 [[fig-wireshark-gsmtap-log]]
 .Wireshark with logs delivered over GSMTAP
 image::./common/images/wireshark-gsmtap-log.png[]
 
-Note: the logs are also duplicated to stderr when GSMTAP logging is configured because stderr is the default log target which is
-initialized automatically. To descrease stderr logging to absolute minimum, you can configure it as follows:
-----
-OsmoBSC> enable
-OsmoBSC# configure terminal
-OsmoBSC(config)# log stderr
-OsmoBSC(config-log)# logging level force-all fatal
-----
 
 NOTE: Every time you generate GSMTAP messages and send it to a unicast (non-broadcast/multicast) IP address,
 please make sure that the destination IP address actually has a socket open on the specified port, or drops
@@ -244,7 +284,9 @@ operating system will likely generate ICMP port unreachable messages.  Those ICM
 arriving at the source (the host on which you run the Osmocom software sending GSMTAP), suppress generation
 of further GSMTAP messages for some time, resulting in incomplete files.  In case of doubt, either send GSMTAP
 to multicast IP addresses, or run something like `nc -l -u -p 4729 > /dev/null` on the destination host to
-open the socket at the GSMTAP port and discard anything arriving at it.
+at the GSMTAP port and discard anything arriving at it.  If the GSMTAP recording address is identified as a
+local address, upon creation of the GSMTAP log target, an attempt will be made to create a dummy sink socket
+to avoid such problems automatically.
 
 ==== Logging to a file
 
