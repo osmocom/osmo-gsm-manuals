@@ -25,6 +25,13 @@ cpu-sched
 ----
 <1> Configure process to use _SCHED_RR_ policy with real time priority 1
 
+NOTE: Running a process under real time priority requires CAP_SYS_NICE
+capabilities. In order to avoid running the process as _root_ user, you can
+either modify the binary permissions with `setcap "CAP_SYS_NICE+ep"
+/path/to/binary`, or allow the user running the program to set rtprio by adding
+a file _/etc/security/limits.d/youruser_allow-rtprio.conf_ with something like
+`youruser - rtprio 99`. See `man 7 sched` for more information on the topic.
+
 [[vty_cpu_sched_cpu_affinity_mask]]
 === CPU-Affinity Mask
 
