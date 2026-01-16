@@ -358,9 +358,19 @@ this point are identical to configuring logging on the VTY, they include
 `logging filter`, `logging level` as well as `logging color`
 and `logging timestamp`.
 
-NOTE: Syslog daemons will normally automatically prefix every message
+TIP: Syslog daemons will normally automatically prefix every message
 with a time-stamp, so you should disable the libosmocore time-stamping
 by issuing the `logging timestamp 0` command.
+
+NOTE: Typical syslog implementations (such as glibc's one) write to _AF_UNIX_
+socket in `/dev/log` in a synchronous blocking I/O fashion, which means
+transmitting a big amount of messages or text over it in a short amount of time
+(before syslogd has time to read it) could potentially block the osmocom
+program's thread issuing the logging. It is hence advised avoiding use of this
+log target to log notable amounts of information in any osmocom program driven
+by an event loop (which includes any program using a VTY), since it may block
+the thread for an unspecified (potentially long or even infinite) amount of time
+and hence prevent the event loop to run and process events.
 
 
 ==== Logging to systemd-journal
