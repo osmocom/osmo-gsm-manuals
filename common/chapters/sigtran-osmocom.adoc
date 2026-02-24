@@ -181,6 +181,106 @@ But then we also have the return direction:
   user has no information (nor to worry about ) any "physical"
   signaling links.
 
+==== Loadshare with TCAP-aware routing
+
+A TCAP dialogue consists of multiple messages that depend on each other.
+This means that simply load-sharing messages between ASPs will not work
+unless the ASPs are able to share state about ongoing TCAP dialogues.
+
+<<ietf-rfc3868>> states in Ch. A.3.1 that "[...] when TCAP messages are
+transported, load sharing is only possible for the first message in a
+TCAP dialogue (TC_Begin, TC_Query, TC_Unidirectional).  All other TCAP
+messages in the same dialogue are sent to the same ASP that was selected
+for the first message, unless the ASPs are able to share state and
+maintain sequenced delivery."
+
+The Osmocom SIGTRAN stack supports TCAP-aware routing as described above
+in traffic-mode loadshare. Additionally, ASPs connected through IPA/SCCPlite
+can use an IPA-based protocol to register ranges of TCAP Ids. This ensures
+that a TC_Begin with a given TCAP Id will already be routed to this specific
+ASP.
+
+The following snippet enables TCAP-aware routing for all ASPs inside an AS:
+
+----
+cs7 instance 0
+ as as-ipa-loadshare-0 ipa
+  traffic-mode loadshare
+  tcap-routing
+----
+
+===== TCAP range management
+
+IPA-based ASPs can pre-register ranges of TIDs to be routed directly to them.
+This protocol is wrapped inside the IPA multiplex header with the stream
+identifier set to IPAC_PROTO_OSMO (0xEE). The extension header inside has the
+protocol ID 0x09.
+
+.IPA header for the TCAP range messages
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 32
+
+	0-15: 	Length (network byte order)
+	16-23:	Stream ID (0xEE)
+	24-31: 	Protocol (0x09)
+}
+----
+
+All messages contain a sequence number so a response can be attributed to a
+request. The message to add a TCAP range contains the start and end of the TID
+as well as a point code and subsystem number to restrict this range to.
+To match all point codes use the value 0xFFFFFFFF while subsystem 0x00 matches
+all subsystems.
+
+.TCAP routing add range
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 32
+
+	0-7: 	Message type add range (0x01)
+	8-39:	Sequence no.
+  40-71: TID start
+  72-103: TID end
+  104-135: Point code
+  136-143: Subsystem no.
+}
+----
+
+.TCAP routing ACK
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 32
+
+	0-7: 	Message type ACK (0x02)
+	8-39:	Sequence no.
+}
+----
+
+.TCAP routing NACK
+[packetdiag]
+----
+{
+	colwidth = 32
+	node_height = 32
+
+	0-7: 	Message type NACK (0x03)
+	8-39:	Sequence no.
+  40-47: Cause
+}
+----
+
+Currently the cause can be 0x01 to indicate a general failure or 0x72 if part
+of the TCAP range is already registered by another ASP.
+
+Ranges are removed when an ASP disconnects, there is currently no other way to
+remove a TCAP range.
 
 === Minimal Osmocom SIGTRAN configurations for small networks
 
