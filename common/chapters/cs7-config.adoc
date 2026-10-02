@@ -51,7 +51,7 @@ cs7 instance 0
  asp asp-clnt-OsmoMSC-A-Iu 2905 0 m3ua
   remote-ip 127.0.0.1
   role asp
-  sctp-role client
+  transport-role client
  as as-clnt-OsmoMSC-A-Iu m3ua
   asp asp-clnt-OsmoMSC-A-Iu
   routing-key 2 0.23.1
@@ -88,7 +88,7 @@ cs7 instance 0
   # optional: local bind to a specific IP
   local-ip 10.9.8.7
   role asp
-  sctp-role client
+  transport-role client
 ----
 
 Be aware that such an `asp` needs to be linked to an `as`, see <<as_and_asp>>.
@@ -239,7 +239,7 @@ cs7 instance 0
   # where to reach the STP:
   remote-ip 127.0.0.1
   role asp
-  sctp-role client
+  transport-role client
  as my-as m3ua
   asp my-asp
 ----
@@ -256,7 +256,7 @@ cs7 instance 0
  asp my-asp 2905 0 m3ua
   remote-ip 127.0.0.1
   role asp
-  sctp-role client
+  transport-role client
  as my-as m3ua
   routing-key 2 0.23.1
 ----
@@ -268,7 +268,7 @@ cs7 instance 0
  asp my-asp 2905 0 m3ua
   remote-ip 127.0.0.1
   role asp
-  sctp-role client
+  transport-role client
  as my-as m3ua
   asp my-asp
   routing-key 2 0.23.1
@@ -402,7 +402,7 @@ cs7 instance 0
  asp mybsc-0 2905 2905 m3ua
   remote-ip 2.2.2.2
   local-ip 1.1.1.1
-  sctp-role client
+  transport-role client
  as mybsc0 m3ua
   asp mybsc0-0
   routing-key 1 1.1.1
@@ -451,7 +451,7 @@ cs7 instance 0
  asp mymsc-0 2905 2905 m3ua
   remote-ip 2.2.2.2
   local-ip 3.3.3.3
-  sctp-role client
+  transport-role client
  as mymsc0 m3ua
   asp mymsc0-0
   routing-key 3 3.3.3
@@ -468,7 +468,7 @@ cs7 instance 0
  asp mybsc-0 2905 0 m3ua
   remote-ip 2.2.2.2
   local-ip 1.1.1.1
-  sctp-role client
+  transport-role client
  as mybsc0 m3ua
   asp mybsc0-0
 
@@ -497,7 +497,7 @@ cs7 instance 0
  asp mymsc-0 2905 0 m3ua
   remote-ip 2.2.2.2
   local-ip 3.3.3.3
-  sctp-role client
+  transport-role client
  as mymsc0 m3ua
   asp mymsc0-0
 ----

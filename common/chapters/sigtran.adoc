@@ -449,11 +449,11 @@ Several SCTP INIT parameters can be configured through VTY, which will be passed
 to the Linux Kernel SCTP stack and used whenever an association is being
 established.
 
-On the client side (see <<sctp_role>>), the parameters are configured in the `asp` node:
+On the client side (see <<transport_layer_role>>), the parameters are configured in the `asp` node:
 ----
 cs7 instance 0
  asp my-asp 2905 0 m3ua
-  sctp-role client
+  transport-role client
   sctp-param init num-ostreams 250 <1>
   sctp-param init max-instreams 300 <2>
   sctp-param init max-attempts 3 <3>
@@ -468,11 +468,11 @@ supported. This value is transmitted during SCTP INIT packet.
 connection failed.
 <4> Retransmit an SCTP INIT message after 10000 ms if no answer is received.
 
-On the server side (see <<sctp_role>>), the parameters are configured in the `listen` node:
+On the server side (see <<transport_layer_role>>), the parameters are configured in the `listen` node:
 ----
 cs7 instance 0
  asp my-asp 2905 0 m3ua
-  sctp-role server
+  transport-role server
  listen m3ua 2905
   sctp-param init num-ostreams 250 <1>
   sctp-param init max-instreams 300 <2>
@@ -485,14 +485,14 @@ during SCTP INIT packet.
 <2> Announce to the server that a maximum of up to 300 inbound SCTP streams are
 supported. This value is transmitted during SCTP INIT ACK packet.
 
-[[sctp_role]]
-==== SCTP role
+[[transport_layer_role]]
+==== Transport layer role
 
-The _SCTP role_ defines which of the two L4 protocol roles SCTP assumes:
+The _Transport layer role_ defines which of the two L4 protocol roles TCP/SCTP assumes:
 
-* The _SCTP server_ role binds to a local port and handles incoming
-  connections from clients
-* The _SCTP client_ role connects to a remote SCTP sever.
+* The _server_ role binds to a local port and handles incoming
+  connections from TCP/SCTP clients.
+* The _client_ role connects to a remote TCP/SCTP sever.
 
 ==== M3UA/SUA role
 
