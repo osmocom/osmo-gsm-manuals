@@ -390,6 +390,7 @@ cs7 instance 0
   remote-ip 10.11.12.13
   remote-ip 16.17.18.19 primary <1>
   ...
+  no shutdown
 ----
 <1> Use 16.17.18.19 as primary address for the SCTP association. User data will
 be in general transmitted over this path.
@@ -414,6 +415,7 @@ cs7 instance 0
   local-ip 10.11.12.13
   local-ip 16.17.18.19 primary <1>
   ...
+  no shutdown
 ----
 <1> Announce 16.17.18.19 to the peer as the primary address to be used when
 transmitting user data to us.
@@ -459,6 +461,7 @@ cs7 instance 0
   sctp-param init max-attempts 3 <3>
   sctp-param init timeout 10000 <4>
   ...
+  no shutdown
 ----
 <1> The number of streams from the server to the client. This value is
 transmitted during SCTP INIT ACK packet.
@@ -473,6 +476,7 @@ On the server side (see <<transport_layer_role>>), the parameters are configured
 cs7 instance 0
  asp my-asp 2905 0 m3ua
   transport-role server
+  no shutdown
  listen m3ua 2905
   sctp-param init num-ostreams 250 <1>
   sctp-param init max-instreams 300 <2>

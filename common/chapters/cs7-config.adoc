@@ -52,6 +52,7 @@ cs7 instance 0
   remote-ip 127.0.0.1
   role asp
   transport-role client
+  no shutdown
  as as-clnt-OsmoMSC-A-Iu m3ua
   asp asp-clnt-OsmoMSC-A-Iu
   routing-key 2 0.23.1
@@ -89,6 +90,7 @@ cs7 instance 0
   local-ip 10.9.8.7
   role asp
   transport-role client
+  no shutdown
 ----
 
 Be aware that such an `asp` needs to be linked to an `as`, see <<as_and_asp>>.
@@ -240,6 +242,7 @@ cs7 instance 0
   remote-ip 127.0.0.1
   role asp
   transport-role client
+  no shutdown
  as my-as m3ua
   asp my-asp
 ----
@@ -257,6 +260,7 @@ cs7 instance 0
   remote-ip 127.0.0.1
   role asp
   transport-role client
+  no shutdown
  as my-as m3ua
   routing-key 2 0.23.1
 ----
@@ -269,6 +273,7 @@ cs7 instance 0
   remote-ip 127.0.0.1
   role asp
   transport-role client
+  no shutdown
  as my-as m3ua
   asp my-asp
   routing-key 2 0.23.1
@@ -403,6 +408,7 @@ cs7 instance 0
   remote-ip 2.2.2.2
   local-ip 1.1.1.1
   transport-role client
+  no shutdown
  as mybsc0 m3ua
   asp mybsc0-0
   routing-key 1 1.1.1
@@ -428,6 +434,7 @@ cs7 instance 0
  asp mybsc-0 2905 2905 m3ua
   remote-ip 1.1.1.1
   local-ip 2.2.2.2
+  no shutdown
  as mybsc m3ua
   asp bsc-0
   routing-key 1 1.1.1
@@ -435,6 +442,7 @@ cs7 instance 0
  asp mymsc-0 2905 2905 m3ua
   remote-ip 3.3.3.3
   local-ip 2.2.2.2
+  no shutdown
  as mymsc m3ua
   asp mymsc-0
   routing-key 3 3.3.3
@@ -453,6 +461,7 @@ cs7 instance 0
   remote-ip 2.2.2.2
   local-ip 3.3.3.3
   transport-role client
+  no shutdown
  as mymsc0 m3ua
   asp mymsc0-0
   routing-key 3 3.3.3
@@ -470,6 +479,7 @@ cs7 instance 0
   remote-ip 2.2.2.2
   local-ip 1.1.1.1
   transport-role client
+  no shutdown
  as mybsc0 m3ua
   asp mybsc0-0
 
@@ -500,6 +510,7 @@ cs7 instance 0
   remote-ip 2.2.2.2
   local-ip 3.3.3.3
   transport-role client
+  no shutdown
  as mymsc0 m3ua
   asp mymsc0-0
 ----

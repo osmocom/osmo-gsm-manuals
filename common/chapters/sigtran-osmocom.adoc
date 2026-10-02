@@ -386,8 +386,24 @@ An ASP has the following properties:
 |Remote Port|Port Number of the remote end of the connection
 |Remote IP|IP Address of the remote end of the connection
 |State|ASP State (Down, Inactive, Active)
+|Administrative State|ASP Administrative State ([no] shutdown, [no] block)
 |QoS Class|QoS Class to apply to this connection
 |====
+
+The user can change the administrative state of a given ASP at any time by means
+of VTY commands (defaults are _no shutdown_ and _no block_):
+
+* _[no] shutdown_: When an ASP is set to the _shutdown_ administrative state,
+its transport layer socket is closed and new ones are forbidden until the
+administrative state is switched back again. If the ASP transport role is
+_client_, no further reconnects will be attempeted. If the ASP transport is
+_server_, new incoming connections matching the ASP will be rejected at socket
+accept time.
+
+* _[no] block_: When an ASP is set to the _block_ administrative state, its
+transport layer socket is manintained, but the ASP is moved to _Inactive_ state,
+and further ACTIVATE attempts are rejected until the administrative state is
+switched back again.
 
 === Osmocom SS7 Routes
 
