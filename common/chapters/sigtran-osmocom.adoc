@@ -306,10 +306,17 @@ port.
 |Local IP|Local Port Number to which the server shall bind/listen
 |Local Port|Local IP Address to which the server shall bind/listen
 |Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
+|Administrative State|Whether the listener transport socket (TCP/SCTP) is listening for clients to connect to, or closed.
 |Accept Dynamic ASPs|Should we accept connections from ASPs that are not explicitly pre-configured with their source IP and port?
 |QoS Class|QoS Class the server will apply to incoming connections
 |====
 
+The user can change the administrative state of a given xUA Server at any time
+by means of the _[no] shutdown_ VTY commands. When in _shutdown_ state, the xUA
+Server has its listen socket closed so no clients can connect to it. This is
+useful to temporarily disable access to a xUA Server and hence new incoming
+connections to related ASPs. Shutting down a xUA Server does't release already
+established connections on related ASPs; it only affects new connections.
 
 === Osmocom SS7 Users
 

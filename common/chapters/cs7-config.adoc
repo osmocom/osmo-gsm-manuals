@@ -422,6 +422,7 @@ cs7 instance 0
  listen m3ua 2905
   accept-asp-connections pre-configured
   local-ip 2.2.2.2
+  no shutdown
 
  # asp <name> <remote-port> <local-port|0> m3ua
  asp mybsc-0 2905 2905 m3ua
@@ -487,6 +488,7 @@ cs7 instance 0
  listen m3ua 2905
   accept-asp-connections dynamic-permitted
   local-ip 2.2.2.2
+  no shutdown
 ----
 
 .osmo-msc.cfg

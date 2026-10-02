@@ -477,6 +477,7 @@ cs7 instance 0
   sctp-param init num-ostreams 250 <1>
   sctp-param init max-instreams 300 <2>
   ...
+  no shutdown
 ----
 <1> Announce to the server that up to 250 outbound SCTP streams (server to
 client) may be requested. This value is transmitted during SCTP INIT packet, and
