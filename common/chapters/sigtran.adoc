@@ -505,8 +505,10 @@ M3UA connection implements.  3GPP specifies the following role:
   to the SGW to talk to the SS7 network
 * _IPSP_ (IP Server Process): M3UA in point-to-point mode
 
-Osmocom (libosmo-sigtran) implements both the SGP and ASP roles, but not
-the IPSP role.
+Osmocom (libosmo-sigtran) implements all M3UA/SUA roles.
+
+NOTE: IPA Application Server Processes support both the SGP and ASP roles, but
+not the IPSP role (https://osmocom.org/issues/6950[OS#6950]).
 
 ==== Traffic Modes in SIGTRAN
 
