@@ -285,6 +285,7 @@ Each SS7 Instance can have different point code formats / lengths.
 |Network Indicator|(config-cs7)# network-indicator|Network Indicator used in MTP3 Routing Label
 |Point Code Format|(config-cs7)# point-code format|Point Code Format (Default: 3.8.3)
 |Point Code Delimiter|(config-cs7)# point-code delimiter|Point Code Delimiter: . or -
+|QoS Class Definition|(config-cs7)# qos class ID|Definition of a QoS class
 |====
 
 [[xua-server]]
@@ -306,6 +307,7 @@ port.
 |Local Port|Local IP Address to which the server shall bind/listen
 |Protocol|Protocol (M3UA, SUA, IPA) to be operated by this server
 |Accept Dynamic ASPs|Should we accept connections from ASPs that are not explicitly pre-configured with their source IP and port?
+|QoS Class|QoS Class the server will apply to incoming connections
 |====
 
 
@@ -377,6 +379,7 @@ An ASP has the following properties:
 |Remote Port|Port Number of the remote end of the connection
 |Remote IP|IP Address of the remote end of the connection
 |State|ASP State (Down, Inactive, Active)
+|QoS Class|QoS Class to apply to this connection
 |====
 
 === Osmocom SS7 Routes

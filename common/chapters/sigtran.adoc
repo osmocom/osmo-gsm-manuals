@@ -523,3 +523,44 @@ messages are distributed between those ASPs.
   _all_ the ASPs in broadcast traffic mode.
 
 Osmocom (libosmo-sigtran) implements all above-mentioned traffic modes.
+
+==== Quality of Service (QoS) / IP DSCP
+
+Osmocom SIGTRAN support allows mapping abstract Quality of Service (QoS)
+classes to specific IP Differentiated Services Code Point (DSCP) values. This
+enables network operators to prioritize SIGTRAN signaling traffic (such as M3UA
+or SUA) across underlying IP transport networks.
+
+QoS classes are defined centrally under the `cs7 instance` node. Once defined,
+a QoS class can optionally be assigned to individual xUA servers (`listen`
+node) or Application Server Processes (`asp` node).
+
+The IP DSCP value of the QoS class that is assigned to an xUA server, applies
+to IP packets sent during negotiation with the socket server.  The IP DSCP
+value of the QoS class applied to the listening socket of the xUA server is
+inherited by default on child ASP sockets when no QoS class is assigned to
+them.
+
+----
+cs7 instance 0
+ qos class 5 <1>
+  qos-ip-dscp 23
+ qos class 6
+  qos-ip-dscp 42
+ qos class 7
+  qos-ip-dscp 8
+  ...
+ asp asp-srv-m3ua 2906 2905 m3ua
+  qos-class 7 <3>
+  ...
+ asp asp-clnt-m3ua 2905 2906 m3ua
+  qos-class 6 <4>
+  ...
+ listen m3ua 2905
+  qos-class 5 <2>
+  ...
+----
+<1> Define QoS class `5` and assign it IP DSCP value `23`.
+<2> Apply QoS class `5` to the M3UA server socket.
+<3> Apply QoS class `7` (DSCP 8) to the server-role ASP.
+<4> Apply QoS class `6` (DSCP 42) to the client-role ASP.
